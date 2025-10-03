@@ -1,0 +1,113 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+dist/
+build/
+out/
+
+# Hardhat files
+cache/
+cache-pvm/
+artifacts/
+artifacts-pvm/
+typechain-types/
+
+# Deployment artifacts (contains sensitive info)
+ignition/deployments/
+deployments/
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary folders
+tmp/
+temp/
+
+# Private keys and secrets
+*.pem
+*.key
+privatekey*
+mnemonic*
+secrets.json
+
+# Testing
+.coverage_artifacts/
+.coverage_cache/
+coverage.json
+
+# Foundry
+cache_forge/
+out_forge/
+broadcast/
+
+# Local development
+.local/
+
+# Misc
+*.tgz
+*.tar.gz
+*.zip
+
+# Frontend specific (if using React/Vue/etc)
+# Uncomment if you have a frontend
+# public/build/
+# src/generated.ts
+
+# Rust (if using ink! contracts)
+target/
+Cargo.lock
+
+# Python (if using any Python tools)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+
+# Docker
+.dockerignore
+docker-compose.override.yml
