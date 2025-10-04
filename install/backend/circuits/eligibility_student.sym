@@ -1,0 +1,6 @@
+1,1,0,main.eligible
+2,-1,0,main.studentStatus
+3,-1,0,main.enrollmentYear
+4,-1,0,main.universityHash
+5,-1,0,main.userSecret
+6,2,0,main.isBit
