@@ -23,6 +23,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Servir archivos estáticos del NFT
+app.use('/nft', express.static(path.join(__dirname, 'nft_mint')));
+
 // Logger simple
 app.use((req, res, next) => {
   console.log('>>> REQ:', req.method, req.originalUrl, 'Content-Type:', req.headers['content-type'] || 'none');
@@ -74,6 +77,17 @@ app.get('/verificador', (req, res) => {
   res.sendFile(path.join(__dirname, 'verificador-seguro.html'));
 });
 
+// Endpoint de prueba para la imagen NFT
+app.get('/test-nft', (req, res) => {
+  res.send(`
+    <h2>Test NFT Image</h2>
+    <p>Ruta de imagen: /nft/nft.png</p>
+    <img src="/nft/nft.png" alt="NFT Test" style="max-width: 300px; border: 2px solid #007bff;">
+    <br><br>
+    <a href="/demo">← Volver al Demo</a>
+  `);
+});
+
 // Endpoint para información del contrato
 app.get('/api/contract-info', (req, res) => {
   try {
@@ -86,6 +100,46 @@ app.get('/api/contract-info', (req, res) => {
   } catch (error) {
     console.error('contract-info error:', error);
     res.status(500).json({ error: 'Failed to get contract info', details: error.message });
+  }
+});
+
+// Endpoint para metadatos del NFT
+app.get('/api/metadata/:tokenId', (req, res) => {
+  try {
+    const { tokenId } = req.params;
+    const metadata = {
+      name: `EqualPass Student Badge #${tokenId}`,
+      description: "Credencial estudiantil verificada con Zero-Knowledge Proofs y WebAuthn. Esta insignia demuestra que el portador es un estudiante verificado sin revelar información personal.",
+      image: `http://localhost:3000/nft/nft.png`,
+      external_url: `http://localhost:3000/verificador`,
+      attributes: [
+        {
+          trait_type: "Badge Type",
+          value: "Student Credential"
+        },
+        {
+          trait_type: "Security Level",
+          value: "High"
+        },
+        {
+          trait_type: "Verification Method",
+          value: "Zero-Knowledge + WebAuthn"
+        },
+        {
+          trait_type: "Network",
+          value: "Polkadot"
+        },
+        {
+          trait_type: "Issued At",
+          value: new Date().toISOString().split('T')[0]
+        }
+      ]
+    };
+    
+    res.json(metadata);
+  } catch (error) {
+    console.error('metadata error:', error);
+    res.status(500).json({ error: 'Failed to get metadata', details: error.message });
   }
 });
 

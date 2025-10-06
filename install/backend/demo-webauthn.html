@@ -64,8 +64,18 @@
         <div id="fraudResult"></div>
     </div>
 
+    <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h2>🎫 Paso 5: Obtener NFT de Estudiante</h2>
+        <p><strong>¡Solo disponible después de mint exitoso!</strong> Obtén tu NFT que prueba tu estatus de estudiante verificado.</p>
+        <button id="getNftButton" onclick="getNFT()" style="display: none; background: #28a745; color: white;">🎫 Obtener Mi NFT</button>
+        <button onclick="testNFTImage()" style="background: #6c757d; color: white; margin-left: 10px;">🧪 Probar Imagen NFT</button>
+        <div id="nftResult"></div>
+    </div>
+
     <script>
         const API_BASE = 'http://localhost:3001/api';
+        const NFT_BASE = 'http://localhost:3001'; // Base para las imágenes NFT
+        let lastMintedTokenId = null; // Variable para guardar el último token ID minteado
         
         async function checkWebAuthnStatus() {
             const userAddress = document.getElementById('userAddress').value;
@@ -161,6 +171,17 @@
                         ${result.error ? `<strong>Error:</strong> ${result.error}` : ''}
                     </div>
                 `;
+                
+                // Mostrar botón de NFT si el mint fue exitoso
+                if (result.success) {
+                    lastMintedTokenId = result.tokenId; // Guardar el token ID
+                    document.getElementById('getNftButton').style.display = 'inline-block';
+                    document.getElementById('nftResult').innerHTML = `
+                        <div class="info">
+                            🎉 ¡Badge minteado exitosamente! Ahora puedes obtener tu NFT de estudiante.
+                        </div>
+                    `;
+                }
             } catch (error) {
                 document.getElementById('mintStandardResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
             }
@@ -228,6 +249,17 @@
                         ${result.error ? `<strong>Error:</strong> ${result.error}` : ''}
                     </div>
                 `;
+                
+                // Mostrar botón de NFT si el mint fue exitoso
+                if (result.success) {
+                    lastMintedTokenId = result.tokenId; // Guardar el token ID
+                    document.getElementById('getNftButton').style.display = 'inline-block';
+                    document.getElementById('nftResult').innerHTML = `
+                        <div class="success">
+                            🎉 ¡Badge minteado con ALTA SEGURIDAD! Ahora puedes obtener tu NFT de estudiante.
+                        </div>
+                    `;
+                }
             } catch (error) {
                 document.getElementById('mintSecureResult').innerHTML = `<div class="error">❌ Error WebAuthn: ${error.message}</div>`;
             }
@@ -288,6 +320,177 @@
         function uint8ArrayToBase64url(uint8Array) {
             const base64 = btoa(String.fromCharCode(...uint8Array));
             return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+        }
+
+        // Función para obtener NFT (simple, solo muestra la imagen)
+        async function getNFT() {
+            try {
+                document.getElementById('nftResult').innerHTML = `
+                    <div class="info">🔄 Generando tu NFT de estudiante...</div>
+                `;
+                
+                // Obtener información del último mint para conseguir el token ID
+                const contractInfo = await fetch(`${API_BASE}/contract-info`);
+                const contractData = await contractInfo.json();
+                
+                // Simular generación del NFT
+                setTimeout(() => {
+                    const tokenId = lastMintedTokenId || Math.floor(Math.random() * 1000); // Usar el token ID real o uno aleatorio
+                    
+                    document.getElementById('nftResult').innerHTML = `
+                        <div class="success">
+                            <h3>🎫 ¡Tu NFT de Estudiante!</h3>
+                            <div id="nftImageContainer" style="margin: 10px 0;">
+                                <div style="display: flex; align-items: center; justify-content: center; min-height: 200px; background: #f8f9fa; border-radius: 10px; border: 2px solid #28a745;">
+                                    <div>🔄 Cargando imagen NFT...</div>
+                                </div>
+                            </div>
+                            <br>
+                            <strong>🎓 EqualPass Student Badge</strong><br>
+                            <strong>🛡️ Credencial Verificada con ZK + WebAuthn</strong><br>
+                            <strong>🌐 Red: Polkadot Paseo</strong><br>
+                            <strong>📅 Fecha: ${new Date().toLocaleDateString()}</strong><br>
+                            <br>
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; text-align: left;">
+                                <h4>📱 Para agregar a MetaMask:</h4>
+                                <p><strong>Dirección del Contrato:</strong><br>
+                                <code style="background: #e9ecef; padding: 4px; border-radius: 4px; font-family: monospace;">${contractData.address}</code>
+                                <button onclick="copyToClipboard('${contractData.address}')" style="margin-left: 5px; padding: 2px 8px;">📋 Copiar</button></p>
+                                
+                                <p><strong>Token ID:</strong><br>
+                                <code style="background: #e9ecef; padding: 4px; border-radius: 4px; font-family: monospace;">${tokenId}</code>
+                                <button onclick="copyToClipboard('${tokenId}')" style="margin-left: 5px; padding: 2px 8px;">📋 Copiar</button></p>
+                                
+                                <p><strong>Red:</strong> Polkadot Paseo Testnet (Chain ID: 420420422)</p>
+                                
+                                <button onclick="addToMetaMask('${contractData.address}', '${tokenId}')" 
+                                        style="background: #ff6600; color: white; padding: 10px 15px; border: none; border-radius: 5px; margin-top: 10px;">
+                                    🦊 Agregar a MetaMask
+                                </button>
+                            </div>
+                            <br>
+                            <small>Este NFT representa tu credencial estudiantil verificada de forma segura.</small>
+                        </div>
+                    `;
+                    
+                    // Cargar la imagen después de crear el contenedor
+                    loadNFTImage(tokenId);
+                    
+                    // Ocultar el botón después de obtener el NFT
+                    document.getElementById('getNftButton').style.display = 'none';
+                }, 2000);
+                
+            } catch (error) {
+                document.getElementById('nftResult').innerHTML = `
+                    <div class="error">❌ Error generando NFT: ${error.message}</div>
+                `;
+            }
+        }
+        
+        // Función de prueba para verificar la imagen NFT
+        function testNFTImage() {
+            document.getElementById('nftResult').innerHTML = `
+                <div class="info">
+                    <h3>🧪 Prueba de Imagen NFT</h3>
+                    <p>Probando cargar imagen desde: <code>${NFT_BASE}/nft/nft.png</code></p>
+                    <div id="nftImageContainer" style="margin: 10px 0;">
+                        <div style="display: flex; align-items: center; justify-content: center; min-height: 200px; background: #f8f9fa; border-radius: 10px; border: 2px solid #007bff;">
+                            <div>🔄 Probando carga de imagen...</div>
+                        </div>
+                    </div>
+                    <p><strong>Check de URLs:</strong></p>
+                    <p>• API Base: <code>${API_BASE}</code></p>
+                    <p>• NFT Base: <code>${NFT_BASE}</code></p>
+                    <p>• URL de imagen: <code>${NFT_BASE}/nft/nft.png</code></p>
+                    <p><a href="${NFT_BASE}/nft/nft.png" target="_blank">🔗 Abrir imagen en nueva pestaña</a></p>
+                </div>
+            `;
+            
+            // Cargar imagen de prueba
+            loadNFTImage('TEST');
+        }
+        
+        // Función para cargar la imagen NFT con manejo de errores
+        function loadNFTImage(tokenId) {
+            const container = document.getElementById('nftImageContainer');
+            if (!container) return;
+            
+            console.log('🖼️ Intentando cargar imagen NFT desde:', `${NFT_BASE}/nft/nft.png`);
+            
+            // Crear imagen con manejo de eventos
+            const img = new Image();
+            
+            img.onload = function() {
+                console.log('✅ Imagen NFT cargada exitosamente');
+                container.innerHTML = `
+                    <img src="${NFT_BASE}/nft/nft.png" 
+                         alt="NFT Estudiante #${tokenId}" 
+                         style="max-width: 200px; max-height: 200px; border-radius: 10px; border: 2px solid #28a745; object-fit: contain;">
+                `;
+            };
+            
+            img.onerror = function() {
+                console.error('❌ Error cargando imagen NFT, usando imagen de respaldo');
+                container.innerHTML = `
+                    <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; border: 2px solid #28a745; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">🎓</div>
+                        <div style="font-size: 16px; font-weight: bold;">EqualPass</div>
+                        <div style="font-size: 12px;">Student Badge</div>
+                        <div style="font-size: 10px; margin-top: 8px;">#${tokenId}</div>
+                    </div>
+                `;
+            };
+            
+            // Timeout para imagen que tarda mucho en cargar
+            setTimeout(() => {
+                if (!img.complete) {
+                    console.warn('⚠️ Imagen NFT tarda mucho en cargar, usando respaldo');
+                    img.onerror();
+                }
+            }, 5000);
+            
+            // Iniciar carga
+            img.src = `${NFT_BASE}/nft/nft.png`;
+        }
+        
+        // Función para copiar al portapapeles
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Copiado al portapapeles: ' + text);
+            }).catch(err => {
+                console.error('Error copiando: ', err);
+                alert('❌ Error copiando al portapapeles');
+            });
+        }
+        
+        // Función para agregar NFT a MetaMask automáticamente
+        async function addToMetaMask(contractAddress, tokenId) {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('❌ MetaMask no detectado');
+                    return;
+                }
+                
+                const wasAdded = await window.ethereum.request({
+                    method: 'wallet_watchAsset',
+                    params: {
+                        type: 'ERC721',
+                        options: {
+                            address: contractAddress,
+                            tokenId: tokenId,
+                        },
+                    },
+                });
+                
+                if (wasAdded) {
+                    alert('🎉 ¡NFT agregado a MetaMask exitosamente!');
+                } else {
+                    alert('⚠️ No se pudo agregar el NFT a MetaMask');
+                }
+            } catch (error) {
+                console.error('Error agregando a MetaMask:', error);
+                alert('❌ Error: ' + error.message);
+            }
         }
 
         // Verificar estado al cargar la página

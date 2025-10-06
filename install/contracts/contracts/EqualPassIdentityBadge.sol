@@ -102,6 +102,32 @@ contract EqualPassIdentityBadge is ERC721, AccessControl {
         emit BadgeMinted(to, tokenId, badgeType, claimId);
     }
 
+    function tokenURI(uint256 tokenId) public view returns (string memory) {
+        require(_ownerOf(tokenId) != address(0), "ERC721: URI query for nonexistent token");
+        
+        // Point to our backend metadata endpoint
+        return string(abi.encodePacked("http://localhost:3000/api/metadata/", _toString(tokenId)));
+    }
+    
+    function _toString(uint256 value) internal pure returns (string memory) {
+        if (value == 0) {
+            return "0";
+        }
+        uint256 temp = value;
+        uint256 digits;
+        while (temp != 0) {
+            digits++;
+            temp /= 10;
+        }
+        bytes memory buffer = new bytes(digits);
+        while (value != 0) {
+            digits -= 1;
+            buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));
+            value /= 10;
+        }
+        return string(buffer);
+    }
+
     function supportsInterface(bytes4 interfaceId) public pure returns (bool) {
         return interfaceId == 0x01ffc9a7 || // ERC165
                interfaceId == 0x80ac58cd || // ERC721
