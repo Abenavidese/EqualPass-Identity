@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EqualPass - Demo WebAuthn + ZK</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        input { width: 300px; padding: 8px; margin: 5px; }
+        .demo-section { background: #e9ecef; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        .fraud-demo { background: #ffe6e6; border: 2px solid #ff4444; }
+    </style>
+</head>
+<body>
+    <h1>🛡️ EqualPass - Demo Seguridad WebAuthn + ZK</h1>
+    
+    <div class="section">
+        <h2>👤 Información del Usuario</h2>
+        <input type="text" id="userAddress" placeholder="Dirección de wallet (0x...)" value="0x6388681e6A22F8Fc30e3150733795255D4250db1">
+        <button onclick="checkWebAuthnStatus()">Verificar Estado WebAuthn</button>
+        <div id="statusResult"></div>
+    </div>
+
+    <div class="section">
+        <h2>🔐 Paso 1: Registro WebAuthn (Solo una vez)</h2>
+        <p>Registra tu dispositivo biométrico para verificación segura:</p>
+        <button onclick="registerWebAuthn()">Registrar Dispositivo</button>
+        <div id="registerResult"></div>
+    </div>
+
+    <div class="section">
+        <h2>🎓 Paso 2: Datos de Estudiante</h2>
+        <input type="text" id="studentStatus" placeholder="Estado estudiante (1=activo)" value="1">
+        <input type="text" id="enrollmentYear" placeholder="Año de matrícula" value="2025">
+        <input type="text" id="universityHash" placeholder="Hash universidad" value="12345">
+        <input type="text" id="userSecret" placeholder="Secreto usuario" value="67890">
+    </div>
+
+    <div class="section">
+        <h2>✅ Paso 3: Mint con Seguridad Estándar</h2>
+        <p>Solo prueba ZK (método actual):</p>
+        <button onclick="mintStandard()">Mint Badge (Solo ZK)</button>
+        <div id="mintStandardResult"></div>
+    </div>
+
+    <div class="section demo-section">
+        <h2>🛡️ Paso 4: Mint con Alta Seguridad</h2>
+        <p>Prueba ZK + Verificación WebAuthn:</p>
+        <button onclick="mintWithWebAuthn()">Mint Badge (ZK + WebAuthn)</button>
+        <div id="mintSecureResult"></div>
+    </div>
+
+    <div class="section fraud-demo">
+        <h2>🚨 Demo Anti-Fraude para Jueces</h2>
+        <p><strong>Escenario:</strong> Un atacante robó los datos ZK pero NO tiene tu dispositivo biométrico.</p>
+        <button onclick="simulateFraud()">Simular Intento de Fraude</button>
+        <div id="fraudResult"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001/api';
+        
+        async function checkWebAuthnStatus() {
+            const userAddress = document.getElementById('userAddress').value;
+            try {
+                const response = await fetch(`${API_BASE}/webauthn/status/${userAddress}`);
+                const data = await response.json();
+                
+                document.getElementById('statusResult').innerHTML = `
+                    <div class="${data.hasCredential ? 'success' : 'warning'}">
+                        Estado: ${data.hasCredential ? '✅ Dispositivo registrado' : '⚠️ Dispositivo no registrado'}
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('statusResult').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        async function registerWebAuthn() {
+            const userAddress = document.getElementById('userAddress').value;
+            if (!userAddress) {
+                alert('Ingresa una dirección de wallet');
+                return;
+            }
+
+            try {
+                // Paso 1: Obtener challenge del servidor
+                const beginResponse = await fetch(`${API_BASE}/webauthn/register/begin`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userAddress })
+                });
+                const options = await beginResponse.json();
+
+                // Paso 2: Crear credencial con WebAuthn
+                const credential = await navigator.credentials.create({
+                    publicKey: {
+                        ...options,
+                        challenge: base64urlToUint8Array(options.challenge),
+                        user: {
+                            ...options.user,
+                            id: base64urlToUint8Array(options.user.id)
+                        }
+                    }
+                });
+
+                // Paso 3: Enviar credencial al servidor
+                const completeResponse = await fetch(`${API_BASE}/webauthn/register/complete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userAddress,
+                        credential: {
+                            id: credential.id,
+                            response: {
+                                clientDataJSON: uint8ArrayToBase64url(new Uint8Array(credential.response.clientDataJSON)),
+                                publicKey: uint8ArrayToBase64url(new Uint8Array(credential.response.getPublicKey()))
+                            }
+                        }
+                    })
+                });
+
+                const result = await completeResponse.json();
+                
+                document.getElementById('registerResult').innerHTML = `
+                    <div class="success">
+                        ✅ Dispositivo registrado exitosamente!<br>
+                        ID: ${result.credentialId}
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('registerResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+                console.error('WebAuthn registration error:', error);
+            }
+        }
+
+        async function mintStandard() {
+            const data = getStudentData();
+            try {
+                const response = await fetch(`${API_BASE}/mint`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                document.getElementById('mintStandardResult').innerHTML = `
+                    <div class="${result.success ? 'success' : 'error'}">
+                        <strong>Resultado:</strong> ${result.success ? '✅ Badge minteado' : '❌ Error'}<br>
+                        <strong>Seguridad:</strong> ${result.securityLevel || 'STANDARD'}<br>
+                        ${result.txHash ? `<strong>TX:</strong> <a href="${result.blockscoutUrl}" target="_blank">${result.txHash.slice(0,10)}...</a><br>` : ''}
+                        ${result.tokenId ? `<strong>Token ID:</strong> ${result.tokenId}` : ''}
+                        ${result.error ? `<strong>Error:</strong> ${result.error}` : ''}
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('mintStandardResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function mintWithWebAuthn() {
+            const userAddress = document.getElementById('userAddress').value;
+            const data = getStudentData();
+            
+            try {
+                // Paso 1: Obtener challenge para autenticación
+                const beginResponse = await fetch(`${API_BASE}/webauthn/authenticate/begin`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userAddress })
+                });
+                
+                if (!beginResponse.ok) {
+                    const error = await beginResponse.json();
+                    throw new Error(error.error);
+                }
+                
+                const options = await beginResponse.json();
+
+                // Paso 2: Autenticar con WebAuthn
+                const credential = await navigator.credentials.get({
+                    publicKey: {
+                        ...options,
+                        challenge: base64urlToUint8Array(options.challenge),
+                        allowCredentials: options.allowCredentials.map(cred => ({
+                            ...cred,
+                            id: base64urlToUint8Array(cred.id)
+                        }))
+                    }
+                });
+
+                // Paso 3: Mint con verificación WebAuthn
+                const mintResponse = await fetch(`${API_BASE}/mint`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...data,
+                        requireWebAuthn: true,
+                        webAuthnCredential: {
+                            id: credential.id,
+                            response: {
+                                clientDataJSON: uint8ArrayToBase64url(new Uint8Array(credential.response.clientDataJSON)),
+                                authenticatorData: uint8ArrayToBase64url(new Uint8Array(credential.response.authenticatorData)),
+                                signature: uint8ArrayToBase64url(new Uint8Array(credential.response.signature))
+                            }
+                        }
+                    })
+                });
+
+                const result = await mintResponse.json();
+                
+                document.getElementById('mintSecureResult').innerHTML = `
+                    <div class="${result.success ? 'success' : 'error'}">
+                        <strong>Resultado:</strong> ${result.success ? '✅ Badge minteado con alta seguridad' : '❌ Error'}<br>
+                        <strong>ZK Verificada:</strong> ${result.verified ? '✅' : '❌'}<br>
+                        <strong>WebAuthn Verificada:</strong> ${result.webAuthnVerified ? '✅' : '❌'}<br>
+                        <strong>Nivel de Seguridad:</strong> ${result.securityLevel}<br>
+                        ${result.txHash ? `<strong>TX:</strong> <a href="${result.blockscoutUrl}" target="_blank">${result.txHash.slice(0,10)}...</a><br>` : ''}
+                        ${result.tokenId ? `<strong>Token ID:</strong> ${result.tokenId}` : ''}
+                        ${result.error ? `<strong>Error:</strong> ${result.error}` : ''}
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('mintSecureResult').innerHTML = `<div class="error">❌ Error WebAuthn: ${error.message}</div>`;
+            }
+        }
+
+        async function simulateFraud() {
+            const userAddress = document.getElementById('userAddress').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/demo-fraud`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        userAddress,
+                        stolenCredential: "datos_robados_zkp"
+                    })
+                });
+                
+                const result = await response.json();
+                
+                document.getElementById('fraudResult').innerHTML = `
+                    <div class="warning">
+                        <h3>🚨 Resultado del Intento de Fraude:</h3>
+                        <strong>Fraude Detectado:</strong> ${result.fraudDetected ? '✅ SÍ' : '❌ NO'}<br>
+                        <strong>Fraude Exitoso:</strong> ${result.fraudSuccess ? '❌ SÍ (MALO)' : '✅ NO (BUENO)'}<br>
+                        <strong>WebAuthn Previno Fraude:</strong> ${result.details?.webAuthnPrevented ? '✅ SÍ' : '❌ NO'}<br>
+                        <p><strong>Explicación:</strong> ${result.message}</p>
+                        <div style="background: #f0f0f0; padding: 10px; border-radius: 4px;">
+                            <strong>Para los Jueces:</strong> Aunque el atacante tenga los datos ZK válidos, 
+                            WebAuthn requiere el dispositivo físico original (huella dactilar, Face ID, etc.). 
+                            Sin el dispositivo correcto, el fraude es imposible.
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('fraudResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        function getStudentData() {
+            return {
+                userAddress: document.getElementById('userAddress').value,
+                studentStatus: document.getElementById('studentStatus').value,
+                enrollmentYear: document.getElementById('enrollmentYear').value,
+                universityHash: document.getElementById('universityHash').value,
+                userSecret: document.getElementById('userSecret').value
+            };
+        }
+
+        // Funciones helper para conversión base64url
+        function base64urlToUint8Array(base64url) {
+            const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+            const padded = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
+            const binary = atob(padded);
+            return new Uint8Array(binary.split('').map(char => char.charCodeAt(0)));
+        }
+
+        function uint8ArrayToBase64url(uint8Array) {
+            const base64 = btoa(String.fromCharCode(...uint8Array));
+            return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+        }
+
+        // Verificar estado al cargar la página
+        window.addEventListener('load', () => {
+            checkWebAuthnStatus();
+        });
+    </script>
+</body>
+</html>

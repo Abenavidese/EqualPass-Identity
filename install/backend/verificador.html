@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EqualPass - Verificador Público</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f8f9fa; }
+        .header { text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; }
+        .section { margin: 20px 0; padding: 25px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .success { background-color: #d4edda; border-left: 5px solid #28a745; }
+        .error { background-color: #f8d7da; border-left: 5px solid #dc3545; }
+        .warning { background-color: #fff3cd; border-left: 5px solid #ffc107; }
+        .info { background-color: #d1ecf1; border-left: 5px solid #17a2b8; }
+        button { padding: 12px 25px; margin: 10px 5px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; transition: all 0.3s; }
+        button:hover { background: #0056b3; transform: translateY(-2px); }
+        button:disabled { background: #6c757d; cursor: not-allowed; transform: none; }
+        input { width: 100%; max-width: 500px; padding: 12px; margin: 10px 0; border: 2px solid #e9ecef; border-radius: 6px; font-size: 16px; }
+        input:focus { border-color: #007bff; outline: none; box-shadow: 0 0 0 3px rgba(0,123,255,0.1); }
+        .address { font-family: 'Courier New', monospace; background: #f8f9fa; padding: 8px; border-radius: 4px; word-break: break-all; }
+        .badge-card { background: #e3f2fd; border: 1px solid #bbdefb; border-radius: 8px; padding: 15px; margin: 10px 0; }
+        .security-high { border-left: 5px solid #4caf50; background: #e8f5e8; }
+        .security-standard { border-left: 5px solid #ff9800; background: #fff3e0; }
+        .verification-result { margin-top: 20px; }
+        .badge-details { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+        .detail-item { background: #f8f9fa; padding: 10px; border-radius: 6px; }
+        .loading { text-align: center; padding: 20px; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .demo-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .demo-section button { background: white; color: #667eea; }
+        .demo-section button:hover { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔍 EqualPass - Verificador Público</h1>
+        <p>Verifica si una persona es realmente un estudiante registrado</p>
+    </div>
+
+    <div class="section">
+        <h2>📋 Cómo Verificar un Estudiante</h2>
+        <div class="info">
+            <h3>🎯 Para Verificadores (Empresas, Instituciones, etc.)</h3>
+            <ol>
+                <li><strong>Solicita la dirección de wallet</strong> al estudiante</li>
+                <li><strong>Ingresa la dirección</strong> en el campo de abajo</li>
+                <li><strong>Ve los resultados</strong> de verificación en tiempo real</li>
+                <li><strong>Confirma la autenticidad</strong> usando blockchain público</li>
+            </ol>
+            <p><em>✅ Sin datos personales expuestos | ✅ Verificación blockchain | ✅ Anti-fraude robusto</em></p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔍 Verificar Estudiante</h2>
+        <p>Ingresa la dirección de wallet del estudiante para verificar su autenticidad:</p>
+        
+        <input type="text" 
+               id="walletAddress" 
+               placeholder="0x... (dirección de wallet del estudiante)"
+               value="">
+        
+        <div style="margin: 15px 0;">
+            <button onclick="verifyStudent()">🔍 Verificar Estudiante</button>
+            <button onclick="clearResults()">🧹 Limpiar Resultados</button>
+        </div>
+        
+        <div id="verificationResult"></div>
+    </div>
+
+    <div class="section demo-section">
+        <h2>🧪 Demo para Jueces - Pruebas Rápidas</h2>
+        <p>Usa estas direcciones de ejemplo para probar el sistema:</p>
+        
+        <div style="margin: 15px 0;">
+            <button onclick="testWithAddress('0x6388681e6A22F8Fc30e3150733795255D4250db1')">
+                📝 Probar: Estudiante Verificado
+            </button>
+            <button onclick="testWithAddress('0x0000000000000000000000000000000000000000')">
+                ❌ Probar: No Estudiante
+            </button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔗 Enlaces Útiles</h2>
+        <div class="info">
+            <p><strong>Contrato en Blockchain:</strong> <span class="address" id="contractAddress">Cargando...</span></p>
+            <p><strong>Explorer:</strong> <a href="https://blockscout-passet-hub.parity-testnet.parity.io" target="_blank">Blockscout Paseo Testnet</a></p>
+            <p><strong>Red:</strong> Polkadot Paseo Testnet (Chain ID: 420420422)</p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001/api';
+        
+        async function verifyStudent() {
+            const walletAddress = document.getElementById('walletAddress').value.trim();
+            
+            if (!walletAddress) {
+                showResult('error', 'Por favor ingresa una dirección de wallet válida');
+                return;
+            }
+
+            if (!walletAddress.startsWith('0x') || walletAddress.length !== 42) {
+                showResult('error', 'Formato de dirección inválido. Debe ser 0x seguido de 40 caracteres hexadecimales');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                const response = await fetch(`${API_BASE}/verify-student`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ walletAddress })
+                });
+                
+                const result = await response.json();
+                
+                if (result.isStudent) {
+                    showStudentVerified(result);
+                } else {
+                    showStudentNotFound(result);
+                }
+                
+            } catch (error) {
+                showResult('error', `Error de conexión: ${error.message}`);
+            }
+        }
+
+        function showStudentVerified(result) {
+            const securityClass = result.securityLevel === 'HIGH' ? 'security-high' : 'security-standard';
+            const securityIcon = result.securityLevel === 'HIGH' ? '🛡️' : '⚠️';
+            const securityText = result.securityLevel === 'HIGH' ? 'ALTA SEGURIDAD (WebAuthn)' : 'SEGURIDAD ESTÁNDAR';
+            
+            let badgesHtml = '';
+            result.studentBadges.forEach(badge => {
+                badgesHtml += `
+                    <div class="badge-card">
+                        <div class="badge-details">
+                            <div class="detail-item">
+                                <strong>Token ID:</strong> ${badge.tokenId}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Tipo:</strong> ESTUDIANTE
+                            </div>
+                            <div class="detail-item">
+                                <strong>Emitido:</strong> ${new Date(badge.issuedAt).toLocaleDateString('es-ES')}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Emisor:</strong> ${badge.issuer.slice(0,8)}...
+                            </div>
+                        </div>
+                        <a href="${result.explorerBase}/token/${result.contractAddress}/instance/${badge.tokenId}" target="_blank">
+                            🔗 Ver en Blockchain Explorer
+                        </a>
+                    </div>
+                `;
+            });
+
+            const html = `
+                <div class="success ${securityClass}">
+                    <h3>✅ ESTUDIANTE VERIFICADO</h3>
+                    <div class="badge-details">
+                        <div class="detail-item">
+                            <strong>Dirección:</strong><br>
+                            <span class="address">${result.walletAddress}</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Seguridad:</strong><br>
+                            ${securityIcon} ${securityText}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Badges de Estudiante:</strong><br>
+                            ${result.studentBadges.length}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Total Badges:</strong><br>
+                            ${result.totalBadges}
+                        </div>
+                    </div>
+                    
+                    <h4>📜 Badges de Estudiante:</h4>
+                    ${badgesHtml}
+                    
+                    <div class="info" style="margin-top: 15px;">
+                        <p><strong>🔐 Garantías de Seguridad:</strong></p>
+                        <ul>
+                            <li>✅ Badge verificado en blockchain Polkadot</li>
+                            <li>✅ Emitido por sistema con pruebas Zero-Knowledge</li>
+                            <li>✅ No se exponen datos personales del estudiante</li>
+                            ${result.hasWebAuthn ? '<li>✅ Verificación biométrica adicional configurada</li>' : '<li>⚠️ Sin verificación biométrica adicional</li>'}
+                        </ul>
+                        <p><em>Verificado el: ${new Date(result.verificationTimestamp).toLocaleString('es-ES')}</em></p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('verificationResult').innerHTML = html;
+        }
+
+        function showStudentNotFound(result) {
+            const html = `
+                <div class="error">
+                    <h3>❌ NO ES ESTUDIANTE VERIFICADO</h3>
+                    <div class="badge-details">
+                        <div class="detail-item">
+                            <strong>Dirección:</strong><br>
+                            <span class="address">${result.walletAddress}</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Razón:</strong><br>
+                            ${result.reason}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Badges Totales:</strong><br>
+                            ${result.badgeCount || 0}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Estado:</strong><br>
+                            No verificado
+                        </div>
+                    </div>
+                    
+                    <div class="warning" style="margin-top: 15px;">
+                        <p><strong>⚠️ Esta persona NO tiene un badge de estudiante válido</strong></p>
+                        <p>Posibles razones:</p>
+                        <ul>
+                            <li>No se ha registrado en el sistema EqualPass</li>
+                            <li>No ha completado el proceso de verificación</li>
+                            <li>No cumple con los requisitos de estudiante</li>
+                            <li>Dirección de wallet incorrecta</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('verificationResult').innerHTML = html;
+        }
+
+        function showResult(type, message) {
+            const html = `
+                <div class="${type}">
+                    <p>${message}</p>
+                </div>
+            `;
+            document.getElementById('verificationResult').innerHTML = html;
+        }
+
+        function showLoading() {
+            const html = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>🔍 Verificando en blockchain...</p>
+                </div>
+            `;
+            document.getElementById('verificationResult').innerHTML = html;
+        }
+
+        function testWithAddress(address) {
+            document.getElementById('walletAddress').value = address;
+            verifyStudent();
+        }
+
+        function clearResults() {
+            document.getElementById('verificationResult').innerHTML = '';
+            document.getElementById('walletAddress').value = '';
+        }
+
+        // Cargar información del contrato al iniciar
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/contract-info`);
+                const data = await response.json();
+                if (data.address) {
+                    document.getElementById('contractAddress').textContent = data.address;
+                }
+            } catch (error) {
+                console.log('Error loading contract info:', error);
+            }
+        });
+    </script>
+</body>
+</html>
