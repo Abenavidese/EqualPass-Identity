@@ -1,3 +1,4 @@
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -110,8 +111,8 @@ app.get('/api/metadata/:tokenId', (req, res) => {
     const metadata = {
       name: `EqualPass Student Badge #${tokenId}`,
       description: "Credencial estudiantil verificada con Zero-Knowledge Proofs y WebAuthn. Esta insignia demuestra que el portador es un estudiante verificado sin revelar información personal.",
-      image: `http://localhost:3000/nft/nft.png`,
-      external_url: `http://localhost:3000/verificador`,
+      image: `http://localhost:3001/nft/nft.png`,
+      external_url: `http://localhost:3001/verificador`,
       attributes: [
         {
           trait_type: "Badge Type",

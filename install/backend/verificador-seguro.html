@@ -22,8 +22,6 @@
         .code-box { background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; border: 2px solid #007bff; }
         .address { font-family: monospace; background: #f5f5f5; padding: 8px; border-radius: 4px; word-break: break-all; }
         .verification-steps { background: #e8f4f8; padding: 15px; border-left: 4px solid #17a2b8; }
-        .security-level { padding: 10px; border-radius: 8px; font-weight: bold; text-align: center; margin: 10px 0; }
-        .level-standard { background: #ffc107; color: #000; }
         .level-high { background: #28a745; color: white; }
         .level-maximum { background: #007bff; color: white; }
         .badge-info { background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 6px; border-left: 4px solid #28a745; }
@@ -212,15 +210,10 @@
 
         function showVerificationResult(result) {
             if (result.verified && result.ownershipProven) {
-                const securityClass = `level-${result.securityLevel.toLowerCase()}`;
                 
                 document.getElementById('verificationResult').innerHTML = `
                     <div class="success">
                         <h3>✅ VERIFICACIÓN AUTOMÁTICA EXITOSA</h3>
-                        
-                        <div class="security-level ${securityClass}">
-                            🛡️ Nivel de Seguridad: ${result.securityLevel}
-                        </div>
                         
                         <p><strong>Resumen:</strong> ${result.summary}</p>
                         
@@ -231,7 +224,6 @@
                                 <li>🔑 Propiedad de wallet: ${result.verificationLevel.walletOwnership ? '✅' : '❌'}</li>
                                 <li>✍️ Firma digital automática: ${result.verificationLevel.signatureVerified ? '✅' : '❌'}</li>
                                 <li>🎓 Credenciales de estudiante: ${result.verificationLevel.studentCredentials ? '✅' : '❌'}</li>
-                                <li>👆 Autenticación biométrica: ${result.verificationLevel.biometricAuth ? '✅' : '❌'}</li>
                             </ul>
                         </div>
 
