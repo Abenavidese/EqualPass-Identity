@@ -14,6 +14,7 @@ import { ContractData } from "./components/ContractData";
 import { myTokenModuleMyTokenAddress } from "./generated";
 import { passetHub, kusamaAssetHub, westend } from "./wagmi-config";
 import { useState, useEffect } from "react";
+import WebAuthnDemo from "./components/WebAuthnDemo";
 
 function App() {
   const {
@@ -23,15 +24,13 @@ function App() {
     loading: connectLoading,
     error: connectError,
   } = useWeb3AuthConnect();
-  const {
-    disconnect,
-    loading: disconnectLoading,
-    error: disconnectError,
-  } = useWeb3AuthDisconnect();
+  const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
   const { userInfo } = useWeb3AuthUser();
   const { web3Auth } = useWeb3Auth();
   const { address } = useAccount();
   const chainId = useChainId();
+
+  const [showWebAuthnDemo, setShowWebAuthnDemo] = useState(false);
 
   // Provider readiness states
   const [providerReady, setProviderReady] = useState(false);
@@ -98,11 +97,8 @@ function App() {
     };
   }, [web3Auth, connectLoading]);
 
-
   const contractAddress =
-    myTokenModuleMyTokenAddress[
-      passetHub.id as keyof typeof myTokenModuleMyTokenAddress
-    ];
+    myTokenModuleMyTokenAddress[passetHub.id as keyof typeof myTokenModuleMyTokenAddress];
 
   // Faucet URLs for different networks
   const getFaucetUrl = (chainId: number, address: string) => {
@@ -137,13 +133,10 @@ function App() {
   const loggedInView = (
     <div className="grid">
       <div className="showcase-message">
-        <h3>
-          🎯 Interact directly with Polkadot Asset Hub - no MetaMask required!
-        </h3>
+        <h3>🎯 Interact directly with Polkadot Asset Hub - no MetaMask required!</h3>
         <p>
-          You're connected via Web3Auth. A secure key pair was generated from
-          your social login choice, enabling blockchain interactions without
-          browser wallet extensions.
+          You're connected via Web3Auth. A secure key pair was generated from your social login choice,
+          enabling blockchain interactions without browser wallet extensions.
         </p>
       </div>
 
@@ -165,9 +158,7 @@ function App() {
             Log Out
           </button>
           {disconnectLoading && <div className="loading">Disconnecting...</div>}
-          {disconnectError && (
-            <div className="error">{disconnectError.message}</div>
-          )}
+          {disconnectError && <div className="error">{disconnectError.message}</div>}
         </div>
       </div>
 
@@ -188,16 +179,13 @@ function App() {
           <div className="showcase-message">
             <h3>📋 Smart Contract Interactions</h3>
             <p>
-              Interact with deployed contracts on Asset Hub - read balances,
-              approve tokens, and execute transactions.
+              Interact with deployed contracts on Asset Hub - read balances, approve tokens, and execute
+              transactions.
             </p>
           </div>
           <div className="contract-section">
             <h3>FakeUSDT Contract Interactions</h3>
-            <ContractData
-              contractAddress={contractAddress}
-              userAddresses={address ? [address] : undefined}
-            />
+            <ContractData contractAddress={contractAddress} userAddresses={address ? [address] : undefined} />
           </div>
         </>
       )}
@@ -210,20 +198,14 @@ function App() {
 
       <div className="showcase-message">
         <h3>🔑 Private Key Access</h3>
-        <p>
-          Export your private key for advanced use cases while maintaining
-          security.
-        </p>
+        <p>Export your private key for advanced use cases while maintaining security.</p>
       </div>
       <ExportPrivateKey />
 
       {!contractAddress && (
         <div className="contract-section">
           <h3>Contract Not Available</h3>
-          <p>
-            Please deploy the FakeUSDT contract and update the address in
-            generated.ts
-          </p>
+          <p>Please deploy the FakeUSDT contract and update the address in generated.ts</p>
         </div>
       )}
     </div>
@@ -232,21 +214,15 @@ function App() {
   const unloggedInView = (
     <div className="grid">
       <div className="educational-message">
-        <h2>
-          👋 Connect with your social accounts to explore Web3 without wallet
-          extensions!
-        </h2>
+        <h2>👋 Connect with your social accounts to explore Web3 without wallet extensions!</h2>
         <p>
-          See what's possible with Asset Hub interactions - no MetaMask or
-          browser wallet required. Just use your existing social logins to get
-          started.
+          See what's possible with Asset Hub interactions - no MetaMask or browser wallet required. Just use
+          your existing social logins to get started.
         </p>
       </div>
 
       {/* Provider initialization status */}
-      {providerLoading && (
-        <div className="loading">Initializing Web3Auth provider...</div>
-      )}
+      {providerLoading && <div className="loading">Initializing Web3Auth provider...</div>}
 
       {/* Login button - only show when provider is ready */}
       {!providerLoading && providerReady && (
@@ -267,17 +243,14 @@ function App() {
       {/* Provider failed to initialize */}
       {!providerLoading && !providerReady && providerError && !connectLoading && (
         <div className="error">
-          Web3Auth provider failed to initialize after 30 seconds. Please check
-          your internet connection and reload the page.
+          Web3Auth provider failed to initialize after 30 seconds. Please check your internet connection and
+          reload the page.
         </div>
       )}
 
       {/* Provider ready but can't connect (network issues) */}
       {!providerLoading && !providerReady && !providerError && !connectLoading && (
-        <div className="error">
-          Web3Auth provider is not ready for login. Please wait or reload the
-          page.
-        </div>
+        <div className="error">Web3Auth provider is not ready for login. Please wait or reload the page.</div>
       )}
 
       {connectLoading && <div className="loading">Connecting...</div>}
@@ -287,18 +260,30 @@ function App() {
 
   return (
     <div className="container">
-      <h1 className="title">
-        <a
-          target="_blank"
-          href="https://web3auth.io/docs/sdk/pnp/web/modal"
-          rel="noreferrer"
-        >
-          Web3Auth{" "}
-        </a>
-        & React Modal Quick Start by WEB3DEV
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="title">
+          <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal" rel="noreferrer">
+            Web3Auth{" "}
+          </a>
+          & React Modal Quick Start by WEB3DEV
+        </h1>
 
-      {isConnected ? loggedInView : unloggedInView}
+        <div>
+          <button onClick={() => setShowWebAuthnDemo((s) => !s)} className="card">
+            {showWebAuthnDemo ? "Cerrar Demo WebAuthn" : "Abrir Demo WebAuthn"}
+          </button>
+        </div>
+      </div>
+
+      {showWebAuthnDemo ? (
+        <div className="my-6">
+          <WebAuthnDemo />
+        </div>
+      ) : isConnected ? (
+        loggedInView
+      ) : (
+        unloggedInView
+      )}
       <div id="console" style={{ whiteSpace: "pre-line" }}>
         <p style={{ whiteSpace: "pre-line" }}></p>
       </div>
