@@ -269,7 +269,12 @@ export default function LandingPage() {
               <h3 className="text-white font-semibold mb-4">Recursos</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="#" className="hover:text-[#0ea5e9] transition-colors">
+                  <a 
+                    href="https://anthony-3.gitbook.io/zk-scholar/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-[#0ea5e9] transition-colors"
+                  >
                     Documentación
                   </a>
                 </li>

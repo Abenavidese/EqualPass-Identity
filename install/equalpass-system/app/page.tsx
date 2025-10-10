@@ -26,7 +26,7 @@ export default function LandingPage() {
               <Link href="/about-us">
                 <Button variant="ghost">Sobre Nosotros</Button>
               </Link>
-              <Link href="/docs">
+              <Link href="https://anthony-3.gitbook.io/zk-scholar/" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost">Documentación</Button>
               </Link>
               <Link href="/verifier">
@@ -406,7 +406,16 @@ export default function LandingPage() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>Privacidad</li>
                 <li>Términos de uso</li>
-                <li>Documentación</li>
+                <li>
+                  <Link 
+                    href="https://anthony-3.gitbook.io/zk-scholar/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Documentación
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

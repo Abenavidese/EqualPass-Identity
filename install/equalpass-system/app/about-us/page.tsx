@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, GraduationCap, Users, Globe, Heart, Linkedin, Mail, Phone } from "lucide-react";
+import { MapPin, GraduationCap, Users, Globe, Heart, Linkedin} from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
 
 export default function AboutUsPage() {
