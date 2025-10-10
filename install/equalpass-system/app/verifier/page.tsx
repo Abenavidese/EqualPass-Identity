@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Shield, ShieldCheck } from "lucide-react";
+import Image from "next/image";
+import { ShieldCheck } from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
 import { VerifierForm } from "@/components/verifier/verifier-form";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -15,7 +16,7 @@ export default function VerifierPage() {
               <BackButton />
             </Link>
             <div className="flex items-center gap-3">
-              <Shield className="h-8 w-8 text-blue-500" />
+              <Image src="/logo_zks.png" alt="EqualPass Logo" width={32} height={32} className="h-8 w-8" />
               <h1 className="text-2xl font-semibold">Verificador de Credenciales</h1>
             </div>
           </div>

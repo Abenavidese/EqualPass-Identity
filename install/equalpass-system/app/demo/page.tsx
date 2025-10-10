@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Shield, User, CheckCircle2, AlertTriangle, Lock, Award, ArrowLeft, Zap, ExternalLink } from "lucide-react";
+import { User, CheckCircle2, AlertTriangle, Lock, Award, Zap, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { equalPassApi, metaMaskHelpers } from "@/lib/equal-pass-api";
 import BackButton from "@/components/ui/BackButton";
@@ -16,7 +17,7 @@ export default function DemoPage() {
   // Form state
   const [userAddress, setUserAddress] = useState("");
   const [walletConnected, setWalletConnected] = useState(false);
-  const [studentStatus, setStudentStatus] = useState("1");
+  const [studentStatus] = useState("1");
   const [enrollmentYear, setEnrollmentYear] = useState("2025");
   const [universityHash, setUniversityHash] = useState("12345");
   const [userSecret, setUserSecret] = useState("67890");
@@ -240,7 +241,7 @@ export default function DemoPage() {
               <BackButton />
             </Link>
             <div className="flex items-center gap-3">
-              <Shield className="h-8 w-8 text-blue-500" />
+              <Image src="/logo_zks.png" alt="EqualPass Logo" width={32} height={32} className="h-8 w-8" />
               <h1 className="text-2xl font-semibold">Generación de Pruebas ZK</h1>
             </div>
           </div>
@@ -461,16 +462,30 @@ export default function DemoPage() {
             </CardHeader>
 
             <CardContent className="space-y-4">
+              {/* Texto explicativo */}
+              <Alert className="bg-amber-50/80 border-amber-200 text-amber-800 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-300">
+                <div className="flex items-center gap-2">
+                  <div className="text-amber-600 dark:text-amber-400">ℹ️</div>
+                  <div className="text-sm">
+                    <span className="font-medium">Nota:</span> Por el momento se asume que todos los datos solicitados son números representando IDs.
+                  </div>
+                </div>
+              </Alert>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="studentStatus">Estado Estudiante</Label>
                   <Input
                     id="studentStatus"
                     value={studentStatus}
-                    onChange={(e) => setStudentStatus(e.target.value)}
+                    readOnly
+                    disabled
                     placeholder="1 = activo"
-                    className="font-sans"
+                    className="font-sans bg-muted text-muted-foreground cursor-not-allowed"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    1 significa que el estudiante está activo (Para la prueba se asume que todo estudiante está activo por lo que no se puede modificar)
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -478,31 +493,51 @@ export default function DemoPage() {
                   <Input
                     id="enrollmentYear"
                     value={enrollmentYear}
-                    onChange={(e) => setEnrollmentYear(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        setEnrollmentYear(value);
+                      }
+                    }}
                     placeholder="2025"
                     inputMode="numeric"
+                    pattern="[0-9]*"
                     className="font-sans"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="universityHash">Hash Universidad</Label>
+                  <Label htmlFor="universityHash">Hash Universidad (ID numérico)</Label>
                   <Input
                     id="universityHash"
                     value={universityHash}
-                    onChange={(e) => setUniversityHash(e.target.value)}
-                    placeholder="ej. 0xabc123… o hash numérico"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        setUniversityHash(value);
+                      }
+                    }}
+                    placeholder="12345"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     className="font-mono text-sm"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="userSecret">Secreto Usuario</Label>
+                  <Label htmlFor="userSecret">Secreto Usuario (ID numérico)</Label>
                   <Input
                     id="userSecret"
                     value={userSecret}
-                    onChange={(e) => setUserSecret(e.target.value)}
-                    placeholder="clave privada local (no se envía en claro)"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        setUserSecret(value);
+                      }
+                    }}
+                    placeholder="67890"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     className="font-mono text-sm"
                     type="password"
                   />
@@ -804,7 +839,7 @@ export default function DemoPage() {
                     </>
                   ) : (
                     <>
-                      <Shield className="h-4 w-4" />
+                      <Lock className="h-4 w-4" />
                       Generar Prueba ZK + WebAuthn
                       <svg
                         className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
@@ -934,6 +969,16 @@ export default function DemoPage() {
 
               <CardContent>
                 <div className="space-y-4">
+                  {/* Tip box sobre wallet desbloqueada */}
+                  <Alert className="bg-blue-50/80 border-blue-200 text-blue-800 dark:bg-blue-950/30 dark:border-blue-800 dark:text-blue-300">
+                    <div className="flex items-center gap-2">
+                      <div className="text-blue-600 dark:text-blue-400">💡</div>
+                      <div className="text-sm">
+                        <span className="font-medium">Tip!</span> Debes tener tu wallet desbloqueada para que el NFT se agregue automáticamente.
+                      </div>
+                    </div>
+                  </Alert>
+
                   {/* Botón sólido y distintivo */}
                   <Button
                     onClick={handleClaimNft}
