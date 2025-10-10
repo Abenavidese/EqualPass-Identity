@@ -7,7 +7,7 @@ type Props = {
   onView?: () => void;
 };
 
-export const NFTCard: React.FC<Props> = ({ title = "EqualPass NFT", tokenId, imageSrc, onView }) => {
+export const NFTCard: React.FC<Props> = ({ title = "ZK-Scholar NFT", tokenId, imageSrc, onView }) => {
   return (
     <div
       className="rounded-lg p-4 w-72 bg-white shadow-xl border-2 border-transparent"

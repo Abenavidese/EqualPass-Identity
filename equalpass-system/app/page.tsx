@@ -1,8 +1,8 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Shield, Lock, Award, CheckCircle2, Eye, Fingerprint, Zap } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Shield, Lock, Award, CheckCircle2, Eye, Fingerprint, Zap } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -13,7 +13,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Shield className="h-7 w-7 text-[#0ea5e9]" />
-              <span className="text-xl font-bold">EqualPass</span>
+              <span className="text-xl font-bold">ZK-Scholar</span>
             </div>
             <div className="flex items-center gap-4">
               <Link href="/demo">
@@ -40,8 +40,8 @@ export default function LandingPage() {
             Verifica tu identidad estudiantil sin revelar datos personales
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-            EqualPass combina pruebas de conocimiento cero, autenticación biométrica y blockchain para crear un sistema
-            de verificación estudiantil seguro y privado.
+            ZK-Scholar combina pruebas de conocimiento cero, autenticación biométrica y blockchain para crear
+            un sistema de verificación estudiantil seguro y privado.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Link href="/demo">
@@ -95,7 +95,9 @@ export default function LandingPage() {
                   <Lock className="h-6 w-6 text-[#0ea5e9]" />
                 </div>
                 <CardTitle>Pruebas Zero-Knowledge</CardTitle>
-                <CardDescription>Demuestra que eres estudiante sin revelar tu nombre, ID o universidad</CardDescription>
+                <CardDescription>
+                  Demuestra que eres estudiante sin revelar tu nombre, ID o universidad
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm text-muted-foreground">
@@ -121,7 +123,9 @@ export default function LandingPage() {
                   <Fingerprint className="h-6 w-6 text-[#22c55e]" />
                 </div>
                 <CardTitle>Autenticación WebAuthn</CardTitle>
-                <CardDescription>Verifica tu identidad con tu huella digital o reconocimiento facial</CardDescription>
+                <CardDescription>
+                  Verifica tu identidad con tu huella digital o reconocimiento facial
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm text-muted-foreground">
@@ -212,7 +216,7 @@ export default function LandingPage() {
                   icon: Award,
                 },
               ].map((item, index) => {
-                const Icon = item.icon
+                const Icon = item.icon;
                 return (
                   <div key={index} className="flex gap-6 items-start">
                     <div className="flex-shrink-0">
@@ -228,7 +232,7 @@ export default function LandingPage() {
                       <p className="text-muted-foreground">{item.description}</p>
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           </div>
@@ -262,7 +266,9 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <div className="font-semibold">Verificación instantánea</div>
-                    <div className="text-sm text-muted-foreground">Demuestra tu estatus de estudiante en segundos</div>
+                    <div className="text-sm text-muted-foreground">
+                      Demuestra tu estatus de estudiante en segundos
+                    </div>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -271,7 +277,9 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <div className="font-semibold">Una sola credencial</div>
-                    <div className="text-sm text-muted-foreground">Úsala en múltiples plataformas y servicios</div>
+                    <div className="text-sm text-muted-foreground">
+                      Úsala en múltiples plataformas y servicios
+                    </div>
                   </div>
                 </li>
               </ul>
@@ -300,7 +308,9 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <div className="font-semibold">Verificación confiable</div>
-                    <div className="text-sm text-muted-foreground">Pruebas criptográficas imposibles de falsificar</div>
+                    <div className="text-sm text-muted-foreground">
+                      Pruebas criptográficas imposibles de falsificar
+                    </div>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -309,7 +319,9 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <div className="font-semibold">Integración simple</div>
-                    <div className="text-sm text-muted-foreground">API REST para verificar credenciales en minutos</div>
+                    <div className="text-sm text-muted-foreground">
+                      API REST para verificar credenciales en minutos
+                    </div>
                   </div>
                 </li>
               </ul>
@@ -351,7 +363,7 @@ export default function LandingPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Shield className="h-6 w-6 text-[#0ea5e9]" />
-                <span className="text-lg font-bold">EqualPass</span>
+                <span className="text-lg font-bold">ZK-Scholar</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Verificación de identidad estudiantil con privacidad garantizada
@@ -391,11 +403,11 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="max-w-6xl mx-auto mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-            <p>© 2025 EqualPass. Todos los derechos reservados.</p>
+            <p>© 2025 ZK-Scholar. Todos los derechos reservados.</p>
             <p className="mt-2">Powered by Zero-Knowledge Proofs + WebAuthn + Blockchain</p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

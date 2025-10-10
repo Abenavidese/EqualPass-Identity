@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Shield, CheckCircle2, AlertCircle, Loader2, ArrowLeft, Copy } from "lucide-react"
-import { Link } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Shield, CheckCircle2, AlertCircle, Loader2, ArrowLeft, Copy } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   checkWebAuthnStatus,
   beginWebAuthnRegistration,
@@ -27,61 +27,61 @@ import {
 } from "@/lib/webauthn-utils";
 
 export default function DemoPage() {
-  const [userAddress, setUserAddress] = useState("0x6388681e6A22F8Fc30e3150733795255D4250db1")
-  const [loading, setLoading] = useState(false)
-  const [webauthnStatus, setWebauthnStatus] = useState<boolean | null>(null)
+  const [userAddress, setUserAddress] = useState("0x6388681e6A22F8Fc30e3150733795255D4250db1");
+  const [loading, setLoading] = useState(false);
+  const [webauthnStatus, setWebauthnStatus] = useState<boolean | null>(null);
   const [studentData, setStudentData] = useState({
     studentStatus: "1",
     enrollmentYear: "2025",
     universityHash: "12345",
     userSecret: "67890",
-  })
+  });
 
-  const [zkProofResult, setZkProofResult] = useState<MintResponse | null>(null)
-  const [webauthnRegistered, setWebauthnRegistered] = useState(false)
-  const [secureProofResult, setSecureProofResult] = useState<MintResponse | null>(null)
-  const [fraudResult, setFraudResult] = useState<any>(null)
-  const [nftData, setNftData] = useState<{ tokenId: number; contractAddress: string } | null>(null)
+  const [zkProofResult, setZkProofResult] = useState<MintResponse | null>(null);
+  const [webauthnRegistered, setWebauthnRegistered] = useState(false);
+  const [secureProofResult, setSecureProofResult] = useState<MintResponse | null>(null);
+  const [fraudResult, setFraudResult] = useState<any>(null);
+  const [nftData, setNftData] = useState<{ tokenId: number; contractAddress: string } | null>(null);
 
   useEffect(() => {
-    checkStatus()
-  }, [])
+    checkStatus();
+  }, []);
 
   const checkStatus = async () => {
     try {
-      const status = await checkWebAuthnStatus(userAddress)
-      setWebauthnStatus(status.hasCredential)
-      setWebauthnRegistered(status.hasCredential)
+      const status = await checkWebAuthnStatus(userAddress);
+      setWebauthnStatus(status.hasCredential);
+      setWebauthnRegistered(status.hasCredential);
     } catch (error) {
-      console.error("Error checking status:", error)
+      console.error("Error checking status:", error);
     }
-  }
+  };
 
   const handleGenerateZKProof = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const result = await mintBadge({
         userAddress,
         ...studentData,
         requireWebAuthn: false,
-      })
-      setZkProofResult(result)
+      });
+      setZkProofResult(result);
       if (result.success && result.tokenId) {
-        const contractInfo = await getContractInfo()
-        setNftData({ tokenId: result.tokenId, contractAddress: contractInfo.address })
+        const contractInfo = await getContractInfo();
+        setNftData({ tokenId: result.tokenId, contractAddress: contractInfo.address });
       }
     } catch (error: any) {
-      setZkProofResult({ success: false, error: error.message })
+      setZkProofResult({ success: false, error: error.message });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleWebAuthnRegistration = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       // Step 1: Get challenge from server
-      const options = await beginWebAuthnRegistration(userAddress)
+      const options = await beginWebAuthnRegistration(userAddress);
 
       // Step 2: Create credential with WebAuthn
       const credential = await navigator.credentials.create({
@@ -93,13 +93,13 @@ export default function DemoPage() {
             id: base64urlToUint8Array(options.user.id),
           },
         },
-      })
+      });
 
-      if (!credential) throw new Error("No se pudo crear la credencial")
+      if (!credential) throw new Error("No se pudo crear la credencial");
 
       // Step 3: Send credential to server
-      const publicKeyCredential = credential as PublicKeyCredential
-      const response = publicKeyCredential.response as AuthenticatorAttestationResponse
+      const publicKeyCredential = credential as PublicKeyCredential;
+      const response = publicKeyCredential.response as AuthenticatorAttestationResponse;
 
       await completeWebAuthnRegistration(userAddress, {
         id: credential.id,
@@ -107,22 +107,22 @@ export default function DemoPage() {
           clientDataJSON: uint8ArrayToBase64url(new Uint8Array(response.clientDataJSON)),
           publicKey: uint8ArrayToBase64url(new Uint8Array(response.getPublicKey()!)),
         },
-      })
+      });
 
-      setWebauthnRegistered(true)
-      await checkStatus()
+      setWebauthnRegistered(true);
+      await checkStatus();
     } catch (error: any) {
-      alert(`Error en registro WebAuthn: ${error.message}`)
+      alert(`Error en registro WebAuthn: ${error.message}`);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleCombinedProof = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       // Step 1: Get authentication challenge
-      const options = await beginWebAuthnAuthentication(userAddress)
+      const options = await beginWebAuthnAuthentication(userAddress);
 
       // Step 2: Authenticate with WebAuthn
       const credential = await navigator.credentials.get({
@@ -134,13 +134,13 @@ export default function DemoPage() {
             id: base64urlToUint8Array(cred.id),
           })),
         },
-      })
+      });
 
-      if (!credential) throw new Error("No se pudo autenticar")
+      if (!credential) throw new Error("No se pudo autenticar");
 
       // Step 3: Mint with WebAuthn verification
-      const publicKeyCredential = credential as PublicKeyCredential
-      const response = publicKeyCredential.response as AuthenticatorAssertionResponse
+      const publicKeyCredential = credential as PublicKeyCredential;
+      const response = publicKeyCredential.response as AuthenticatorAssertionResponse;
 
       const result = await mintBadge({
         userAddress,
@@ -154,60 +154,60 @@ export default function DemoPage() {
             signature: uint8ArrayToBase64url(new Uint8Array(response.signature)),
           },
         },
-      })
+      });
 
-      setSecureProofResult(result)
+      setSecureProofResult(result);
       if (result.success && result.tokenId) {
-        const contractInfo = await getContractInfo()
-        setNftData({ tokenId: result.tokenId, contractAddress: contractInfo.address })
+        const contractInfo = await getContractInfo();
+        setNftData({ tokenId: result.tokenId, contractAddress: contractInfo.address });
       }
     } catch (error: any) {
-      setSecureProofResult({ success: false, error: error.message })
+      setSecureProofResult({ success: false, error: error.message });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleSimulateFraud = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const result = await simulateFraud(userAddress)
-      setFraudResult(result)
+      const result = await simulateFraud(userAddress);
+      setFraudResult(result);
     } catch (error: any) {
-      setFraudResult({ fraudDetected: false, fraudSuccess: false, message: error.message })
+      setFraudResult({ fraudDetected: false, fraudSuccess: false, message: error.message });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleClaimNFT = async () => {
-    if (!nftData) return
+    if (!nftData) return;
 
     try {
       const success = await addNFTToMetaMask({
         address: nftData.contractAddress as `0x${string}`,
         tokenId: nftData.tokenId.toString(),
-      })
+      });
       if (success) {
-        alert("🎉 ¡NFT agregado a MetaMask exitosamente!")
+        alert("🎉 ¡NFT agregado a MetaMask exitosamente!");
       } else {
         // Show manual instructions
-        const manual = `📝 Instrucciones manuales:\n1. Abre MetaMask → NFTs → "Importar NFT"\n2. Dirección: ${nftData.contractAddress}\n3. Token ID: ${nftData.tokenId}`
-        alert(manual)
+        const manual = `📝 Instrucciones manuales:\n1. Abre MetaMask → NFTs → "Importar NFT"\n2. Dirección: ${nftData.contractAddress}\n3. Token ID: ${nftData.tokenId}`;
+        alert(manual);
       }
     } catch (error: any) {
-      alert(`Error: ${error.message}`)
+      alert(`Error: ${error.message}`);
     }
-  }
+  };
 
   const handleCopy = async (text: string) => {
     try {
-      await copyToClipboard(text)
-      alert("✅ Copiado al portapapeles")
+      await copyToClipboard(text);
+      alert("✅ Copiado al portapapeles");
     } catch (error) {
-      alert("❌ Error copiando al portapapeles")
+      alert("❌ Error copiando al portapapeles");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-sky-50 py-8">
@@ -222,7 +222,7 @@ export default function DemoPage() {
           </Link>
           <div className="flex items-center gap-3 mb-2">
             <Shield className="h-10 w-10 text-[#0ea5e9]" />
-            <h1 className="text-3xl font-bold">EqualPass - Demo Seguridad WebAuthn + ZK</h1>
+            <h1 className="text-3xl font-bold">ZK-Scholar - Demo Seguridad WebAuthn + ZK</h1>
           </div>
           <p className="text-muted-foreground">
             Demostración del flujo completo de verificación de identidad estudiantil
@@ -316,7 +316,9 @@ export default function DemoPage() {
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>Paso 2: Generar Prueba ZK</CardTitle>
-            <CardDescription>Crea una prueba matemática de que eres estudiante sin revelar tus datos</CardDescription>
+            <CardDescription>
+              Crea una prueba matemática de que eres estudiante sin revelar tus datos
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -415,7 +417,9 @@ export default function DemoPage() {
         <Card className="mb-6 bg-amber-50/50">
           <CardHeader>
             <CardTitle>Paso 4: Prueba ZK + WebAuthn (Alta Seguridad)</CardTitle>
-            <CardDescription>Genera una prueba de alta seguridad combinando ambas tecnologías</CardDescription>
+            <CardDescription>
+              Genera una prueba de alta seguridad combinando ambas tecnologías
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -513,7 +517,8 @@ export default function DemoPage() {
                     <strong>Fraude Detectado:</strong> {fraudResult.fraudDetected ? "✅ SÍ" : "❌ NO"}
                   </p>
                   <p>
-                    <strong>Fraude Exitoso:</strong> {fraudResult.fraudSuccess ? "❌ SÍ (MALO)" : "✅ NO (BUENO)"}
+                    <strong>Fraude Exitoso:</strong>{" "}
+                    {fraudResult.fraudSuccess ? "❌ SÍ (MALO)" : "✅ NO (BUENO)"}
                   </p>
                   <p>
                     <strong>WebAuthn Previno Fraude:</strong>{" "}
@@ -523,9 +528,9 @@ export default function DemoPage() {
                     <strong>Explicación:</strong> {fraudResult.message}
                   </p>
                   <div className="mt-3 p-3 bg-white rounded border border-amber-300">
-                    <strong>Para los Jueces:</strong> Aunque el atacante tenga los datos ZK válidos, WebAuthn requiere
-                    el dispositivo físico original (huella dactilar, Face ID, etc.). Sin el dispositivo correcto, el
-                    fraude es imposible.
+                    <strong>Para los Jueces:</strong> Aunque el atacante tenga los datos ZK válidos, WebAuthn
+                    requiere el dispositivo físico original (huella dactilar, Face ID, etc.). Sin el
+                    dispositivo correcto, el fraude es imposible.
                   </div>
                 </div>
               </div>
@@ -537,7 +542,8 @@ export default function DemoPage() {
           <CardHeader>
             <CardTitle>🎫 Paso 5: Obtener NFT de Estudiante</CardTitle>
             <CardDescription>
-              ¡Solo disponible después de mint exitoso! Obtén tu NFT que prueba tu estatus de estudiante verificado.
+              ¡Solo disponible después de mint exitoso! Obtén tu NFT que prueba tu estatus de estudiante
+              verificado.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -550,21 +556,21 @@ export default function DemoPage() {
                     className="max-w-[200px] max-h-[200px] rounded-lg"
                     onError={(e) => {
                       // Fallback to gradient if image fails to load
-                      e.currentTarget.style.display = "none"
+                      e.currentTarget.style.display = "none";
                       e.currentTarget.parentElement!.innerHTML = `
                         <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center;">
                           <div style="font-size: 48px; margin-bottom: 10px;">🎓</div>
-                          <div style="font-size: 16px; font-weight: bold;">EqualPass</div>
+                          <div style="font-size: 16px; font-weight: bold;">ZK-Scholar</div>
                           <div style="font-size: 12px;">Student Badge</div>
                           <div style="font-size: 10px; margin-top: 8px;">#${nftData.tokenId}</div>
                         </div>
-                      `
+                      `;
                     }}
                   />
                 </div>
 
                 <div className="space-y-2 text-sm">
-                  <p className="font-semibold text-lg">🎓 EqualPass Student Badge</p>
+                  <p className="font-semibold text-lg">🎓 ZK-Scholar Student Badge</p>
                   <p>🛡️ Credencial Verificada con ZK + WebAuthn</p>
                   <p>🌐 Red: Polkadot Paseo</p>
                   <p>📅 Fecha: {new Date().toLocaleDateString()}</p>
@@ -579,7 +585,11 @@ export default function DemoPage() {
                         <code className="flex-1 text-xs bg-gray-100 p-2 rounded font-mono break-all">
                           {nftData.contractAddress}
                         </code>
-                        <Button size="sm" variant="outline" onClick={() => handleCopy(nftData.contractAddress)}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleCopy(nftData.contractAddress)}
+                        >
                           <Copy className="h-3 w-3" />
                         </Button>
                       </div>
@@ -587,8 +597,14 @@ export default function DemoPage() {
                     <div>
                       <p className="text-xs text-muted-foreground mb-1">Token ID:</p>
                       <div className="flex gap-2">
-                        <code className="flex-1 text-xs bg-gray-100 p-2 rounded font-mono">{nftData.tokenId}</code>
-                        <Button size="sm" variant="outline" onClick={() => handleCopy(nftData.tokenId.toString())}>
+                        <code className="flex-1 text-xs bg-gray-100 p-2 rounded font-mono">
+                          {nftData.tokenId}
+                        </code>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleCopy(nftData.tokenId.toString())}
+                        >
                           <Copy className="h-3 w-3" />
                         </Button>
                       </div>
@@ -609,5 +625,5 @@ export default function DemoPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

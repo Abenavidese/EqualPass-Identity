@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Fingerprint, CheckCircle2, Loader2 } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Fingerprint, CheckCircle2, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export function WebAuthnCard() {
-  const [loading, setLoading] = useState(false)
-  const [registered, setRegistered] = useState(false)
-  const { toast } = useToast()
+  const [loading, setLoading] = useState(false);
+  const [registered, setRegistered] = useState(false);
+  const { toast } = useToast();
 
   const handleRegister = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       // WebAuthn registration flow
       const publicKeyCredentialCreationOptions: PublicKeyCredentialCreationOptions = {
         challenge: new Uint8Array(32),
         rp: {
-          name: "EqualPass",
+          name: "ZK-Scholar",
           id: window.location.hostname,
         },
         user: {
@@ -34,11 +34,11 @@ export function WebAuthnCard() {
         },
         timeout: 60000,
         attestation: "none",
-      }
+      };
 
       const credential = await navigator.credentials.create({
         publicKey: publicKeyCredentialCreationOptions,
-      })
+      });
 
       if (credential) {
         // TODO: Replace with actual endpoint
@@ -46,16 +46,16 @@ export function WebAuthnCard() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ credential }),
-        })
+        });
 
-        const data = await response.json()
+        const data = await response.json();
 
         if (data.ok) {
-          setRegistered(true)
+          setRegistered(true);
           toast({
             title: "✓ Dispositivo registrado",
             description: "Tu autenticación biométrica está activa",
-          })
+          });
         }
       }
     } catch (error) {
@@ -63,11 +63,11 @@ export function WebAuthnCard() {
         title: "Error",
         description: "No se pudo registrar el dispositivo. Verifica que tu navegador soporte WebAuthn.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Card className="border-2 shadow-lg">
@@ -83,8 +83,8 @@ export function WebAuthnCard() {
       <CardContent className="space-y-4">
         <div className="bg-muted/50 p-4 rounded-lg space-y-2">
           <p className="text-sm text-muted-foreground">
-            WebAuthn utiliza la biometría de tu dispositivo para garantizar que solo tú puedas reclamar tu credencial
-            verificada.
+            WebAuthn utiliza la biometría de tu dispositivo para garantizar que solo tú puedas reclamar tu
+            credencial verificada.
           </p>
         </div>
 
@@ -114,10 +114,12 @@ export function WebAuthnCard() {
         {registered && (
           <Alert className="border-success bg-success/10">
             <CheckCircle2 className="h-4 w-4 text-success" />
-            <AlertDescription className="ml-2">Autenticación biométrica configurada correctamente</AlertDescription>
+            <AlertDescription className="ml-2">
+              Autenticación biométrica configurada correctamente
+            </AlertDescription>
           </Alert>
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

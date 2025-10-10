@@ -1,47 +1,47 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { Shield, User, CheckCircle2, AlertTriangle, Lock, Award, ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Shield, User, CheckCircle2, AlertTriangle, Lock, Award, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function DemoPage() {
-  const [year, setYear] = useState("2025")
-  const [studentId, setStudentId] = useState("12345")
-  const [universityId, setUniversityId] = useState("67890")
-  const [webauthnRegistered, setWebauthnRegistered] = useState(false)
-  const [zkProofGenerated, setZkProofGenerated] = useState(false)
-  const [combinedProofGenerated, setCombinedProofGenerated] = useState(false)
-  const [nftClaimed, setNftClaimed] = useState(false)
+  const [year, setYear] = useState("2025");
+  const [studentId, setStudentId] = useState("12345");
+  const [universityId, setUniversityId] = useState("67890");
+  const [webauthnRegistered, setWebauthnRegistered] = useState(false);
+  const [zkProofGenerated, setZkProofGenerated] = useState(false);
+  const [combinedProofGenerated, setCombinedProofGenerated] = useState(false);
+  const [nftClaimed, setNftClaimed] = useState(false);
 
   const handleGenerateZkProof = () => {
-    setZkProofGenerated(true)
-  }
+    setZkProofGenerated(true);
+  };
 
   const handleRegisterWebAuthn = () => {
-    setWebauthnRegistered(true)
-  }
+    setWebauthnRegistered(true);
+  };
 
   const handleGenerateCombinedProof = () => {
     if (zkProofGenerated && webauthnRegistered) {
-      setCombinedProofGenerated(true)
+      setCombinedProofGenerated(true);
     }
-  }
+  };
 
   const handleSimulateFraud = () => {
     alert(
-      "⚠️ Intento de fraude detectado: Los datos ZK son válidos pero falta la verificación WebAuthn del dispositivo registrado.",
-    )
-  }
+      "⚠️ Intento de fraude detectado: Los datos ZK son válidos pero falta la verificación WebAuthn del dispositivo registrado."
+    );
+  };
 
   const handleClaimNft = () => {
-    setNftClaimed(true)
-  }
+    setNftClaimed(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
@@ -55,7 +55,7 @@ export default function DemoPage() {
               </Button>
             </Link>
             <Shield className="h-8 w-8 text-[#0ea5e9]" />
-            <h1 className="text-2xl font-bold text-balance">EqualPass - Demo Seguridad WebAuthn + ZK</h1>
+            <h1 className="text-2xl font-bold text-balance">ZK-Scholar - Demo Seguridad WebAuthn + ZK</h1>
           </div>
         </div>
       </header>
@@ -105,7 +105,7 @@ export default function DemoPage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="year">Año</Label>
+                <Label htmlFor="year">Año Matrícula</Label>
                 <Input
                   id="year"
                   type="number"
@@ -143,13 +143,19 @@ export default function DemoPage() {
             <CardDescription>Solo prueba ZK (verificación básica)</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={handleGenerateZkProof} className="w-full bg-[#0ea5e9]" disabled={zkProofGenerated}>
+            <Button
+              onClick={handleGenerateZkProof}
+              className="w-full bg-[#0ea5e9]"
+              disabled={zkProofGenerated}
+            >
               {zkProofGenerated ? "Prueba ZK Generada" : "Generar Prueba ZK"}
             </Button>
             {zkProofGenerated && (
               <Alert className="mt-4 border-[#22c55e]">
                 <CheckCircle2 className="h-4 w-4 text-[#22c55e]" />
-                <AlertDescription className="text-[#22c55e]">Prueba ZK generada exitosamente</AlertDescription>
+                <AlertDescription className="text-[#22c55e]">
+                  Prueba ZK generada exitosamente
+                </AlertDescription>
               </Alert>
             )}
           </CardContent>
@@ -238,7 +244,8 @@ export default function DemoPage() {
               Paso 5: Obtener NFT de Estudiante
             </CardTitle>
             <CardDescription>
-              ¡Solo disponible después de mint exitoso! Obtén tu NFT que prueba tu estatus de estudiante verificado.
+              ¡Solo disponible después de mint exitoso! Obtén tu NFT que prueba tu estatus de estudiante
+              verificado.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -273,10 +280,10 @@ export default function DemoPage() {
       {/* Footer */}
       <footer className="border-t mt-12 py-6 bg-muted/30">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>EqualPass - Sistema de Verificación de Identidad Estudiantil</p>
+          <p>ZK-Scholar - Sistema de Verificación de Identidad Estudiantil</p>
           <p className="mt-1">Powered by Zero-Knowledge Proofs + WebAuthn + Blockchain</p>
         </div>
       </footer>
     </div>
-  )
+  );
 }

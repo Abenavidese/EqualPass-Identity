@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Shield, CheckCircle2, XCircle, Loader2, ArrowLeft } from "lucide-react"
-import { Link } from "react-router-dom"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Shield, CheckCircle2, XCircle, Loader2, ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function VerifierPage() {
-  const [tokenId, setTokenId] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [tokenId, setTokenId] = useState("");
+  const [loading, setLoading] = useState(false);
   const [verificationResult, setVerificationResult] = useState<{
-    isValid: boolean
-    owner: string
-    issuedAt: string
-    expiresAt: string
-  } | null>(null)
+    isValid: boolean;
+    owner: string;
+    issuedAt: string;
+    expiresAt: string;
+  } | null>(null);
 
   const handleVerify = async () => {
-    setLoading(true)
-    setVerificationResult(null)
+    setLoading(true);
+    setVerificationResult(null);
 
     // Simulate verification
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     // Mock verification results
     const mockResults: Record<string, any> = {
@@ -46,18 +46,18 @@ export default function VerifierPage() {
         issuedAt: "N/A",
         expiresAt: "N/A",
       },
-    }
+    };
 
     const result = mockResults[tokenId] || {
       isValid: false,
       owner: "0x0000000000000000000000000000000000000000",
       issuedAt: "N/A",
       expiresAt: "N/A",
-    }
+    };
 
-    setVerificationResult(result)
-    setLoading(false)
-  }
+    setVerificationResult(result);
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-sky-50 py-8">
@@ -159,14 +159,17 @@ export default function VerifierPage() {
               {verificationResult.isValid && (
                 <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
                   <p className="text-sm text-green-800">
-                    ✓ Esta credencial es válida y fue emitida por EqualPass. El portador es un estudiante verificado.
+                    ✓ Esta credencial es válida y fue emitida por ZK-Scholar. El portador es un estudiante
+                    verificado.
                   </p>
                 </div>
               )}
 
               {!verificationResult.isValid && (
                 <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-sm text-red-800">✗ Esta credencial no es válida o no existe en el sistema.</p>
+                  <p className="text-sm text-red-800">
+                    ✗ Esta credencial no es válida o no existe en el sistema.
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -181,12 +184,12 @@ export default function VerifierPage() {
               Verificación Segura
             </h3>
             <p className="text-sm text-muted-foreground">
-              Todas las verificaciones se realizan on-chain en Polkadot Paseo Testnet. Los datos personales del
-              estudiante nunca son revelados durante el proceso de verificación.
+              Todas las verificaciones se realizan on-chain en Polkadot Paseo Testnet. Los datos personales
+              del estudiante nunca son revelados durante el proceso de verificación.
             </p>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }

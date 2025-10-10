@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Shield, Lock, Zap, CheckCircle2, ArrowRight, Github, Twitter } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Shield, Lock, Zap, CheckCircle2, ArrowRight, Github, Twitter } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   return (
@@ -12,7 +12,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Shield className="h-8 w-8 text-[#0ea5e9]" />
-              <span className="text-xl font-bold">EqualPass</span>
+              <span className="text-xl font-bold">ZK-Scholar</span>
             </div>
             <div className="hidden md:flex items-center gap-6">
               <a href="#features" className="text-sm font-medium hover:text-[#0ea5e9] transition-colors">
@@ -43,8 +43,8 @@ export default function LandingPage() {
             Prueba que eres estudiante <span className="text-[#0ea5e9]">sin revelar tus datos</span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
-            EqualPass utiliza Zero-Knowledge Proofs y blockchain para verificar tu identidad estudiantil manteniendo tu
-            privacidad intacta. Sin compartir información personal.
+            ZK-Scholar utiliza Zero-Knowledge Proofs y blockchain para verificar tu identidad estudiantil
+            manteniendo tu privacidad intacta. Sin compartir información personal.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/demo">
@@ -160,7 +160,8 @@ export default function LandingPage() {
                 {
                   step: "03",
                   title: "Recibe tu NFT",
-                  description: "Obtén tu credencial digital permanente en blockchain. Úsala cuando y donde quieras.",
+                  description:
+                    "Obtén tu credencial digital permanente en blockchain. Úsala cuando y donde quieras.",
                   color: "text-[#f59e0b]",
                 },
               ].map((item, index) => (
@@ -218,9 +219,11 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-[#0ea5e9] to-[#0284c7] py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Comienza a Verificar tu Identidad Hoy</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Comienza a Verificar tu Identidad Hoy
+          </h2>
           <p className="text-xl text-sky-100 mb-8 max-w-2xl mx-auto">
-            Únete a la revolución de la privacidad digital. Prueba EqualPass ahora.
+            Únete a la revolución de la privacidad digital. Prueba ZK-Scholar ahora.
           </p>
           <Link to="/demo">
             <Button size="lg" variant="secondary" className="text-lg px-8">
@@ -238,7 +241,7 @@ export default function LandingPage() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Shield className="h-6 w-6 text-[#0ea5e9]" />
-                <span className="text-white font-bold text-lg">EqualPass</span>
+                <span className="text-white font-bold text-lg">ZK-Scholar</span>
               </div>
               <p className="text-sm">Verificación de identidad estudiantil con privacidad garantizada.</p>
             </div>
@@ -295,10 +298,10 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm">
-            <p>&copy; 2025 EqualPass. Todos los derechos reservados.</p>
+            <p>&copy; 2025 ZK-Scholar. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

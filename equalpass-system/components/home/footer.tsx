@@ -1,4 +1,4 @@
-import { ShieldCheck } from "lucide-react"
+import { ShieldCheck } from "lucide-react";
 
 export function Footer() {
   return (
@@ -9,9 +9,9 @@ export function Footer() {
           <span className="text-sm">No se almacena información personal identificable (PII)</span>
         </div>
         <p className="text-xs text-muted-foreground">
-          Demo de EqualPass - Sistema de verificación estudiantil con Zero-Knowledge Proofs
+          Demo de ZK-Scholar - Sistema de verificación estudiantil con Zero-Knowledge Proofs
         </p>
       </div>
     </footer>
-  )
+  );
 }

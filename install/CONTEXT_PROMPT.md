@@ -1,12 +1,13 @@
-# EqualPass Identity - Contexto Completo del Proyecto
+# ZK-Scholar Identity - Contexto Completo del Proyecto
 
 ## Descripción General del Proyecto
 
-**EqualPass** es un sistema de verificación de identidad estudiantil que combina **Zero-Knowledge Proofs (ZK) + WebAuthn** para crear un sistema de credenciales seguro y anti-fraude. Está construido para la red **Polkadot Paseo TestNet** y permite a estudiantes obtener NFTs verificados que prueban su estatus sin revelar información personal.
+**ZK-Scholar** es un sistema de verificación de identidad estudiantil que combina **Zero-Knowledge Proofs (ZK) + WebAuthn** para crear un sistema de credenciales seguro y anti-fraude. Está construido para la red **Polkadot Paseo TestNet** y permite a estudiantes obtener NFTs verificados que prueban su estatus sin revelar información personal.
 
 ## Arquitectura Técnica Actual
 
 ### 🔧 **Stack Tecnológico**
+
 - **Smart Contracts:** Solidity ^0.8.28 en Polkadot Paseo TestNet
 - **ZK Proofs:** Circom circuits + snarkjs para verificación de elegibilidad
 - **Autenticación:** WebAuthn para verificación biométrica
@@ -15,6 +16,7 @@
 - **Blockchain:** Polkadot Paseo PassetHub (Chain ID: 420420422)
 
 ### 🌐 **Configuración de Red**
+
 ```javascript
 Network Name: Paseo PassetHub
 Chain ID: 420420422 (0x190f1b46)
@@ -24,8 +26,9 @@ Block Explorer: https://blockscout-passet-hub.parity-testnet.parity.io
 ```
 
 ### 📁 **Estructura del Proyecto**
+
 ```
-equalpass-hackathon/
+ZK-Scholar-hackathon/
 ├── backend/
 │   ├── server-modular.js              # Servidor principal con arquitectura modular
 │   ├── demo-webauthn.html             # Demo principal con flujo completo
@@ -50,9 +53,9 @@ equalpass-hackathon/
 │       └── nft.png                    # Imagen del NFT
 ├── contracts/
 │   ├── contracts/
-│   │   └── EqualPassIdentityBadge.sol # Smart contract principal
+│   │   └── ZK-ScholarIdentityBadge.sol # Smart contract principal
 │   ├── ignition/modules/
-│   │   └── DeployEqualPass.ts         # Script de deployment
+│   │   └── DeployZK-Scholar.ts         # Script de deployment
 │   └── hardhat.config.ts              # Configuración de Hardhat
 └── frontend/                          # Frontend React (opcional)
 ```
@@ -60,50 +63,60 @@ equalpass-hackathon/
 ## 🎯 **Funcionalidades Implementadas**
 
 ### ✅ **1. Verificación Zero-Knowledge**
+
 - Circuito Circom que verifica elegibilidad estudiantil sin revelar datos personales
 - Inputs: `studentStatus`, `enrollmentYear`, `universityHash`, `userSecret`
 - Genera pruebas verificables sin exponer información sensible
 
 ### ✅ **2. Autenticación WebAuthn**
+
 - Registro de dispositivos biométricos (huella, face ID, etc.)
 - Verificación de identidad usando credenciales del dispositivo
 - Sistema de challenges para prevenir replay attacks
 
 ### ✅ **3. Smart Contract NFT**
-- Contrato `EqualPassIdentityBadge` que mintea badges estudiantiles
+
+- Contrato `ZK-ScholarIdentityBadge` que mintea badges estudiantiles
 - Función `mintBadge()` que acepta pruebas ZK
 - Metadata dinámico con `tokenURI()` pointing a servidor local
 - Deployed en Polkadot Paseo TestNet
 
 ### ✅ **4. Integración MetaMask**
+
 - Auto-configuración de red Polkadot Paseo
 - Importación automática de NFTs a wallet
 - Fallback a instrucciones manuales si falla la importación automática
 
 ### ✅ **5. Sistema Anti-Fraude**
+
 - Demo que muestra cómo un atacante con solo datos ZK NO puede autenticarse
 - Requiere tanto prueba ZK como verificación biométrica para alta seguridad
 
 ## 🔄 **Flujo de Usuario Actual**
 
 ### **Paso 1: Datos de Estudiante**
+
 Usuario ingresa: dirección wallet, status estudiante, año matrícula, hash universidad, secreto
 
 ### **Paso 2: Generar Prueba ZK**
+
 - Sistema genera prueba zero-knowledge con datos del estudiante
 - Prueba que es estudiante sin revelar información personal
 - Mintea NFT con seguridad estándar
 
 ### **Paso 3: Registro WebAuthn (Opcional)**
+
 - Usuario registra dispositivo biométrico una sola vez
 - Genera credenciales WebAuthn únicas por dispositivo
 
 ### **Paso 4: Prueba ZK + WebAuthn (Alta Seguridad)**
+
 - Combina prueba ZK con verificación biométrica
 - Nivel máximo de seguridad anti-fraude
 - Mintea NFT con seguridad alta
 
 ### **Paso 5: Obtener NFT**
+
 - Descarga automática de NFT a MetaMask
 - Configuración automática de red Polkadot si es necesario
 - NFT muestra credencial estudiantil verificada
@@ -111,6 +124,7 @@ Usuario ingresa: dirección wallet, status estudiante, año matrícula, hash uni
 ## 🛡️ **Verificador para Instituciones**
 
 ### **verificador-seguro.html**
+
 - Interface para que instituciones verifiquen estudiantes
 - Verificación automática al conectar wallet
 - Muestra solo: conexión, propiedad de wallet, firma digital, credenciales estudiantiles
@@ -119,6 +133,7 @@ Usuario ingresa: dirección wallet, status estudiante, año matrícula, hash uni
 ## 🚀 **APIs y Endpoints**
 
 ### **Servidor (Puerto 3001)**
+
 ```javascript
 // WebAuthn
 POST /api/webauthn/register/begin
@@ -141,9 +156,10 @@ POST /api/demo-fraud         # Simulación de fraude
 ```
 
 ## 🎨 **Configuración NFT**
+
 ```javascript
 {
-  "name": "EqualPass Student Badge #[tokenId]",
+  "name": "ZK-Scholar Student Badge #[tokenId]",
   "description": "Credencial estudiantil verificada con Zero-Knowledge Proofs y WebAuthn...",
   "image": "http://localhost:3001/nft/nft.png",
   "external_url": "http://localhost:3001/verificador",
@@ -158,6 +174,7 @@ POST /api/demo-fraud         # Simulación de fraude
 ## 🔧 **Configuración Clave**
 
 ### **Hardhat Config**
+
 ```javascript
 module.exports = {
   solidity: "0.8.28",
@@ -173,6 +190,7 @@ module.exports = {
 ```
 
 ### **Variables de Entorno**
+
 - `PRIVATE_KEY`: Clave privada para deployment (sin 0x prefix)
 - Servidor corre en puerto 3001
 - Todos los endpoints apuntan a localhost:3001
@@ -180,11 +198,13 @@ module.exports = {
 ## 🎯 **Objetivos y Casos de Uso**
 
 ### **Para Hackathon**
+
 - Demostrar seguridad anti-fraude con ZK + WebAuthn
 - Mostrar diferencia entre verificación estándar vs alta seguridad
 - Proof of concept de credenciales estudiantiles descentralizadas
 
 ### **Casos de Uso Reales**
+
 1. **Descuentos Estudiantiles:** Verificar estatus sin revelar universidad específica
 2. **Acceso a Recursos:** Bibliotecas, software estudiantil, eventos
 3. **Verificación Institucional:** Proceso automatizado para instituciones
@@ -193,16 +213,19 @@ module.exports = {
 ## 🔍 **Puntos Técnicos Importantes**
 
 ### **Seguridad**
+
 - Pruebas ZK son verificables pero no revelan datos
 - WebAuthn previene fraude con dispositivos robados
 - NFTs son proof of ownership en blockchain
 
 ### **UX Considerations**
+
 - Flujo progresivo: ZK básico → registro biométrico → alta seguridad
 - Auto-configuración de MetaMask para mejor experiencia
 - Fallbacks manuales cuando la auto-configuración falla
 
 ### **Limitaciones Actuales**
+
 - Testnet solo (Polkadot Paseo)
 - Circuitos ZK con datos mock para demo
 - Servidor local (no producción)
@@ -210,6 +233,7 @@ module.exports = {
 ## 📋 **Estado Actual del Proyecto**
 
 ### ✅ **Completado**
+
 - Smart contract deployed y funcionando
 - Circuitos ZK generando pruebas válidas
 - WebAuthn registration y authentication
@@ -219,6 +243,7 @@ module.exports = {
 - Sistema anti-fraude demostrable
 
 ### 🔄 **Listo para Demo**
+
 - Flujo completo ZK → WebAuthn → NFT
 - URLs de acceso:
   - Demo principal: `http://localhost:3001/demo-webauthn.html`

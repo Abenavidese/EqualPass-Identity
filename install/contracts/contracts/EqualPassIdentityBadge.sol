@@ -68,7 +68,7 @@ contract ERC721 {
     function safeTransferFrom(address, address, uint256, bytes memory) public pure { revert("Non-transferable"); }
 }
 
-contract EqualPassIdentityBadge is ERC721, AccessControl {
+contract ZK-ScholarIdentityBadge is ERC721, AccessControl {
     uint256 private _tokenIdCounter;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -83,7 +83,7 @@ contract EqualPassIdentityBadge is ERC721, AccessControl {
 
     event BadgeMinted(address indexed to, uint256 indexed tokenId, uint256 badgeType, bytes32 claimId);
 
-    constructor() ERC721("EqualPass Identity Badge", "EPIB") {
+    constructor() ERC721("ZK-Scholar Identity Badge", "EPIB") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
     }

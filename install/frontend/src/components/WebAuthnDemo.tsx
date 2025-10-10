@@ -277,7 +277,7 @@ export const WebAuthnDemo: React.FC = () => {
         <div className="md:col-span-2 bg-white p-6 rounded-lg shadow">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-2xl font-semibold">🛡️ EqualPass — Demo WebAuthn + ZK</h2>
+              <h2 className="text-2xl font-semibold">🛡️ ZK-Scholar — Demo WebAuthn + ZK</h2>
               <p className="text-sm text-gray-500 mt-1">
                 Flujo de verificación paso a paso para jueces y evaluadores.
               </p>
@@ -431,7 +431,7 @@ export const WebAuthnDemo: React.FC = () => {
             <h3 className="text-sm font-medium text-gray-600">NFT</h3>
             <div className="mt-2">
               {nftTokenId ? (
-                <NFTCard title="EqualPass Badge" tokenId={nftTokenId} imageSrc={nftImageSrc} />
+                <NFTCard title="ZK-Scholar Badge" tokenId={nftTokenId} imageSrc={nftImageSrc} />
               ) : (
                 <div className="text-gray-500 text-sm">Tu NFT aparecerá aquí después del mint</div>
               )}

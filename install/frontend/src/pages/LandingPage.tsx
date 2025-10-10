@@ -134,7 +134,7 @@ export default function LandingPage(): JSX.Element {
             Verifica tu identidad estudiantil sin revelar datos personales
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-            EqualPass combina pruebas de conocimiento cero, autenticación biométrica y blockchain para crear
+            ZK-Scholar combina pruebas de conocimiento cero, autenticación biométrica y blockchain para crear
             un sistema de verificación estudiantil seguro y privado.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
@@ -369,7 +369,7 @@ export default function LandingPage(): JSX.Element {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <ShieldIcon className="h-6 w-6 text-[#0ea5e9]" />
-                <span className="text-lg font-bold">EqualPass</span>
+                <span className="text-lg font-bold">ZK-Scholar</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Verificación de identidad estudiantil con privacidad garantizada
@@ -409,7 +409,7 @@ export default function LandingPage(): JSX.Element {
             </div>
           </div>
           <div className="max-w-6xl mx-auto mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-            <p>© 2025 EqualPass. Todos los derechos reservados.</p>
+            <p>© 2025 ZK-Scholar. Todos los derechos reservados.</p>
             <p className="mt-2">Powered by Zero-Knowledge Proofs + WebAuthn + Blockchain</p>
           </div>
         </div>

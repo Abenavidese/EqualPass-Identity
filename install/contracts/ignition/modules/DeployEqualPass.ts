@@ -1,9 +1,9 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
-const EqualPassModule = buildModule("EqualPassModule", (m) => {
-  const equalPassBadge = m.contract("EqualPassIdentityBadge", []);
+const ZK-ScholarModule = buildModule("ZK-ScholarModule", (m) => {
+  const ZK-ScholarBadge = m.contract("ZK-ScholarIdentityBadge", []);
 
-  return { equalPassBadge };
+  return { ZK-ScholarBadge };
 });
 
-export default EqualPassModule;
+export default ZK-ScholarModule;

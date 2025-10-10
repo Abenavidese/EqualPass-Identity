@@ -10,7 +10,7 @@ export default function App() {
 
   return (
     <div className="container p-8">
-      <h2 className="text-xl font-semibold">EqualPass</h2>
+      <h2 className="text-xl font-semibold">ZK-Scholar</h2>
       <p className="text-sm text-slate-600">
         Open{" "}
         <a className="underline" href="/test">
