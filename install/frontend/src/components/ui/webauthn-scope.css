@@ -1,0 +1,37 @@
+/* Scoped overrides to prevent the global App.css from forcing the bluish theme
+   into the WebAuthn demo components. This file is imported from the component
+   and therefore loaded after App.css, so these rules can safely override it.
+*/
+.webauthn-scope {
+  --tw-bg-opacity: 1;
+}
+
+/* Ensure buttons inside the demo respect component classes (Tailwind) */
+.webauthn-scope button,
+.webauthn-scope .card {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+}
+
+.webauthn-scope input,
+.webauthn-scope select,
+.webauthn-scope textarea {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: inherit !important;
+}
+
+/* Small helper to restore default anchor styles inside demo */
+.webauthn-scope a {
+  color: inherit !important;
+}
+
+/* Make sure utility classes like bg-*/
+are visible by removing element-level overrides */ .webauthn-scope [class*="bg-"] {
+  background-color: initial !important;
+  background-image: initial !important;
+}
