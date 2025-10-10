@@ -18,8 +18,13 @@ import {
   getContractInfo,
   getNFTImageUrl,
   type MintResponse,
-} from "@/lib/api"
-import { base64urlToUint8Array, uint8ArrayToBase64url, copyToClipboard, addNFTToMetaMask } from "@/lib/webauthn-utils"
+} from "@/src/lib/api";
+import {
+  base64urlToUint8Array,
+  uint8ArrayToBase64url,
+  copyToClipboard,
+  addNFTToMetaMask,
+} from "@/lib/webauthn-utils";
 
 export default function DemoPage() {
   const [userAddress, setUserAddress] = useState("0x6388681e6A22F8Fc30e3150733795255D4250db1")
@@ -179,7 +184,10 @@ export default function DemoPage() {
     if (!nftData) return
 
     try {
-      const success = await addNFTToMetaMask(nftData.contractAddress, nftData.tokenId)
+      const success = await addNFTToMetaMask({
+        address: nftData.contractAddress as `0x${string}`,
+        tokenId: nftData.tokenId.toString(),
+      })
       if (success) {
         alert("🎉 ¡NFT agregado a MetaMask exitosamente!")
       } else {
