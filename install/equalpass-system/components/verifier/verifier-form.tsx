@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, CheckCircle2, XCircle } from "lucide-react"
+import { Loader2, CheckCircle2, XCircle, User } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { equalPassApi } from "@/lib/equal-pass-api"
 
@@ -35,7 +35,8 @@ interface AddressVerificationResult {
 export function VerifierForm() {
   const [tokenId, setTokenId] = useState("")
   const [address, setAddress] = useState("")
-  const [queryType, setQueryType] = useState<"token" | "address">("token")
+  const [walletConnected, setWalletConnected] = useState(false)
+  const [queryType, setQueryType] = useState<"token" | "address">("address")
   const [isLoading, setIsLoading] = useState(false)
   const [tokenResult, setTokenResult] = useState<TokenVerificationResult | null>(null)
   const [addressResult, setAddressResult] = useState<AddressVerificationResult | null>(null)
@@ -136,9 +137,37 @@ export function VerifierForm() {
     }
   }
 
+  // Función para conectar wallet
+  const connectWallet = async () => {
+    try {
+      if (!(window as any).ethereum) {
+        toast({
+          title: "Error",
+          description: "MetaMask no está instalado. Por favor instala MetaMask para continuar.",
+          variant: "destructive"
+        })
+        return
+      }
+
+      const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' })
+      if (accounts.length > 0) {
+        setAddress(accounts[0])
+        setWalletConnected(true)
+      }
+    } catch (error) {
+      console.error('Error connecting wallet:', error)
+      toast({
+        title: "Error",
+        description: "Error conectando la wallet. Por favor intenta de nuevo.",
+        variant: "destructive"
+      })
+    }
+  }
+
   const handleReset = () => {
     setTokenId("")
     setAddress("")
+    setWalletConnected(false)
     setTokenResult(null)
     setAddressResult(null)
     setVerificationError(null)
@@ -171,8 +200,8 @@ export function VerifierForm() {
 
         <CardContent>
           <Tabs value={queryType} onValueChange={(v) => setQueryType(v as "token" | "address")}>
-            <TabsList className="grid w-full grid-cols-2 bg-background/60 backdrop-blur-sm">
-              <TabsTrigger value="token">Por Token ID</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-1 bg-background/60 backdrop-blur-sm">
+              {/* <TabsTrigger value="token">Por Token ID</TabsTrigger> */}
               <TabsTrigger value="address">Por Dirección</TabsTrigger>
             </TabsList>
 
@@ -252,29 +281,60 @@ export function VerifierForm() {
 
             {/* --- TAB POR ADDRESS --- */}
             <TabsContent value="address" className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="verify-address">Dirección de Wallet</Label>
-                <Input
-                  id="verify-address"
-                  placeholder="0x..."
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  disabled={isLoading}
-                  className="bg-background/70"
-                />
-              </div>
+              {!walletConnected ? (
+                <div className="text-center p-6 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50/50">
+                  <User className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                  <h3 className="text-sm font-medium text-gray-900 mb-1">Conecta tu Wallet</h3>
+                  <p className="text-xs text-gray-500 mb-4">
+                    Conecta MetaMask para verificar la propiedad de tus badges
+                  </p>
+                  <Button 
+                    onClick={connectWallet}
+                    className="w-full"
+                  >
+                    <span className="mr-2">🦊</span>
+                    Conectar MetaMask
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label>Wallet Conectada</Label>
+                    <Button 
+                      onClick={() => {
+                        setAddress("")
+                        setWalletConnected(false)
+                      }}
+                      variant="outline" 
+                      size="sm"
+                    >
+                      Desconectar
+                    </Button>
+                  </div>
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <span className="text-sm font-medium text-green-900">Conectado</span>
+                    </div>
+                    <p className="text-xs font-mono text-green-700 mt-1 break-all">
+                      {address}
+                    </p>
+                  </div>
+                </div>
+              )}
 
-              <Button
-                onClick={handleVerifyAddress}
-                disabled={isLoading || !address.trim()}
-                className={[
-                  "group w-full relative overflow-hidden rounded-xl border text-white shadow-lg transition-all",
-                  isLoading
-                    ? "border-white/10 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 opacity-85"
-                    : "border-white/10 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:shadow-xl hover:brightness-110 active:scale-[0.99]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                ].join(" ")}
-              >
+              {walletConnected && (
+                <Button
+                  onClick={handleVerifyAddress}
+                  disabled={isLoading || !address.trim()}
+                  className={[
+                    "group w-full relative overflow-hidden rounded-xl border text-white shadow-lg transition-all",
+                    isLoading
+                      ? "border-white/10 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 opacity-85"
+                      : "border-white/10 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:shadow-xl hover:brightness-110 active:scale-[0.99]",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                  ].join(" ")}
+                >
                 <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-15 group-active:opacity-20 bg-white" />
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -285,8 +345,9 @@ export function VerifierForm() {
                   "Verificar Dirección"
                 )}
               </Button>
+              )}
 
-              {addressResult && addressResult.verified && (
+              {walletConnected && addressResult && addressResult.verified && (
                 <Alert className="bg-card/60 backdrop-blur-sm border-green-500/70">
                   <CheckCircle2 className="h-4 w-4 text-green-600" />
                   <AlertDescription className="ml-2">

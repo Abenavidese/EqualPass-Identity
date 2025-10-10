@@ -14,7 +14,8 @@ import BackButton from "@/components/ui/BackButton";
 
 export default function DemoPage() {
   // Form state
-  const [userAddress, setUserAddress] = useState("0x6388681e6A22F8Fc30e3150733795255D4250db1");
+  const [userAddress, setUserAddress] = useState("");
+  const [walletConnected, setWalletConnected] = useState(false);
   const [studentStatus, setStudentStatus] = useState("1");
   const [enrollmentYear, setEnrollmentYear] = useState("2025");
   const [universityHash, setUniversityHash] = useState("12345");
@@ -48,8 +49,28 @@ export default function DemoPage() {
 
   // Check WebAuthn status on load
   useEffect(() => {
-    checkWebAuthnStatus();
+    if (userAddress) {
+      checkWebAuthnStatus();
+    }
   }, [userAddress]);
+
+  // Check if wallet is already connected on page load
+  useEffect(() => {
+    const checkWalletConnection = async () => {
+      try {
+        if ((window as any).ethereum) {
+          const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            setUserAddress(accounts[0]);
+            setWalletConnected(true);
+          }
+        }
+      } catch (error) {
+        console.warn('Error checking wallet connection:', error);
+      }
+    };
+    checkWalletConnection();
+  }, []);
 
   const setLoadingState = (key: string, value: boolean) => {
     setLoading(prev => ({ ...prev, [key]: value }));
@@ -84,6 +105,25 @@ export default function DemoPage() {
       setResult('status', { error: error.message, fallback: true });
     } finally {
       setLoadingState('status', false);
+    }
+  };
+
+  // Función para conectar wallet
+  const connectWallet = async () => {
+    try {
+      if (!(window as any).ethereum) {
+        alert('MetaMask no está instalado. Por favor instala MetaMask para continuar.');
+        return;
+      }
+
+      const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+      if (accounts.length > 0) {
+        setUserAddress(accounts[0]);
+        setWalletConnected(true);
+      }
+    } catch (error) {
+      console.error('Error connecting wallet:', error);
+      alert('Error conectando la wallet. Por favor intenta de nuevo.');
     }
   };
 
@@ -294,43 +334,76 @@ export default function DemoPage() {
 
             <CardContent>
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="userAddress">Dirección de Wallet</Label>
-                  <Input
-                    id="userAddress"
-                    value={userAddress}
-                    onChange={(e) => setUserAddress(e.target.value)}
-                    placeholder="0x..."
-                    className="font-mono text-sm"
-                  />
-                </div>
+                {!walletConnected ? (
+                  <div className="text-center p-6 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50/50">
+                    <User className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                    <h3 className="text-sm font-medium text-gray-900 mb-1">Conecta tu Wallet</h3>
+                    <p className="text-xs text-gray-500 mb-4">
+                      Conecta MetaMask para comenzar con la verificación de identidad
+                    </p>
+                    <Button 
+                      onClick={connectWallet}
+                      className="w-full"
+                    >
+                      <span className="mr-2">🦊</span>
+                      Conectar MetaMask
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label>Wallet Conectada</Label>
+                      <Button 
+                        onClick={() => {
+                          setUserAddress("");
+                          setWalletConnected(false);
+                        }}
+                        variant="outline" 
+                        size="sm"
+                      >
+                        Desconectar
+                      </Button>
+                    </div>
+                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                        <span className="text-sm font-medium text-green-900">Conectado</span>
+                      </div>
+                      <p className="text-xs font-mono text-green-700 mt-1 break-all">
+                        {userAddress}
+                      </p>
+                    </div>
+                  </div>
+                )}
 
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={checkWebAuthnStatus}
-                    disabled={loading.status}
-                  >
-                    {loading.status ? "Verificando..." : "Verificar Estado WebAuthn"}
-                  </Button>
+                {walletConnected && (
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={checkWebAuthnStatus}
+                      disabled={loading.status}
+                    >
+                      {loading.status ? "Verificando..." : "Verificar Estado WebAuthn"}
+                    </Button>
 
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      localStorage.removeItem(`webauthn_registered_${userAddress}`);
-                      setWebauthnRegistered(false);
-                      setResults((prev) => ({ ...prev, status: null }));
-                      alert("Estado local limpiado. Verifica el estado nuevamente.");
-                    }}
-                    title="Limpiar estado local en caso de desincronización"
-                  >
-                    🔄
-                  </Button>
-                </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        localStorage.removeItem(`webauthn_registered_${userAddress}`);
+                        setWebauthnRegistered(false);
+                        setResults((prev) => ({ ...prev, status: null }));
+                        alert("Estado local limpiado. Verifica el estado nuevamente.");
+                      }}
+                      title="Limpiar estado local en caso de desincronización"
+                    >
+                      🔄
+                    </Button>
+                  </div>
+                )}
 
-                {results.status && (
+                {walletConnected && results.status && (
                   <Alert variant={webauthnStatus?.hasCredential ? "default" : "destructive"}>
                     <AlertDescription className="space-y-1">
                       <div className="flex items-center gap-2">
