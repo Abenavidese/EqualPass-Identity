@@ -6,10 +6,12 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const variants: Record<string, string> = {
-  primary: "bg-indigo-600 hover:bg-indigo-700 text-white",
-  secondary: "bg-gray-600 hover:bg-gray-700 text-white",
-  success: "bg-emerald-600 hover:bg-emerald-700 text-white",
-  danger: "bg-red-600 hover:bg-red-700 text-white",
+  primary:
+    "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md hover:scale-[1.01] transform",
+  secondary: "bg-gradient-to-r from-gray-700 to-gray-600 text-white shadow-sm hover:brightness-105 transform",
+  success:
+    "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:scale-[1.01] transform",
+  danger: "bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-md hover:scale-[1.01] transform",
 };
 
 export const Button: React.FC<Props> = ({
@@ -19,7 +21,8 @@ export const Button: React.FC<Props> = ({
   className = "",
   ...rest
 }) => {
-  const base = "px-4 py-2 rounded disabled:opacity-60 flex items-center gap-2";
+  const base =
+    "px-4 py-2 rounded-lg disabled:opacity-60 flex items-center gap-2 transition-transform duration-150";
   return (
     <button
       className={`${base} ${variants[variant]} ${className}`}

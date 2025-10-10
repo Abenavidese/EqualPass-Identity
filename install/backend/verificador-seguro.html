@@ -1,217 +1,338 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EqualPass - Verificador Oficial</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZK-Scholar - Verificador Oficial</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f8f9fa; }
-        .header { text-align: center; background: #007bff; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: white; }
-        .success { background-color: #d4edda; border-color: #c3e6cb; }
-        .error { background-color: #f8d7da; border-color: #f5c6cb; }
-        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
-        .info { background-color: #d1ecf1; border-color: #bee5eb; }
-        .critical { background-color: #ffe6e6; border: 3px solid #ff4444; }
-        button { padding: 12px 24px; margin: 8px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
-        button.generate { background: #28a745; }
-        button.verify { background: #17a2b8; }
-        button.critical { background: #dc3545; }
-        button:disabled { background: #6c757d; cursor: not-allowed; }
-        input, textarea { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
-        .code-box { background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; border: 2px solid #007bff; }
-        .address { font-family: monospace; background: #f5f5f5; padding: 8px; border-radius: 4px; word-break: break-all; }
-        .verification-steps { background: #e8f4f8; padding: 15px; border-left: 4px solid #17a2b8; }
-        .level-high { background: #28a745; color: white; }
-        .level-maximum { background: #007bff; color: white; }
-        .badge-info { background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 6px; border-left: 4px solid #28a745; }
-        .instructions { background: #fff3cd; padding: 15px; border-radius: 8px; }
-        h1, h2 { color: #333; }
-        .step-number { background: #007bff; color: white; border-radius: 50%; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; }
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f8f9fa;
+      }
+      .header {
+        text-align: center;
+        background: #007bff;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      .section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: white;
+      }
+      .success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+      }
+      .error {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+      }
+      .warning {
+        background-color: #fff3cd;
+        border-color: #ffeaa7;
+      }
+      .info {
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+      }
+      .critical {
+        background-color: #ffe6e6;
+        border: 3px solid #ff4444;
+      }
+      button {
+        padding: 12px 24px;
+        margin: 8px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button.generate {
+        background: #28a745;
+      }
+      button.verify {
+        background: #17a2b8;
+      }
+      button.critical {
+        background: #dc3545;
+      }
+      button:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .code-box {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: monospace;
+        white-space: pre-wrap;
+        border: 2px solid #007bff;
+      }
+      .address {
+        font-family: monospace;
+        background: #f5f5f5;
+        padding: 8px;
+        border-radius: 4px;
+        word-break: break-all;
+      }
+      .verification-steps {
+        background: #e8f4f8;
+        padding: 15px;
+        border-left: 4px solid #17a2b8;
+      }
+      .level-high {
+        background: #28a745;
+        color: white;
+      }
+      .level-maximum {
+        background: #007bff;
+        color: white;
+      }
+      .badge-info {
+        background: #f8f9fa;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 6px;
+        border-left: 4px solid #28a745;
+      }
+      .instructions {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      .step-number {
+        background: #007bff;
+        color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <h1>🛡️ EqualPass - Sistema de Verificación</h1>
-        <p>Verificación segura de credenciales estudiantiles con prueba de propiedad</p>
+      <h1>🛡️ ZK-Scholar - Sistema de Verificación</h1>
+      <p>Verificación segura de credenciales estudiantiles con prueba de propiedad</p>
     </div>
 
     <div class="section info">
-        <h2>📋 Información del Verificador</h2>
-        <input type="text" id="verifierName" placeholder="Tu nombre o institución" value="Universidad XYZ">
-        <input type="text" id="purpose" placeholder="Propósito de la verificación" value="Verificación para descuento estudiantil">
+      <h2>📋 Información del Verificador</h2>
+      <input type="text" id="verifierName" placeholder="Tu nombre o institución" value="Universidad XYZ" />
+      <input
+        type="text"
+        id="purpose"
+        placeholder="Propósito de la verificación"
+        value="Verificación para descuento estudiantil"
+      />
     </div>
 
     <div class="section">
-        <h2><span class="step-number">1</span>Verificación Automática</h2>
-        <p>El estudiante conecta su wallet y el sistema verifica automáticamente su identidad y credenciales.</p>
-        
-        <div id="walletStatus" class="info" style="display:none;">
-            <p><strong>Wallet conectada:</strong> <span id="connectedAddress"></span></p>
-            <p><strong>Red:</strong> <span id="networkInfo"></span></p>
-        </div>
-        
-        <button class="generate" onclick="startAutomaticVerification()">🚀 Iniciar Verificación Automática</button>
-        <button id="connectWalletBtn" onclick="connectWallet()" style="display:none;">🔗 Conectar Wallet Primero</button>
-        
-        <div id="verificationProcess"></div>
-        <div id="verificationResult"></div>
+      <h2><span class="step-number">1</span>Verificación Automática</h2>
+      <p>
+        El estudiante conecta su wallet y el sistema verifica automáticamente su identidad y credenciales.
+      </p>
+
+      <div id="walletStatus" class="info" style="display: none">
+        <p><strong>Wallet conectada:</strong> <span id="connectedAddress"></span></p>
+        <p><strong>Red:</strong> <span id="networkInfo"></span></p>
+      </div>
+
+      <button class="generate" onclick="startAutomaticVerification()">
+        🚀 Iniciar Verificación Automática
+      </button>
+      <button id="connectWalletBtn" onclick="connectWallet()" style="display: none">
+        🔗 Conectar Wallet Primero
+      </button>
+
+      <div id="verificationProcess"></div>
+      <div id="verificationResult"></div>
     </div>
 
-    <div class="section critical" id="fraudWarning" style="display:none;">
-        <h2>🚨 ADVERTENCIA DE SEGURIDAD</h2>
-        <p><strong>IMPORTANTE:</strong> Sin firma válida, no puedes estar seguro de que esta persona es el dueño real de la wallet.</p>
-        <p>Cualquiera puede copiar una dirección de wallet pública. La firma digital es la única prueba confiable de propiedad.</p>
+    <div class="section critical" id="fraudWarning" style="display: none">
+      <h2>🚨 ADVERTENCIA DE SEGURIDAD</h2>
+      <p>
+        <strong>IMPORTANTE:</strong> Sin firma válida, no puedes estar seguro de que esta persona es el dueño
+        real de la wallet.
+      </p>
+      <p>
+        Cualquiera puede copiar una dirección de wallet pública. La firma digital es la única prueba confiable
+        de propiedad.
+      </p>
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:3001/api';
-        let currentWalletAddress = null;
-        let currentChallengeId = null;
+      const API_BASE = "http://localhost:3001/api";
+      let currentWalletAddress = null;
+      let currentChallengeId = null;
 
-        // Detectar MetaMask y estado de la wallet
-        async function checkWalletConnection() {
-            if (typeof window.ethereum !== 'undefined') {
-                try {
-                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                    if (accounts.length > 0) {
-                        currentWalletAddress = accounts[0];
-                        document.getElementById('connectedAddress').textContent = currentWalletAddress;
-                        document.getElementById('walletStatus').style.display = 'block';
-                        
-                        // Obtener información de la red
-                        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                        document.getElementById('networkInfo').textContent = `Chain ID: ${parseInt(chainId, 16)}`;
-                        
-                        return true;
-                    }
-                } catch (error) {
-                    console.error('Error verificando wallet:', error);
-                }
+      // Detectar MetaMask y estado de la wallet
+      async function checkWalletConnection() {
+        if (typeof window.ethereum !== "undefined") {
+          try {
+            const accounts = await window.ethereum.request({ method: "eth_accounts" });
+            if (accounts.length > 0) {
+              currentWalletAddress = accounts[0];
+              document.getElementById("connectedAddress").textContent = currentWalletAddress;
+              document.getElementById("walletStatus").style.display = "block";
+
+              // Obtener información de la red
+              const chainId = await window.ethereum.request({ method: "eth_chainId" });
+              document.getElementById("networkInfo").textContent = `Chain ID: ${parseInt(chainId, 16)}`;
+
+              return true;
             }
-            return false;
+          } catch (error) {
+            console.error("Error verificando wallet:", error);
+          }
+        }
+        return false;
+      }
+
+      // Conectar wallet
+      async function connectWallet() {
+        if (typeof window.ethereum === "undefined") {
+          alert("❌ MetaMask no detectado. Por favor instala MetaMask.");
+          return false;
         }
 
-        // Conectar wallet
-        async function connectWallet() {
-            if (typeof window.ethereum === 'undefined') {
-                alert('❌ MetaMask no detectado. Por favor instala MetaMask.');
-                return false;
-            }
+        try {
+          const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+          currentWalletAddress = accounts[0];
 
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                currentWalletAddress = accounts[0];
-                
-                document.getElementById('connectedAddress').textContent = currentWalletAddress;
-                document.getElementById('walletStatus').style.display = 'block';
-                document.getElementById('connectWalletBtn').style.display = 'none';
-                
-                return true;
-            } catch (error) {
-                alert('❌ Error conectando wallet: ' + error.message);
-                return false;
-            }
+          document.getElementById("connectedAddress").textContent = currentWalletAddress;
+          document.getElementById("walletStatus").style.display = "block";
+          document.getElementById("connectWalletBtn").style.display = "none";
+
+          return true;
+        } catch (error) {
+          alert("❌ Error conectando wallet: " + error.message);
+          return false;
+        }
+      }
+
+      // Proceso automático completo
+      async function startAutomaticVerification() {
+        const verifierName = document.getElementById("verifierName").value;
+        const purpose = document.getElementById("purpose").value;
+
+        if (!verifierName.trim()) {
+          alert("Por favor ingresa tu nombre o institución");
+          return;
         }
 
-        // Proceso automático completo
-        async function startAutomaticVerification() {
-            const verifierName = document.getElementById('verifierName').value;
-            const purpose = document.getElementById('purpose').value;
-
-            if (!verifierName.trim()) {
-                alert('Por favor ingresa tu nombre o institución');
-                return;
-            }
-
-            // Mostrar proceso en curso
-            document.getElementById('verificationProcess').innerHTML = `
+        // Mostrar proceso en curso
+        document.getElementById("verificationProcess").innerHTML = `
                 <div class="info">
                     <h3>🔄 Verificación en Proceso...</h3>
                     <p id="processStep">Paso 1: Verificando conexión de wallet...</p>
                 </div>
             `;
 
-            try {
-                // PASO 1: Verificar/Conectar wallet
-                updateProcessStep('Paso 1: Verificando conexión de wallet...');
-                
-                const isConnected = await checkWalletConnection();
-                if (!isConnected) {
-                    updateProcessStep('Paso 1: Conectando wallet...');
-                    const connected = await connectWallet();
-                    if (!connected) {
-                        throw new Error('No se pudo conectar la wallet');
-                    }
-                }
+        try {
+          // PASO 1: Verificar/Conectar wallet
+          updateProcessStep("Paso 1: Verificando conexión de wallet...");
 
-                // PASO 2: Generar desafío
-                updateProcessStep('Paso 2: Generando código de verificación...');
-                
-                const challengeResponse = await fetch(`${API_BASE}/generate-challenge`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ verifierName, purpose })
-                });
+          const isConnected = await checkWalletConnection();
+          if (!isConnected) {
+            updateProcessStep("Paso 1: Conectando wallet...");
+            const connected = await connectWallet();
+            if (!connected) {
+              throw new Error("No se pudo conectar la wallet");
+            }
+          }
 
-                const challengeResult = await challengeResponse.json();
-                currentChallengeId = challengeResult.challengeId;
+          // PASO 2: Generar desafío
+          updateProcessStep("Paso 2: Generando código de verificación...");
 
-                // PASO 3: Firmar automáticamente con MetaMask
-                updateProcessStep('Paso 3: Solicitando firma digital... (Revisa MetaMask)');
-                
-                const signature = await window.ethereum.request({
-                    method: 'personal_sign',
-                    params: [challengeResult.message, currentWalletAddress]
-                });
+          const challengeResponse = await fetch(`${API_BASE}/generate-challenge`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ verifierName, purpose }),
+          });
 
-                // PASO 4: Verificar automáticamente
-                updateProcessStep('Paso 4: Verificando firma y credenciales...');
-                
-                const verificationResponse = await fetch(`${API_BASE}/verify-ownership`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        challengeId: currentChallengeId,
-                        walletAddress: currentWalletAddress,
-                        signature
-                    })
-                });
+          const challengeResult = await challengeResponse.json();
+          currentChallengeId = challengeResult.challengeId;
 
-                const result = await verificationResponse.json();
+          // PASO 3: Firmar automáticamente con MetaMask
+          updateProcessStep("Paso 3: Solicitando firma digital... (Revisa MetaMask)");
 
-                // PASO 5: Mostrar resultados
-                updateProcessStep('Paso 5: Verificación completada ✅');
-                
-                setTimeout(() => {
-                    document.getElementById('verificationProcess').style.display = 'none';
-                    showVerificationResult(result);
-                }, 1000);
+          const signature = await window.ethereum.request({
+            method: "personal_sign",
+            params: [challengeResult.message, currentWalletAddress],
+          });
 
-            } catch (error) {
-                console.error('Error en verificación automática:', error);
-                
-                document.getElementById('verificationProcess').innerHTML = `
+          // PASO 4: Verificar automáticamente
+          updateProcessStep("Paso 4: Verificando firma y credenciales...");
+
+          const verificationResponse = await fetch(`${API_BASE}/verify-ownership`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              challengeId: currentChallengeId,
+              walletAddress: currentWalletAddress,
+              signature,
+            }),
+          });
+
+          const result = await verificationResponse.json();
+
+          // PASO 5: Mostrar resultados
+          updateProcessStep("Paso 5: Verificación completada ✅");
+
+          setTimeout(() => {
+            document.getElementById("verificationProcess").style.display = "none";
+            showVerificationResult(result);
+          }, 1000);
+        } catch (error) {
+          console.error("Error en verificación automática:", error);
+
+          document.getElementById("verificationProcess").innerHTML = `
                     <div class="error">
                         ❌ Error en verificación automática: ${error.message}
                     </div>
                 `;
 
-                document.getElementById('fraudWarning').style.display = 'block';
-            }
+          document.getElementById("fraudWarning").style.display = "block";
         }
+      }
 
-        function updateProcessStep(step) {
-            const stepElement = document.getElementById('processStep');
-            if (stepElement) {
-                stepElement.textContent = step;
-            }
+      function updateProcessStep(step) {
+        const stepElement = document.getElementById("processStep");
+        if (stepElement) {
+          stepElement.textContent = step;
         }
+      }
 
-        function showVerificationResult(result) {
-            if (result.verified && result.ownershipProven) {
-                
-                document.getElementById('verificationResult').innerHTML = `
+      function showVerificationResult(result) {
+        if (result.verified && result.ownershipProven) {
+          document.getElementById("verificationResult").innerHTML = `
                     <div class="success">
                         <h3>✅ VERIFICACIÓN AUTOMÁTICA EXITOSA</h3>
                         
@@ -221,29 +342,45 @@
                             <h4>✅ Verificaciones Completadas Automáticamente:</h4>
                             <ul>
                                 <li>🔗 Conexión de wallet: ✅</li>
-                                <li>🔑 Propiedad de wallet: ${result.verificationLevel.walletOwnership ? '✅' : '❌'}</li>
-                                <li>✍️ Firma digital automática: ${result.verificationLevel.signatureVerified ? '✅' : '❌'}</li>
-                                <li>🎓 Credenciales de estudiante: ${result.verificationLevel.studentCredentials ? '✅' : '❌'}</li>
+                                <li>🔑 Propiedad de wallet: ${
+                                  result.verificationLevel.walletOwnership ? "✅" : "❌"
+                                }</li>
+                                <li>✍️ Firma digital automática: ${
+                                  result.verificationLevel.signatureVerified ? "✅" : "❌"
+                                }</li>
+                                <li>🎓 Credenciales de estudiante: ${
+                                  result.verificationLevel.studentCredentials ? "✅" : "❌"
+                                }</li>
                             </ul>
                         </div>
 
                         <p><strong>Dirección verificada automáticamente:</strong></p>
                         <div class="address">${result.walletAddress}</div>
                         
-                        ${result.studentBadges.length > 0 ? `
+                        ${
+                          result.studentBadges.length > 0
+                            ? `
                             <h4>🎓 Badges de Estudiante Encontrados:</h4>
-                            ${result.studentBadges.map(badge => `
+                            ${result.studentBadges
+                              .map(
+                                (badge) => `
                                 <div class="badge-info">
                                     <strong>Token ID:</strong> ${badge.tokenId}<br>
                                     <strong>Emitido:</strong> ${new Date(badge.issuedAt).toLocaleString()}<br>
                                     <strong>Emisor:</strong> ${badge.issuer}
                                 </div>
-                            `).join('')}
-                        ` : ''}
+                            `
+                              )
+                              .join("")}
+                        `
+                            : ""
+                        }
                         
                         <p><strong>Verificado por:</strong> ${result.verifierInfo.verifierName}</p>
                         <p><strong>Propósito:</strong> ${result.verifierInfo.purpose}</p>
-                        <p><strong>Fecha:</strong> ${new Date(result.verifierInfo.verifiedAt).toLocaleString()}</p>
+                        <p><strong>Fecha:</strong> ${new Date(
+                          result.verifierInfo.verifiedAt
+                        ).toLocaleString()}</p>
                         
                         <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px;">
                             <h4>🎯 Para los Jueces:</h4>
@@ -258,13 +395,13 @@
                     </div>
                 `;
 
-                document.getElementById('fraudWarning').style.display = 'none';
-            } else {
-                document.getElementById('verificationResult').innerHTML = `
+          document.getElementById("fraudWarning").style.display = "none";
+        } else {
+          document.getElementById("verificationResult").innerHTML = `
                     <div class="error">
                         <h3>❌ VERIFICACIÓN AUTOMÁTICA FALLIDA</h3>
                         <p><strong>Error:</strong> ${result.error}</p>
-                        ${result.details ? `<p><strong>Detalles:</strong> ${result.details}</p>` : ''}
+                        ${result.details ? `<p><strong>Detalles:</strong> ${result.details}</p>` : ""}
                         
                         <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin-top: 15px;">
                             <h4>⚠️ Posibles Razones:</h4>
@@ -277,32 +414,32 @@
                     </div>
                 `;
 
-                document.getElementById('fraudWarning').style.display = 'block';
-            }
+          document.getElementById("fraudWarning").style.display = "block";
         }
+      }
 
-        // Verificar conexión al cargar la página
-        window.addEventListener('load', async () => {
-            const isConnected = await checkWalletConnection();
-            if (!isConnected && typeof window.ethereum !== 'undefined') {
-                document.getElementById('connectWalletBtn').style.display = 'inline-block';
-            }
+      // Verificar conexión al cargar la página
+      window.addEventListener("load", async () => {
+        const isConnected = await checkWalletConnection();
+        if (!isConnected && typeof window.ethereum !== "undefined") {
+          document.getElementById("connectWalletBtn").style.display = "inline-block";
+        }
+      });
+
+      // Detectar cambios de cuenta en MetaMask
+      if (typeof window.ethereum !== "undefined") {
+        window.ethereum.on("accountsChanged", (accounts) => {
+          if (accounts.length > 0) {
+            currentWalletAddress = accounts[0];
+            document.getElementById("connectedAddress").textContent = currentWalletAddress;
+            document.getElementById("walletStatus").style.display = "block";
+          } else {
+            currentWalletAddress = null;
+            document.getElementById("walletStatus").style.display = "none";
+            document.getElementById("connectWalletBtn").style.display = "inline-block";
+          }
         });
-
-        // Detectar cambios de cuenta en MetaMask
-        if (typeof window.ethereum !== 'undefined') {
-            window.ethereum.on('accountsChanged', (accounts) => {
-                if (accounts.length > 0) {
-                    currentWalletAddress = accounts[0];
-                    document.getElementById('connectedAddress').textContent = currentWalletAddress;
-                    document.getElementById('walletStatus').style.display = 'block';
-                } else {
-                    currentWalletAddress = null;
-                    document.getElementById('walletStatus').style.display = 'none';
-                    document.getElementById('connectWalletBtn').style.display = 'inline-block';
-                }
-            });
-        }
+      }
     </script>
-</body>
+  </body>
 </html>

@@ -1,291 +1,379 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EqualPass - Demo WebAuthn + ZK</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZK-Scholar - Demo WebAuthn + ZK</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
-        .success { background-color: #d4edda; border-color: #c3e6cb; }
-        .error { background-color: #f8d7da; border-color: #f5c6cb; }
-        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
-        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:disabled { background: #6c757d; cursor: not-allowed; }
-        input { width: 300px; padding: 8px; margin: 5px; }
-        .demo-section { background: #e9ecef; }
-        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
-        .fraud-demo { background: #ffe6e6; border: 2px solid #ff4444; }
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+      }
+      .error {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+      }
+      .warning {
+        background-color: #fff3cd;
+        border-color: #ffeaa7;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+      }
+      input {
+        width: 300px;
+        padding: 8px;
+        margin: 5px;
+      }
+      .demo-section {
+        background: #e9ecef;
+      }
+      pre {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      .fraud-demo {
+        background: #ffe6e6;
+        border: 2px solid #ff4444;
+      }
     </style>
-</head>
-<body>
-    <h1>🛡️ EqualPass - Demo Seguridad WebAuthn + ZK</h1>
-    
+  </head>
+  <body>
+    <h1>🛡️ ZK-Scholar - Demo Seguridad WebAuthn + ZK</h1>
+
     <div class="section">
-        <h2>👤 Información del Usuario</h2>
-        <input type="text" id="userAddress" placeholder="Dirección de wallet (0x...)" value="0x6388681e6A22F8Fc30e3150733795255D4250db1">
-        <button onclick="checkWebAuthnStatus()">Verificar Estado WebAuthn</button>
-        <div id="statusResult"></div>
+      <h2>👤 Información del Usuario</h2>
+      <input
+        type="text"
+        id="userAddress"
+        placeholder="Dirección de wallet (0x...)"
+        value="0x6388681e6A22F8Fc30e3150733795255D4250db1"
+      />
+      <button onclick="checkWebAuthnStatus()">Verificar Estado WebAuthn</button>
+      <div id="statusResult"></div>
     </div>
 
     <div class="section">
-        <h2>🎓 Paso 1: Datos de Estudiante</h2>
-        <input type="text" id="studentStatus" placeholder="Estado estudiante (1=activo)" value="1">
-        <input type="text" id="enrollmentYear" placeholder="Año de matrícula" value="2025">
-        <input type="text" id="universityHash" placeholder="Hash universidad" value="12345">
-        <input type="text" id="userSecret" placeholder="Secreto usuario" value="67890">
+      <h2>🎓 Paso 1: Datos de Estudiante</h2>
+      <input type="text" id="studentStatus" placeholder="Estado estudiante (1=activo)" value="1" />
+      <input type="text" id="enrollmentYear" placeholder="Año de matrícula" value="2025" />
+      <input type="text" id="universityHash" placeholder="Hash universidad" value="12345" />
+      <input type="text" id="userSecret" placeholder="Secreto usuario" value="67890" />
     </div>
 
     <div class="section">
-        <h2>✅ Paso 2: Generar Prueba ZK</h2>
-        <p>Solo prueba ZK (verificación básica):</p>
-        <button onclick="mintStandard()">Generar Prueba ZK</button>
-        <div id="mintStandardResult"></div>
+      <h2>✅ Paso 2: Generar Prueba ZK</h2>
+      <p>Solo prueba ZK (verificación básica):</p>
+      <button onclick="mintStandard()">Generar Prueba ZK</button>
+      <div id="mintStandardResult"></div>
     </div>
 
     <div class="section">
-        <h2>🔐 Paso 3: Registro WebAuthn (Solo una vez)</h2>
-        <p>Registra tu dispositivo biométrico para verificación segura:</p>
-        <button onclick="registerWebAuthn()">Registrar Dispositivo</button>
-        <div id="registerResult"></div>
+      <h2>🔐 Paso 3: Registro WebAuthn (Solo una vez)</h2>
+      <p>Registra tu dispositivo biométrico para verificación segura:</p>
+      <button onclick="registerWebAuthn()">Registrar Dispositivo</button>
+      <div id="registerResult"></div>
     </div>
 
     <div class="section demo-section">
-        <h2>🛡️ Paso 4: Prueba ZK + WebAuthn (Alta Seguridad)</h2>
-        <p>Prueba ZK + Verificación WebAuthn:</p>
-        <button onclick="mintWithWebAuthn()">Generar Prueba ZK + WebAuthn</button>
-        <div id="mintSecureResult"></div>
+      <h2>🛡️ Paso 4: Prueba ZK + WebAuthn (Alta Seguridad)</h2>
+      <p>Prueba ZK + Verificación WebAuthn:</p>
+      <button onclick="mintWithWebAuthn()">Generar Prueba ZK + WebAuthn</button>
+      <div id="mintSecureResult"></div>
     </div>
 
     <div class="section fraud-demo">
-        <h2>🚨 Demo Anti-Fraude para Jueces</h2>
-        <p><strong>Escenario:</strong> Un atacante robó los datos ZK pero NO tiene tu dispositivo biométrico.</p>
-        <button onclick="simulateFraud()">Simular Intento de Fraude</button>
-        <div id="fraudResult"></div>
+      <h2>🚨 Demo Anti-Fraude para Jueces</h2>
+      <p>
+        <strong>Escenario:</strong> Un atacante robó los datos ZK pero NO tiene tu dispositivo biométrico.
+      </p>
+      <button onclick="simulateFraud()">Simular Intento de Fraude</button>
+      <div id="fraudResult"></div>
     </div>
 
-    <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-        <h2>🎫 Paso 5: Obtener NFT de Estudiante</h2>
-        <p><strong>¡Solo disponible después de mint exitoso!</strong> Obtén tu NFT que prueba tu estatus de estudiante verificado.</p>
-        <button id="getNftButton" onclick="getNFT()" style="display: none; background: #28a745; color: white;">🎫 Obtener Mi NFT</button>
-        <button onclick="testNFTImage()" style="background: #6c757d; color: white; margin-left: 10px;">🧪 Probar Imagen NFT</button>
-        <div id="nftResult"></div>
+    <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white">
+      <h2>🎫 Paso 5: Obtener NFT de Estudiante</h2>
+      <p>
+        <strong>¡Solo disponible después de mint exitoso!</strong> Obtén tu NFT que prueba tu estatus de
+        estudiante verificado.
+      </p>
+      <button id="getNftButton" onclick="getNFT()" style="display: none; background: #28a745; color: white">
+        🎫 Obtener Mi NFT
+      </button>
+      <button onclick="testNFTImage()" style="background: #6c757d; color: white; margin-left: 10px">
+        🧪 Probar Imagen NFT
+      </button>
+      <div id="nftResult"></div>
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:3001/api';
-        const NFT_BASE = 'http://localhost:3001'; // Base para las imágenes NFT
-        let lastMintedTokenId = null; // Variable para guardar el último token ID minteado
-        
-        async function checkWebAuthnStatus() {
-            const userAddress = document.getElementById('userAddress').value;
-            try {
-                const response = await fetch(`${API_BASE}/webauthn/status/${userAddress}`);
-                const data = await response.json();
-                
-                document.getElementById('statusResult').innerHTML = `
-                    <div class="${data.hasCredential ? 'success' : 'warning'}">
-                        Estado: ${data.hasCredential ? '✅ Dispositivo registrado' : '⚠️ Dispositivo no registrado'}
+      const API_BASE = "http://localhost:3001/api";
+      const NFT_BASE = "http://localhost:3001"; // Base para las imágenes NFT
+      let lastMintedTokenId = null; // Variable para guardar el último token ID minteado
+
+      async function checkWebAuthnStatus() {
+        const userAddress = document.getElementById("userAddress").value;
+        try {
+          const response = await fetch(`${API_BASE}/webauthn/status/${userAddress}`);
+          const data = await response.json();
+
+          document.getElementById("statusResult").innerHTML = `
+                    <div class="${data.hasCredential ? "success" : "warning"}">
+                        Estado: ${
+                          data.hasCredential ? "✅ Dispositivo registrado" : "⚠️ Dispositivo no registrado"
+                        }
                     </div>
                 `;
-            } catch (error) {
-                document.getElementById('statusResult').innerHTML = `<div class="error">Error: ${error.message}</div>`;
-            }
+        } catch (error) {
+          document.getElementById(
+            "statusResult"
+          ).innerHTML = `<div class="error">Error: ${error.message}</div>`;
+        }
+      }
+
+      async function registerWebAuthn() {
+        const userAddress = document.getElementById("userAddress").value;
+        if (!userAddress) {
+          alert("Ingresa una dirección de wallet");
+          return;
         }
 
-        async function registerWebAuthn() {
-            const userAddress = document.getElementById('userAddress').value;
-            if (!userAddress) {
-                alert('Ingresa una dirección de wallet');
-                return;
-            }
+        try {
+          // Paso 1: Obtener challenge del servidor
+          const beginResponse = await fetch(`${API_BASE}/webauthn/register/begin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userAddress }),
+          });
+          const options = await beginResponse.json();
 
-            try {
-                // Paso 1: Obtener challenge del servidor
-                const beginResponse = await fetch(`${API_BASE}/webauthn/register/begin`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userAddress })
-                });
-                const options = await beginResponse.json();
+          // Paso 2: Crear credencial con WebAuthn
+          const credential = await navigator.credentials.create({
+            publicKey: {
+              ...options,
+              challenge: base64urlToUint8Array(options.challenge),
+              user: {
+                ...options.user,
+                id: base64urlToUint8Array(options.user.id),
+              },
+            },
+          });
 
-                // Paso 2: Crear credencial con WebAuthn
-                const credential = await navigator.credentials.create({
-                    publicKey: {
-                        ...options,
-                        challenge: base64urlToUint8Array(options.challenge),
-                        user: {
-                            ...options.user,
-                            id: base64urlToUint8Array(options.user.id)
-                        }
-                    }
-                });
+          // Paso 3: Enviar credencial al servidor
+          const completeResponse = await fetch(`${API_BASE}/webauthn/register/complete`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userAddress,
+              credential: {
+                id: credential.id,
+                response: {
+                  clientDataJSON: uint8ArrayToBase64url(new Uint8Array(credential.response.clientDataJSON)),
+                  publicKey: uint8ArrayToBase64url(new Uint8Array(credential.response.getPublicKey())),
+                },
+              },
+            }),
+          });
 
-                // Paso 3: Enviar credencial al servidor
-                const completeResponse = await fetch(`${API_BASE}/webauthn/register/complete`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        userAddress,
-                        credential: {
-                            id: credential.id,
-                            response: {
-                                clientDataJSON: uint8ArrayToBase64url(new Uint8Array(credential.response.clientDataJSON)),
-                                publicKey: uint8ArrayToBase64url(new Uint8Array(credential.response.getPublicKey()))
-                            }
-                        }
-                    })
-                });
+          const result = await completeResponse.json();
 
-                const result = await completeResponse.json();
-                
-                document.getElementById('registerResult').innerHTML = `
+          document.getElementById("registerResult").innerHTML = `
                     <div class="success">
                         ✅ Dispositivo registrado exitosamente!<br>
                         ID: ${result.credentialId}
                     </div>
                 `;
-            } catch (error) {
-                document.getElementById('registerResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
-                console.error('WebAuthn registration error:', error);
-            }
+        } catch (error) {
+          document.getElementById(
+            "registerResult"
+          ).innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+          console.error("WebAuthn registration error:", error);
         }
+      }
 
-        async function mintStandard() {
-            const data = getStudentData();
-            try {
-                const response = await fetch(`${API_BASE}/mint`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await response.json();
-                
-                document.getElementById('mintStandardResult').innerHTML = `
-                    <div class="${result.success ? 'success' : 'error'}">
-                        <strong>Resultado:</strong> ${result.success ? '✅ Badge minteado' : '❌ Error'}<br>
-                        <strong>Seguridad:</strong> ${result.securityLevel || 'STANDARD'}<br>
-                        ${result.txHash ? `<strong>TX:</strong> <a href="${result.blockscoutUrl}" target="_blank">${result.txHash.slice(0,10)}...</a><br>` : ''}
-                        ${result.tokenId ? `<strong>Token ID:</strong> ${result.tokenId}` : ''}
-                        ${result.error ? `<strong>Error:</strong> ${result.error}` : ''}
+      async function mintStandard() {
+        const data = getStudentData();
+        try {
+          const response = await fetch(`${API_BASE}/mint`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+
+          document.getElementById("mintStandardResult").innerHTML = `
+                    <div class="${result.success ? "success" : "error"}">
+                        <strong>Resultado:</strong> ${result.success ? "✅ Badge minteado" : "❌ Error"}<br>
+                        <strong>Seguridad:</strong> ${result.securityLevel || "STANDARD"}<br>
+                        ${
+                          result.txHash
+                            ? `<strong>TX:</strong> <a href="${
+                                result.blockscoutUrl
+                              }" target="_blank">${result.txHash.slice(0, 10)}...</a><br>`
+                            : ""
+                        }
+                        ${result.tokenId ? `<strong>Token ID:</strong> ${result.tokenId}` : ""}
+                        ${result.error ? `<strong>Error:</strong> ${result.error}` : ""}
                     </div>
                 `;
-                
-                // Mostrar botón de NFT si el mint fue exitoso
-                if (result.success) {
-                    lastMintedTokenId = result.tokenId; // Guardar el token ID
-                    document.getElementById('getNftButton').style.display = 'inline-block';
-                    document.getElementById('nftResult').innerHTML = `
+
+          // Mostrar botón de NFT si el mint fue exitoso
+          if (result.success) {
+            lastMintedTokenId = result.tokenId; // Guardar el token ID
+            document.getElementById("getNftButton").style.display = "inline-block";
+            document.getElementById("nftResult").innerHTML = `
                         <div class="info">
                             🎉 ¡Badge minteado exitosamente! Ahora puedes obtener tu NFT de estudiante.
                         </div>
                     `;
-                }
-            } catch (error) {
-                document.getElementById('mintStandardResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
-            }
+          }
+        } catch (error) {
+          document.getElementById(
+            "mintStandardResult"
+          ).innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
         }
+      }
 
-        async function mintWithWebAuthn() {
-            const userAddress = document.getElementById('userAddress').value;
-            const data = getStudentData();
-            
-            try {
-                // Paso 1: Obtener challenge para autenticación
-                const beginResponse = await fetch(`${API_BASE}/webauthn/authenticate/begin`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userAddress })
-                });
-                
-                if (!beginResponse.ok) {
-                    const error = await beginResponse.json();
-                    throw new Error(error.error);
-                }
-                
-                const options = await beginResponse.json();
+      async function mintWithWebAuthn() {
+        const userAddress = document.getElementById("userAddress").value;
+        const data = getStudentData();
 
-                // Paso 2: Autenticar con WebAuthn
-                const credential = await navigator.credentials.get({
-                    publicKey: {
-                        ...options,
-                        challenge: base64urlToUint8Array(options.challenge),
-                        allowCredentials: options.allowCredentials.map(cred => ({
-                            ...cred,
-                            id: base64urlToUint8Array(cred.id)
-                        }))
-                    }
-                });
+        try {
+          // Paso 1: Obtener challenge para autenticación
+          const beginResponse = await fetch(`${API_BASE}/webauthn/authenticate/begin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userAddress }),
+          });
 
-                // Paso 3: Mint con verificación WebAuthn
-                const mintResponse = await fetch(`${API_BASE}/mint`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        ...data,
-                        requireWebAuthn: true,
-                        webAuthnCredential: {
-                            id: credential.id,
-                            response: {
-                                clientDataJSON: uint8ArrayToBase64url(new Uint8Array(credential.response.clientDataJSON)),
-                                authenticatorData: uint8ArrayToBase64url(new Uint8Array(credential.response.authenticatorData)),
-                                signature: uint8ArrayToBase64url(new Uint8Array(credential.response.signature))
-                            }
-                        }
-                    })
-                });
+          if (!beginResponse.ok) {
+            const error = await beginResponse.json();
+            throw new Error(error.error);
+          }
 
-                const result = await mintResponse.json();
-                
-                document.getElementById('mintSecureResult').innerHTML = `
-                    <div class="${result.success ? 'success' : 'error'}">
-                        <strong>Resultado:</strong> ${result.success ? '✅ Badge minteado con alta seguridad' : '❌ Error'}<br>
-                        <strong>ZK Verificada:</strong> ${result.verified ? '✅' : '❌'}<br>
-                        <strong>WebAuthn Verificada:</strong> ${result.webAuthnVerified ? '✅' : '❌'}<br>
+          const options = await beginResponse.json();
+
+          // Paso 2: Autenticar con WebAuthn
+          const credential = await navigator.credentials.get({
+            publicKey: {
+              ...options,
+              challenge: base64urlToUint8Array(options.challenge),
+              allowCredentials: options.allowCredentials.map((cred) => ({
+                ...cred,
+                id: base64urlToUint8Array(cred.id),
+              })),
+            },
+          });
+
+          // Paso 3: Mint con verificación WebAuthn
+          const mintResponse = await fetch(`${API_BASE}/mint`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ...data,
+              requireWebAuthn: true,
+              webAuthnCredential: {
+                id: credential.id,
+                response: {
+                  clientDataJSON: uint8ArrayToBase64url(new Uint8Array(credential.response.clientDataJSON)),
+                  authenticatorData: uint8ArrayToBase64url(
+                    new Uint8Array(credential.response.authenticatorData)
+                  ),
+                  signature: uint8ArrayToBase64url(new Uint8Array(credential.response.signature)),
+                },
+              },
+            }),
+          });
+
+          const result = await mintResponse.json();
+
+          document.getElementById("mintSecureResult").innerHTML = `
+                    <div class="${result.success ? "success" : "error"}">
+                        <strong>Resultado:</strong> ${
+                          result.success ? "✅ Badge minteado con alta seguridad" : "❌ Error"
+                        }<br>
+                        <strong>ZK Verificada:</strong> ${result.verified ? "✅" : "❌"}<br>
+                        <strong>WebAuthn Verificada:</strong> ${result.webAuthnVerified ? "✅" : "❌"}<br>
                         <strong>Nivel de Seguridad:</strong> ${result.securityLevel}<br>
-                        ${result.txHash ? `<strong>TX:</strong> <a href="${result.blockscoutUrl}" target="_blank">${result.txHash.slice(0,10)}...</a><br>` : ''}
-                        ${result.tokenId ? `<strong>Token ID:</strong> ${result.tokenId}` : ''}
-                        ${result.error ? `<strong>Error:</strong> ${result.error}` : ''}
+                        ${
+                          result.txHash
+                            ? `<strong>TX:</strong> <a href="${
+                                result.blockscoutUrl
+                              }" target="_blank">${result.txHash.slice(0, 10)}...</a><br>`
+                            : ""
+                        }
+                        ${result.tokenId ? `<strong>Token ID:</strong> ${result.tokenId}` : ""}
+                        ${result.error ? `<strong>Error:</strong> ${result.error}` : ""}
                     </div>
                 `;
-                
-                // Mostrar botón de NFT si el mint fue exitoso
-                if (result.success) {
-                    lastMintedTokenId = result.tokenId; // Guardar el token ID
-                    document.getElementById('getNftButton').style.display = 'inline-block';
-                    document.getElementById('nftResult').innerHTML = `
+
+          // Mostrar botón de NFT si el mint fue exitoso
+          if (result.success) {
+            lastMintedTokenId = result.tokenId; // Guardar el token ID
+            document.getElementById("getNftButton").style.display = "inline-block";
+            document.getElementById("nftResult").innerHTML = `
                         <div class="success">
                             🎉 ¡Badge minteado con ALTA SEGURIDAD! Ahora puedes obtener tu NFT de estudiante.
                         </div>
                     `;
-                }
-            } catch (error) {
-                document.getElementById('mintSecureResult').innerHTML = `<div class="error">❌ Error WebAuthn: ${error.message}</div>`;
-            }
+          }
+        } catch (error) {
+          document.getElementById(
+            "mintSecureResult"
+          ).innerHTML = `<div class="error">❌ Error WebAuthn: ${error.message}</div>`;
         }
+      }
 
-        async function simulateFraud() {
-            const userAddress = document.getElementById('userAddress').value;
-            
-            try {
-                const response = await fetch(`${API_BASE}/demo-fraud`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        userAddress,
-                        stolenCredential: "datos_robados_zkp"
-                    })
-                });
-                
-                const result = await response.json();
-                
-                document.getElementById('fraudResult').innerHTML = `
+      async function simulateFraud() {
+        const userAddress = document.getElementById("userAddress").value;
+
+        try {
+          const response = await fetch(`${API_BASE}/demo-fraud`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userAddress,
+              stolenCredential: "datos_robados_zkp",
+            }),
+          });
+
+          const result = await response.json();
+
+          document.getElementById("fraudResult").innerHTML = `
                     <div class="warning">
                         <h3>🚨 Resultado del Intento de Fraude:</h3>
-                        <strong>Fraude Detectado:</strong> ${result.fraudDetected ? '✅ SÍ' : '❌ NO'}<br>
-                        <strong>Fraude Exitoso:</strong> ${result.fraudSuccess ? '❌ SÍ (MALO)' : '✅ NO (BUENO)'}<br>
-                        <strong>WebAuthn Previno Fraude:</strong> ${result.details?.webAuthnPrevented ? '✅ SÍ' : '❌ NO'}<br>
+                        <strong>Fraude Detectado:</strong> ${result.fraudDetected ? "✅ SÍ" : "❌ NO"}<br>
+                        <strong>Fraude Exitoso:</strong> ${
+                          result.fraudSuccess ? "❌ SÍ (MALO)" : "✅ NO (BUENO)"
+                        }<br>
+                        <strong>WebAuthn Previno Fraude:</strong> ${
+                          result.details?.webAuthnPrevented ? "✅ SÍ" : "❌ NO"
+                        }<br>
                         <p><strong>Explicación:</strong> ${result.message}</p>
                         <div style="background: #f0f0f0; padding: 10px; border-radius: 4px;">
                             <strong>Para los Jueces:</strong> Aunque el atacante tenga los datos ZK válidos, 
@@ -294,50 +382,52 @@
                         </div>
                     </div>
                 `;
-            } catch (error) {
-                document.getElementById('fraudResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
-            }
+        } catch (error) {
+          document.getElementById(
+            "fraudResult"
+          ).innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
         }
+      }
 
-        function getStudentData() {
-            return {
-                userAddress: document.getElementById('userAddress').value,
-                studentStatus: document.getElementById('studentStatus').value,
-                enrollmentYear: document.getElementById('enrollmentYear').value,
-                universityHash: document.getElementById('universityHash').value,
-                userSecret: document.getElementById('userSecret').value
-            };
-        }
+      function getStudentData() {
+        return {
+          userAddress: document.getElementById("userAddress").value,
+          studentStatus: document.getElementById("studentStatus").value,
+          enrollmentYear: document.getElementById("enrollmentYear").value,
+          universityHash: document.getElementById("universityHash").value,
+          userSecret: document.getElementById("userSecret").value,
+        };
+      }
 
-        // Funciones helper para conversión base64url
-        function base64urlToUint8Array(base64url) {
-            const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
-            const padded = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
-            const binary = atob(padded);
-            return new Uint8Array(binary.split('').map(char => char.charCodeAt(0)));
-        }
+      // Funciones helper para conversión base64url
+      function base64urlToUint8Array(base64url) {
+        const base64 = base64url.replace(/-/g, "+").replace(/_/g, "/");
+        const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
+        const binary = atob(padded);
+        return new Uint8Array(binary.split("").map((char) => char.charCodeAt(0)));
+      }
 
-        function uint8ArrayToBase64url(uint8Array) {
-            const base64 = btoa(String.fromCharCode(...uint8Array));
-            return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-        }
+      function uint8ArrayToBase64url(uint8Array) {
+        const base64 = btoa(String.fromCharCode(...uint8Array));
+        return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+      }
 
-        // Función para obtener NFT (simple, solo muestra la imagen)
-        async function getNFT() {
-            try {
-                document.getElementById('nftResult').innerHTML = `
+      // Función para obtener NFT (simple, solo muestra la imagen)
+      async function getNFT() {
+        try {
+          document.getElementById("nftResult").innerHTML = `
                     <div class="info">🔄 Generando tu NFT de estudiante...</div>
                 `;
-                
-                // Obtener información del último mint para conseguir el token ID
-                const contractInfo = await fetch(`${API_BASE}/contract-info`);
-                const contractData = await contractInfo.json();
-                
-                // Simular generación del NFT
-                setTimeout(() => {
-                    const tokenId = lastMintedTokenId || Math.floor(Math.random() * 1000); // Usar el token ID real o uno aleatorio
-                    
-                    document.getElementById('nftResult').innerHTML = `
+
+          // Obtener información del último mint para conseguir el token ID
+          const contractInfo = await fetch(`${API_BASE}/contract-info`);
+          const contractData = await contractInfo.json();
+
+          // Simular generación del NFT
+          setTimeout(() => {
+            const tokenId = lastMintedTokenId || Math.floor(Math.random() * 1000); // Usar el token ID real o uno aleatorio
+
+            document.getElementById("nftResult").innerHTML = `
                         <div class="success">
                             <h3>🎫 ¡Tu NFT de Estudiante!</h3>
                             <div id="nftImageContainer" style="margin: 10px 0;">
@@ -346,7 +436,7 @@
                                 </div>
                             </div>
                             <br>
-                            <strong>🎓 EqualPass Student Badge</strong><br>
+                            <strong>🎓 ZK-Scholar Student Badge</strong><br>
                             <strong>🛡️ Credencial Verificada con ZK + WebAuthn</strong><br>
                             <strong>🌐 Red: Polkadot Paseo</strong><br>
                             <strong>📅 Fecha: ${new Date().toLocaleDateString()}</strong><br>
@@ -354,8 +444,12 @@
                             <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; text-align: left;">
                                 <h4>📱 Para agregar a MetaMask:</h4>
                                 <p><strong>Dirección del Contrato:</strong><br>
-                                <code style="background: #e9ecef; padding: 4px; border-radius: 4px; font-family: monospace;">${contractData.address}</code>
-                                <button onclick="copyToClipboard('${contractData.address}')" style="margin-left: 5px; padding: 2px 8px;">📋 Copiar</button></p>
+                                <code style="background: #e9ecef; padding: 4px; border-radius: 4px; font-family: monospace;">${
+                                  contractData.address
+                                }</code>
+                                <button onclick="copyToClipboard('${
+                                  contractData.address
+                                }')" style="margin-left: 5px; padding: 2px 8px;">📋 Copiar</button></p>
                                 
                                 <p><strong>Token ID:</strong><br>
                                 <code style="background: #e9ecef; padding: 4px; border-radius: 4px; font-family: monospace;">${tokenId}</code>
@@ -368,7 +462,9 @@
                                             style="background: #ff6600; color: white; padding: 10px 15px; border: none; border-radius: 5px; margin-right: 10px;">
                                         🦊 Agregar a MetaMask
                                     </button>
-                                    <button onclick="showManualInstructions('${contractData.address}', '${tokenId}')" 
+                                    <button onclick="showManualInstructions('${
+                                      contractData.address
+                                    }', '${tokenId}')" 
                                             style="background: #6c757d; color: white; padding: 10px 15px; border: none; border-radius: 5px;">
                                         📝 Instrucciones Manuales
                                     </button>
@@ -378,24 +474,23 @@
                             <small>Este NFT representa tu credencial estudiantil verificada de forma segura.</small>
                         </div>
                     `;
-                    
-                    // Cargar la imagen después de crear el contenedor
-                    loadNFTImage(tokenId);
-                    
-                    // Ocultar el botón después de obtener el NFT
-                    document.getElementById('getNftButton').style.display = 'none';
-                }, 2000);
-                
-            } catch (error) {
-                document.getElementById('nftResult').innerHTML = `
+
+            // Cargar la imagen después de crear el contenedor
+            loadNFTImage(tokenId);
+
+            // Ocultar el botón después de obtener el NFT
+            document.getElementById("getNftButton").style.display = "none";
+          }, 2000);
+        } catch (error) {
+          document.getElementById("nftResult").innerHTML = `
                     <div class="error">❌ Error generando NFT: ${error.message}</div>
                 `;
-            }
         }
-        
-        // Función de prueba para verificar la imagen NFT
-        function testNFTImage() {
-            document.getElementById('nftResult').innerHTML = `
+      }
+
+      // Función de prueba para verificar la imagen NFT
+      function testNFTImage() {
+        document.getElementById("nftResult").innerHTML = `
                 <div class="info">
                     <h3>🧪 Prueba de Imagen NFT</h3>
                     <p>Probando cargar imagen desde: <code>${NFT_BASE}/nft/nft.png</code></p>
@@ -411,57 +506,57 @@
                     <p><a href="${NFT_BASE}/nft/nft.png" target="_blank">🔗 Abrir imagen en nueva pestaña</a></p>
                 </div>
             `;
-            
-            // Cargar imagen de prueba
-            loadNFTImage('TEST');
-        }
-        
-        // Función para cargar la imagen NFT con manejo de errores
-        function loadNFTImage(tokenId) {
-            const container = document.getElementById('nftImageContainer');
-            if (!container) return;
-            
-            console.log('🖼️ Intentando cargar imagen NFT desde:', `${NFT_BASE}/nft/nft.png`);
-            
-            // Crear imagen con manejo de eventos
-            const img = new Image();
-            
-            img.onload = function() {
-                console.log('✅ Imagen NFT cargada exitosamente');
-                container.innerHTML = `
+
+        // Cargar imagen de prueba
+        loadNFTImage("TEST");
+      }
+
+      // Función para cargar la imagen NFT con manejo de errores
+      function loadNFTImage(tokenId) {
+        const container = document.getElementById("nftImageContainer");
+        if (!container) return;
+
+        console.log("🖼️ Intentando cargar imagen NFT desde:", `${NFT_BASE}/nft/nft.png`);
+
+        // Crear imagen con manejo de eventos
+        const img = new Image();
+
+        img.onload = function () {
+          console.log("✅ Imagen NFT cargada exitosamente");
+          container.innerHTML = `
                     <img src="${NFT_BASE}/nft/nft.png" 
                          alt="NFT Estudiante #${tokenId}" 
                          style="max-width: 200px; max-height: 200px; border-radius: 10px; border: 2px solid #28a745; object-fit: contain;">
                 `;
-            };
-            
-            img.onerror = function() {
-                console.error('❌ Error cargando imagen NFT, usando imagen de respaldo');
-                container.innerHTML = `
+        };
+
+        img.onerror = function () {
+          console.error("❌ Error cargando imagen NFT, usando imagen de respaldo");
+          container.innerHTML = `
                     <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; border: 2px solid #28a745; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center;">
                         <div style="font-size: 48px; margin-bottom: 10px;">🎓</div>
-                        <div style="font-size: 16px; font-weight: bold;">EqualPass</div>
+                        <div style="font-size: 16px; font-weight: bold;">ZK-Scholar</div>
                         <div style="font-size: 12px;">Student Badge</div>
                         <div style="font-size: 10px; margin-top: 8px;">#${tokenId}</div>
                     </div>
                 `;
-            };
-            
-            // Timeout para imagen que tarda mucho en cargar
-            setTimeout(() => {
-                if (!img.complete) {
-                    console.warn('⚠️ Imagen NFT tarda mucho en cargar, usando respaldo');
-                    img.onerror();
-                }
-            }, 5000);
-            
-            // Iniciar carga
-            img.src = `${NFT_BASE}/nft/nft.png`;
-        }
-        
-        // Función para mostrar instrucciones manuales detalladas
-        function showManualInstructions(contractAddress, tokenId) {
-            const instructions = `
+        };
+
+        // Timeout para imagen que tarda mucho en cargar
+        setTimeout(() => {
+          if (!img.complete) {
+            console.warn("⚠️ Imagen NFT tarda mucho en cargar, usando respaldo");
+            img.onerror();
+          }
+        }, 5000);
+
+        // Iniciar carga
+        img.src = `${NFT_BASE}/nft/nft.png`;
+      }
+
+      // Función para mostrar instrucciones manuales detalladas
+      function showManualInstructions(contractAddress, tokenId) {
+        const instructions = `
 📱 INSTRUCCIONES MANUALES PARA METAMASK
 
 🔧 Paso 1: Verificar Red
@@ -480,129 +575,136 @@
 
 ✅ ¡Listo! Tu NFT debería aparecer en MetaMask
             `;
-            
-            alert(instructions);
-            
-            // Copiar automáticamente la dirección del contrato
-            copyToClipboard(contractAddress);
-        }
-        
-        // Función para copiar al portapapeles
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('✅ Copiado al portapapeles: ' + text);
-            }).catch(err => {
-                console.error('Error copiando: ', err);
-                alert('❌ Error copiando al portapapeles');
-            });
-        }
-        
-        // Función para agregar NFT a MetaMask automáticamente
-        async function addToMetaMask(contractAddress, tokenId) {
-            try {
-                if (typeof window.ethereum === 'undefined') {
-                    alert('❌ MetaMask no detectado');
-                    return;
-                }
-                
-                // Primero verificar que estemos en la red correcta
-                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                if (chainId !== '0x1911f0a6') {
-                    const changeNetwork = confirm('⚠️ Necesitas estar en la red Paseo PassetHub.\n¿Quieres cambiar automáticamente?');
-                    if (changeNetwork) {
-                        await switchToPolkadotNetwork();
-                    } else {
-                        return;
-                    }
-                }
-                
-                // Intentar agregar el NFT con información más completa
-                const wasAdded = await window.ethereum.request({
-                    method: 'wallet_watchAsset',
-                    params: {
-                        type: 'ERC721',
-                        options: {
-                            address: contractAddress,
-                            tokenId: tokenId.toString(), // Asegurar que es string
-                            name: `EqualPass Student Badge #${tokenId}`,
-                            description: 'Credencial estudiantil verificada con Zero-Knowledge Proofs y WebAuthn',
-                            image: `http://localhost:3001/nft/nft.png`
-                        },
-                    },
-                });
-                
-                if (wasAdded) {
-                    alert('🎉 ¡NFT agregado a MetaMask exitosamente!');
-                } else {
-                    // Si el método automático falla, dar instrucciones manuales
-                    const manualInstructions = `⚠️ El método automático no funcionó.\n\n📝 Instrucciones manuales:\n1. Ve a MetaMask → NFTs → "Importar NFT"\n2. Dirección del contrato: ${contractAddress}\n3. Token ID: ${tokenId}\n4. Haz clic en "Agregar"\n\n¿Quieres que copie la dirección del contrato al portapapeles?`;
-                    
-                    const copyAddress = confirm(manualInstructions);
-                    if (copyAddress) {
-                        await copyToClipboard(contractAddress);
-                    }
-                }
-            } catch (error) {
-                console.error('Error agregando a MetaMask:', error);
-                
-                // Dar instrucciones manuales más detalladas en caso de error
-                const errorMessage = `❌ Error automático: ${error.message}\n\n📝 Solución manual:\n1. Abre MetaMask\n2. Ve a la pestaña "NFTs"\n3. Haz clic en "Importar NFT"\n4. Pega esta dirección: ${contractAddress}\n5. Token ID: ${tokenId}\n6. Confirma\n\n¿Copiar dirección del contrato?`;
-                
-                const copyForManual = confirm(errorMessage);
-                if (copyForManual) {
-                    try {
-                        await copyToClipboard(contractAddress);
-                        alert('✅ Dirección copiada al portapapeles');
-                    } catch (copyError) {
-                        console.error('Error copiando:', copyError);
-                    }
-                }
-            }
-        }
-        
-        // Función para cambiar a la red Polkadot Paseo
-        async function switchToPolkadotNetwork() {
-            try {
-                // Intentar cambiar a la red Polkadot Paseo
-                await window.ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x190f1b46' }], // 420420422 en hexadecimal
-                });
-                alert('✅ Cambiado a red Paseo PassetHub exitosamente');
-            } catch (switchError) {
-                // Si la red no existe, agregarla
-                if (switchError.code === 4902) {
-                    try {
-                        await window.ethereum.request({
-                            method: 'wallet_addEthereumChain',
-                            params: [{
-                                chainId: '0x190f1b46',
-                                chainName: 'Paseo PassetHub',
-                                nativeCurrency: {
-                                    name: 'PAS',
-                                    symbol: 'PAS',
-                                    decimals: 18
-                                },
-                                rpcUrls: ['https://testnet-passet-hub-eth-rpc.polkadot.io'],
-                                blockExplorerUrls: ['https://blockscout-passet-hub.parity-testnet.parity.io']
-                            }]
-                        });
-                        alert('✅ Red Paseo PassetHub agregada y activada exitosamente');
-                    } catch (addError) {
-                        console.error('Error agregando red:', addError);
-                        alert('❌ No se pudo agregar la red Paseo PassetHub a MetaMask: ' + addError.message);
-                    }
-                } else {
-                    console.error('Error cambiando red:', switchError);
-                    alert('❌ Error cambiando a red Paseo PassetHub: ' + switchError.message);
-                }
-            }
-        }
 
-        // Verificar estado al cargar la página
-        window.addEventListener('load', () => {
-            checkWebAuthnStatus();
-        });
+        alert(instructions);
+
+        // Copiar automáticamente la dirección del contrato
+        copyToClipboard(contractAddress);
+      }
+
+      // Función para copiar al portapapeles
+      function copyToClipboard(text) {
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            alert("✅ Copiado al portapapeles: " + text);
+          })
+          .catch((err) => {
+            console.error("Error copiando: ", err);
+            alert("❌ Error copiando al portapapeles");
+          });
+      }
+
+      // Función para agregar NFT a MetaMask automáticamente
+      async function addToMetaMask(contractAddress, tokenId) {
+        try {
+          if (typeof window.ethereum === "undefined") {
+            alert("❌ MetaMask no detectado");
+            return;
+          }
+
+          // Primero verificar que estemos en la red correcta
+          const chainId = await window.ethereum.request({ method: "eth_chainId" });
+          if (chainId !== "0x1911f0a6") {
+            const changeNetwork = confirm(
+              "⚠️ Necesitas estar en la red Paseo PassetHub.\n¿Quieres cambiar automáticamente?"
+            );
+            if (changeNetwork) {
+              await switchToPolkadotNetwork();
+            } else {
+              return;
+            }
+          }
+
+          // Intentar agregar el NFT con información más completa
+          const wasAdded = await window.ethereum.request({
+            method: "wallet_watchAsset",
+            params: {
+              type: "ERC721",
+              options: {
+                address: contractAddress,
+                tokenId: tokenId.toString(), // Asegurar que es string
+                name: `ZK-Scholar Student Badge #${tokenId}`,
+                description: "Credencial estudiantil verificada con Zero-Knowledge Proofs y WebAuthn",
+                image: `http://localhost:3001/nft/nft.png`,
+              },
+            },
+          });
+
+          if (wasAdded) {
+            alert("🎉 ¡NFT agregado a MetaMask exitosamente!");
+          } else {
+            // Si el método automático falla, dar instrucciones manuales
+            const manualInstructions = `⚠️ El método automático no funcionó.\n\n📝 Instrucciones manuales:\n1. Ve a MetaMask → NFTs → "Importar NFT"\n2. Dirección del contrato: ${contractAddress}\n3. Token ID: ${tokenId}\n4. Haz clic en "Agregar"\n\n¿Quieres que copie la dirección del contrato al portapapeles?`;
+
+            const copyAddress = confirm(manualInstructions);
+            if (copyAddress) {
+              await copyToClipboard(contractAddress);
+            }
+          }
+        } catch (error) {
+          console.error("Error agregando a MetaMask:", error);
+
+          // Dar instrucciones manuales más detalladas en caso de error
+          const errorMessage = `❌ Error automático: ${error.message}\n\n📝 Solución manual:\n1. Abre MetaMask\n2. Ve a la pestaña "NFTs"\n3. Haz clic en "Importar NFT"\n4. Pega esta dirección: ${contractAddress}\n5. Token ID: ${tokenId}\n6. Confirma\n\n¿Copiar dirección del contrato?`;
+
+          const copyForManual = confirm(errorMessage);
+          if (copyForManual) {
+            try {
+              await copyToClipboard(contractAddress);
+              alert("✅ Dirección copiada al portapapeles");
+            } catch (copyError) {
+              console.error("Error copiando:", copyError);
+            }
+          }
+        }
+      }
+
+      // Función para cambiar a la red Polkadot Paseo
+      async function switchToPolkadotNetwork() {
+        try {
+          // Intentar cambiar a la red Polkadot Paseo
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x190f1b46" }], // 420420422 en hexadecimal
+          });
+          alert("✅ Cambiado a red Paseo PassetHub exitosamente");
+        } catch (switchError) {
+          // Si la red no existe, agregarla
+          if (switchError.code === 4902) {
+            try {
+              await window.ethereum.request({
+                method: "wallet_addEthereumChain",
+                params: [
+                  {
+                    chainId: "0x190f1b46",
+                    chainName: "Paseo PassetHub",
+                    nativeCurrency: {
+                      name: "PAS",
+                      symbol: "PAS",
+                      decimals: 18,
+                    },
+                    rpcUrls: ["https://testnet-passet-hub-eth-rpc.polkadot.io"],
+                    blockExplorerUrls: ["https://blockscout-passet-hub.parity-testnet.parity.io"],
+                  },
+                ],
+              });
+              alert("✅ Red Paseo PassetHub agregada y activada exitosamente");
+            } catch (addError) {
+              console.error("Error agregando red:", addError);
+              alert("❌ No se pudo agregar la red Paseo PassetHub a MetaMask: " + addError.message);
+            }
+          } else {
+            console.error("Error cambiando red:", switchError);
+            alert("❌ Error cambiando a red Paseo PassetHub: " + switchError.message);
+          }
+        }
+      }
+
+      // Verificar estado al cargar la página
+      window.addEventListener("load", () => {
+        checkWebAuthnStatus();
+      });
     </script>
-</body>
+  </body>
 </html>

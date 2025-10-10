@@ -3,6 +3,7 @@ import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { Message } from "./ui/Message";
 import { NFTCard } from "./ui/NFTCard";
+import "./ui/webauthn-scope.css";
 
 const API_BASE = "http://localhost:3001/api";
 const NFT_BASE = "http://localhost:3001";
@@ -271,12 +272,12 @@ export const WebAuthnDemo: React.FC = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-50 rounded-lg">
+    <div className="webauthn-scope p-6 bg-gray-50 rounded-lg">
       <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6 items-start">
         <div className="md:col-span-2 bg-white p-6 rounded-lg shadow">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-2xl font-semibold">🛡️ EqualPass — Demo WebAuthn + ZK</h2>
+              <h2 className="text-2xl font-semibold">🛡️ ZK-Scholar — Demo WebAuthn + ZK</h2>
               <p className="text-sm text-gray-500 mt-1">
                 Flujo de verificación paso a paso para jueces y evaluadores.
               </p>
@@ -430,7 +431,7 @@ export const WebAuthnDemo: React.FC = () => {
             <h3 className="text-sm font-medium text-gray-600">NFT</h3>
             <div className="mt-2">
               {nftTokenId ? (
-                <NFTCard title="EqualPass Badge" tokenId={nftTokenId} imageSrc={nftImageSrc} />
+                <NFTCard title="ZK-Scholar Badge" tokenId={nftTokenId} imageSrc={nftImageSrc} />
               ) : (
                 <div className="text-gray-500 text-sm">Tu NFT aparecerá aquí después del mint</div>
               )}
