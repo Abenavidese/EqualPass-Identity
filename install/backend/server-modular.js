@@ -20,8 +20,10 @@ const setupChallengeRoutes = require("./routes/challenge");
 const app = express();
 
 // Middleware básico
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || "*", // usa el dominio de Vercel en producción
+  credentials: true
+})); 
 
 // Servir archivos estáticos del NFT
 app.use("/nft", express.static(path.join(__dirname, "nft_mint")));
