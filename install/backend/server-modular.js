@@ -109,6 +109,21 @@ app.get("/api/contract-info", (req, res) => {
   }
 });
 
+// Endpoint para configuración dinámmica de URLs
+app.get("/api/config", (req, res) => {
+  try {
+    res.json({
+      API_BASE: `${config.BACKEND_URL}/api`,
+      NFT_BASE: config.BACKEND_URL,
+      BACKEND_URL: config.BACKEND_URL,
+      FRONTEND_URL: config.FRONTEND_URL,
+    });
+  } catch (error) {
+    console.error("config error:", error);
+    res.status(500).json({ error: "Failed to get config", details: error.message });
+  }
+});
+
 // Endpoint para metadatos del NFT
 app.get("/api/metadata/:tokenId", (req, res) => {
   try {
@@ -117,8 +132,8 @@ app.get("/api/metadata/:tokenId", (req, res) => {
       name: `ZK-Scholar Student Badge #${tokenId}`,
       description:
         "Credencial estudiantil verificada con Zero-Knowledge Proofs y WebAuthn. Esta insignia demuestra que el portador es un estudiante verificado sin revelar información personal.",
-      image: `http://localhost:3001/nft/nft.png`,
-      external_url: `http://localhost:3001/verificador`,
+      image: `${config.BACKEND_URL}/nft/nft.png`,
+      external_url: `${config.BACKEND_URL}/verificador`,
       attributes: [
         {
           trait_type: "Badge Type",
@@ -190,9 +205,9 @@ app.listen(config.PORT, () => {
 🔗 Contrato: ${config.CONTRACT_ADDRESS}
 🌐 Red: Polkadot Paseo Testnet
 📊 Endpoints disponibles:
-   • Demo: http://localhost:${config.PORT}/demo
-   • Verificador: http://localhost:${config.PORT}/verificador
-   • API: http://localhost:${config.PORT}/api/*
+   • Demo: ${config.BACKEND_URL}/demo
+   • Verificador: ${config.BACKEND_URL}/verificador
+   • API: ${config.BACKEND_URL}/api/*
    
 🛡️ Servicios activos:
    ✅ WebAuthn Authentication

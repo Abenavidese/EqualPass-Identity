@@ -1,6 +1,6 @@
 // API configuration and helper functions for ZK-Scholar backend
-const API_BASE = "http://localhost:3001/api";
-const NFT_BASE = "http://localhost:3001";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001/api";
+const NFT_BASE = process.env.NEXT_PUBLIC_NFT_BASE_URL || "http://localhost:3001";
 
 // Types for API responses
 export interface WebAuthnStatusResponse {

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
+import { API_CONFIG } from "@/lib/api-config"
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useChainId } from "wagmi"
 import { Award, Loader2, RefreshCw, CheckCircle2, AlertTriangle } from "lucide-react"
 import { CONTRACT, PASEO_CHAIN, generateClaimId } from "@/lib/contract"
@@ -48,7 +49,7 @@ export function MintCard() {
 
     try {
       // TODO: Replace with actual endpoint
-      const response = await fetch("http://localhost:3001/api/claim", {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/claim`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ address, badgeType, claimId }),

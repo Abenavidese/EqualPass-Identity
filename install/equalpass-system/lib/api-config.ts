@@ -1,7 +1,7 @@
 // API Configuration for EqualPass Backend
 export const API_CONFIG = {
-  BASE_URL: 'http://localhost:3001/api',
-  NFT_BASE: 'http://localhost:3001',
+  BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001/api',
+  NFT_BASE: process.env.NEXT_PUBLIC_NFT_BASE_URL || 'http://localhost:3001',
   ENDPOINTS: {
     // WebAuthn
     WEBAUTHN_REGISTER_BEGIN: '/webauthn/register/begin',

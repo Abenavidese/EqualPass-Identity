@@ -46,7 +46,7 @@ export async function addNFTToMetaMask(contractAddress: string, tokenId: number)
         tokenId: tokenId.toString(),
         name: `ZK-Scholar Student Badge #${tokenId}`,
         description: "Credencial estudiantil verificada con Zero-Knowledge Proofs y WebAuthn",
-        image: "http://localhost:3001/nft/nft.png",
+        image: `${process.env.NEXT_PUBLIC_NFT_BASE_URL || "http://localhost:3001"}/nft/nft.png`,
       },
     },
   });

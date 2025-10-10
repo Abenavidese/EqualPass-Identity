@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { API_CONFIG } from "@/lib/api-config"
 
 export function EvidenceCard() {
   const [evidence, setEvidence] = useState("")
@@ -27,7 +28,7 @@ export function EvidenceCard() {
     setLoading(true)
     try {
       // TODO: Replace with actual endpoint
-      const response = await fetch("http://localhost:3001/api/eligible", {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/eligible`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ evidence }),

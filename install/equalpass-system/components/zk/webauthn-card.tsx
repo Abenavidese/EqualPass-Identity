@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Fingerprint, CheckCircle2, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { API_CONFIG } from "@/lib/api-config";
 
 export function WebAuthnCard() {
   const [loading, setLoading] = useState(false);
@@ -42,7 +43,7 @@ export function WebAuthnCard() {
 
       if (credential) {
         // TODO: Replace with actual endpoint
-        const response = await fetch("http://localhost:3001/api/webauthn/verify", {
+        const response = await fetch(`${API_CONFIG.BASE_URL}/webauthn/verify`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ credential }),
