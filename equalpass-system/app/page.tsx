@@ -1,152 +1,59 @@
-import React from "react";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Shield, Lock, Award, CheckCircle2, Eye, Fingerprint, Zap } from "lucide-react"
 
-// Clean Vite-compatible landing page
-
-const ShieldIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M12 2l7 4v6c0 5-3.6 9.7-7 10-3.4-.3-7-5-7-10V6l7-4z"
-      stroke="currentColor"
-      strokeWidth={1.2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const CheckIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M20 6L9 17l-5-5"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const EyeIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M2 12s4-8 10-8 10 8 10 8-4 8-10 8S2 12 2 12z"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth={1.5} />
-  </svg>
-);
-
-const LockIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="3" y="10" width="18" height="10" rx="2" stroke="currentColor" strokeWidth={1.5} />
-    <path
-      d="M7 10V8a5 5 0 0110 0v2"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const FingerprintIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2v4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const AwardIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M12 2l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"
-      stroke="currentColor"
-      strokeWidth={1.2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const features = [
-  {
-    title: "Pruebas Zero-Knowledge",
-    description: "Demuestra que eres estudiante sin revelar tu nombre, ID o universidad",
-    icon: LockIcon,
-  },
-  {
-    title: "Autenticación WebAuthn",
-    description: "Verifica tu identidad con tu huella digital o reconocimiento facial",
-    icon: FingerprintIcon,
-  },
-  {
-    title: "NFT Soulbound",
-    description: "Recibe una credencial digital no transferible en blockchain",
-    icon: AwardIcon,
-  },
-];
-
-const timeline = [
-  {
-    step: "1",
-    title: "Ingresa tus datos académicos",
-    description: "Año de estudio, ID de estudiante e ID de universidad",
-    icon: EyeIcon,
-  },
-  {
-    step: "2",
-    title: "Genera la prueba ZK",
-    description: "El sistema crea una prueba criptográfica sin revelar tus datos",
-    icon: LockIcon,
-  },
-  {
-    step: "3",
-    title: "Registra tu dispositivo",
-    description: "Configura la autenticación biométrica una sola vez",
-    icon: FingerprintIcon,
-  },
-  {
-    step: "4",
-    title: "Verifica tu identidad",
-    description: "Combina ZK + WebAuthn para máxima seguridad",
-    icon: ShieldIcon,
-  },
-  {
-    step: "5",
-    title: "Recibe tu NFT",
-    description: "Obtén tu credencial estudiantil verificada en blockchain",
-    icon: AwardIcon,
-  },
-];
-
-export default function LandingPage(): JSX.Element {
+export default function LandingPage() {
   return (
-    <div className="prose-invert">
+    <div className="min-h-screen bg-background">
+      {/* Navigation */}
+      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Shield className="h-7 w-7 text-[#0ea5e9]" />
+              <span className="text-xl font-bold">EqualPass</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link href="/demo">
+                <Button variant="ghost">Demo</Button>
+              </Link>
+              <Link href="/verifier">
+                <Button variant="ghost">Verificador</Button>
+              </Link>
+              <Link href="/demo">
+                <Button className="bg-[#0ea5e9] hover:bg-[#0ea5e9]/90">Comenzar</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 lg:py-32">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <div className="inline-block bg-[#22c55e]/10 text-[#22c55e] border border-[#22c55e]/20 rounded-full px-4 py-1 text-sm font-medium">
+          <Badge className="bg-[#22c55e]/10 text-[#22c55e] border-[#22c55e]/20 hover:bg-[#22c55e]/20">
             Verificación de Identidad Estudiantil
-          </div>
+          </Badge>
           <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-balance">
             Verifica tu identidad estudiantil sin revelar datos personales
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-            EqualPass combina pruebas de conocimiento cero, autenticación biométrica y blockchain para crear
-            un sistema de verificación estudiantil seguro y privado.
+            EqualPass combina pruebas de conocimiento cero, autenticación biométrica y blockchain para crear un sistema
+            de verificación estudiantil seguro y privado.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-            <a
-              href="/demo"
-              className="inline-block bg-[#0ea5e9] hover:bg-[#0ea5e9]/90 text-white rounded-lg text-lg px-8 py-3"
-            >
-              Probar Demo
-            </a>
-            <a href="/verifier" className="inline-block border rounded-lg text-lg px-8 py-3 bg-white">
-              Ver Verificador
-            </a>
+            <Link href="/demo">
+              <Button size="lg" className="bg-[#0ea5e9] hover:bg-[#0ea5e9]/90 text-lg px-8">
+                Probar Demo
+              </Button>
+            </Link>
+            <Link href="/verifier">
+              <Button size="lg" variant="outline" className="text-lg px-8 bg-transparent">
+                Ver Verificador
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -180,41 +87,90 @@ export default function LandingPage(): JSX.Element {
               Tres capas de seguridad para proteger tu identidad estudiantil
             </p>
           </div>
+
           <div className="grid md:grid-cols-3 gap-6">
-            {features.map((f) => {
-              const IconComp = f.icon;
-              return (
-                <div
-                  key={f.title}
-                  className="border-2 hover:border-[#0ea5e9]/50 transition-colors p-6 rounded"
-                >
-                  <div className="w-12 h-12 rounded-lg bg-[#0ea5e9]/10 flex items-center justify-center mb-4">
-                    <IconComp className="h-6 w-6 text-[#0ea5e9]" />
-                  </div>
-                  <h3 className="font-semibold text-lg">{f.title}</h3>
-                  <p className="text-sm text-muted-foreground">{f.description}</p>
-                  <ul className="space-y-2 text-sm text-muted-foreground mt-4">
-                    <li className="flex items-start gap-2">
-                      <CheckIcon className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
-                      <span>Privacidad matemáticamente garantizada</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckIcon className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
-                      <span>Verificación criptográfica</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckIcon className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
-                      <span>Sin intermediarios</span>
-                    </li>
-                  </ul>
+            <Card className="border-2 hover:border-[#0ea5e9]/50 transition-colors">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-[#0ea5e9]/10 flex items-center justify-center mb-4">
+                  <Lock className="h-6 w-6 text-[#0ea5e9]" />
                 </div>
-              );
-            })}
+                <CardTitle>Pruebas Zero-Knowledge</CardTitle>
+                <CardDescription>Demuestra que eres estudiante sin revelar tu nombre, ID o universidad</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
+                    <span>Privacidad matemáticamente garantizada</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
+                    <span>Verificación criptográfica</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
+                    <span>Sin intermediarios</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:border-[#0ea5e9]/50 transition-colors">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-[#22c55e]/10 flex items-center justify-center mb-4">
+                  <Fingerprint className="h-6 w-6 text-[#22c55e]" />
+                </div>
+                <CardTitle>Autenticación WebAuthn</CardTitle>
+                <CardDescription>Verifica tu identidad con tu huella digital o reconocimiento facial</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
+                    <span>Biometría local en tu dispositivo</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
+                    <span>Protección anti-fraude</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
+                    <span>Estándar web seguro</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:border-[#0ea5e9]/50 transition-colors">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-[#f59e0b]/10 flex items-center justify-center mb-4">
+                  <Award className="h-6 w-6 text-[#f59e0b]" />
+                </div>
+                <CardTitle>NFT Soulbound</CardTitle>
+                <CardDescription>Recibe una credencial digital no transferible en blockchain</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
+                    <span>Credencial permanente</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
+                    <span>No transferible ni vendible</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e] mt-0.5 flex-shrink-0" />
+                    <span>Verificable públicamente</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Timeline */}
+      {/* How It Works Timeline */}
       <section className="bg-muted/30 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-12">
@@ -222,11 +178,43 @@ export default function LandingPage(): JSX.Element {
               <h2 className="text-4xl font-bold">Proceso de verificación</h2>
               <p className="text-lg text-muted-foreground">Simple, rápido y seguro en 5 pasos</p>
             </div>
+
             <div className="space-y-6">
-              {timeline.map((item) => {
-                const IconComp = item.icon;
+              {[
+                {
+                  step: "1",
+                  title: "Ingresa tus datos académicos",
+                  description: "Año de estudio, ID de estudiante e ID de universidad",
+                  icon: Eye,
+                },
+                {
+                  step: "2",
+                  title: "Genera tu prueba ZK",
+                  description: "El sistema crea una prueba criptográfica sin revelar tus datos",
+                  icon: Lock,
+                },
+                {
+                  step: "3",
+                  title: "Registra tu dispositivo",
+                  description: "Configura la autenticación biométrica una sola vez",
+                  icon: Fingerprint,
+                },
+                {
+                  step: "4",
+                  title: "Verifica tu identidad",
+                  description: "Combina ZK + WebAuthn para máxima seguridad",
+                  icon: Shield,
+                },
+                {
+                  step: "5",
+                  title: "Recibe tu NFT",
+                  description: "Obtén tu credencial estudiantil verificada en blockchain",
+                  icon: Award,
+                },
+              ].map((item, index) => {
+                const Icon = item.icon
                 return (
-                  <div key={item.step} className="flex gap-6 items-start">
+                  <div key={index} className="flex gap-6 items-start">
                     <div className="flex-shrink-0">
                       <div className="w-12 h-12 rounded-full bg-[#0ea5e9] text-white flex items-center justify-center font-bold text-lg">
                         {item.step}
@@ -234,20 +222,20 @@ export default function LandingPage(): JSX.Element {
                     </div>
                     <div className="flex-1 pt-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <IconComp className="h-5 w-5 text-[#0ea5e9]" />
+                        <Icon className="h-5 w-5 text-[#0ea5e9]" />
                         <h3 className="text-xl font-semibold">{item.title}</h3>
                       </div>
                       <p className="text-muted-foreground">{item.description}</p>
                     </div>
                   </div>
-                );
+                )
               })}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Benefits */}
+      {/* Benefits Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -259,7 +247,7 @@ export default function LandingPage(): JSX.Element {
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#22c55e]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckIcon className="h-4 w-4 text-[#22c55e]" />
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e]" />
                   </div>
                   <div>
                     <div className="font-semibold">Privacidad total</div>
@@ -270,28 +258,25 @@ export default function LandingPage(): JSX.Element {
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#22c55e]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckIcon className="h-4 w-4 text-[#22c55e]" />
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e]" />
                   </div>
                   <div>
                     <div className="font-semibold">Verificación instantánea</div>
-                    <div className="text-sm text-muted-foreground">
-                      Demuestra tu estatus de estudiante en segundos
-                    </div>
+                    <div className="text-sm text-muted-foreground">Demuestra tu estatus de estudiante en segundos</div>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#22c55e]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckIcon className="h-4 w-4 text-[#22c55e]" />
+                    <CheckCircle2 className="h-4 w-4 text-[#22c55e]" />
                   </div>
                   <div>
                     <div className="font-semibold">Una sola credencial</div>
-                    <div className="text-sm text-muted-foreground">
-                      Úsala en múltiples plataformas y servicios
-                    </div>
+                    <div className="text-sm text-muted-foreground">Úsala en múltiples plataformas y servicios</div>
                   </div>
                 </li>
               </ul>
             </div>
+
             <div className="space-y-6">
               <h2 className="text-4xl font-bold">Para instituciones</h2>
               <p className="text-lg text-muted-foreground">
@@ -300,7 +285,7 @@ export default function LandingPage(): JSX.Element {
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#0ea5e9]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <ShieldIcon className="h-4 w-4 text-[#0ea5e9]" />
+                    <Zap className="h-4 w-4 text-[#0ea5e9]" />
                   </div>
                   <div>
                     <div className="font-semibold">Sin almacenar datos</div>
@@ -311,24 +296,20 @@ export default function LandingPage(): JSX.Element {
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#0ea5e9]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <ShieldIcon className="h-4 w-4 text-[#0ea5e9]" />
+                    <Zap className="h-4 w-4 text-[#0ea5e9]" />
                   </div>
                   <div>
                     <div className="font-semibold">Verificación confiable</div>
-                    <div className="text-sm text-muted-foreground">
-                      Pruebas criptográficas imposibles de falsificar
-                    </div>
+                    <div className="text-sm text-muted-foreground">Pruebas criptográficas imposibles de falsificar</div>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#0ea5e9]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <ShieldIcon className="h-4 w-4 text-[#0ea5e9]" />
+                    <Zap className="h-4 w-4 text-[#0ea5e9]" />
                   </div>
                   <div>
                     <div className="font-semibold">Integración simple</div>
-                    <div className="text-sm text-muted-foreground">
-                      API REST para verificar credenciales en minutos
-                    </div>
+                    <div className="text-sm text-muted-foreground">API REST para verificar credenciales en minutos</div>
                   </div>
                 </li>
               </ul>
@@ -337,7 +318,7 @@ export default function LandingPage(): JSX.Element {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA Section */}
       <section className="bg-gradient-to-br from-[#0ea5e9]/10 via-background to-[#22c55e]/10 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-8">
@@ -348,15 +329,16 @@ export default function LandingPage(): JSX.Element {
               Únete a la revolución de la privacidad digital con tecnología blockchain
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-              <a
-                href="/demo"
-                className="inline-block bg-[#0ea5e9] hover:bg-[#0ea5e9]/90 text-white rounded-lg text-lg px-8 py-3"
-              >
-                Probar Demo Ahora
-              </a>
-              <a href="/verifier" className="inline-block border rounded-lg text-lg px-8 py-3 bg-white">
-                Ver Verificador
-              </a>
+              <Link href="/demo">
+                <Button size="lg" className="bg-[#0ea5e9] hover:bg-[#0ea5e9]/90 text-lg px-8">
+                  Probar Demo Ahora
+                </Button>
+              </Link>
+              <Link href="/verifier">
+                <Button size="lg" variant="outline" className="text-lg px-8 bg-transparent">
+                  Ver Verificador
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -368,7 +350,7 @@ export default function LandingPage(): JSX.Element {
           <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <ShieldIcon className="h-6 w-6 text-[#0ea5e9]" />
+                <Shield className="h-6 w-6 text-[#0ea5e9]" />
                 <span className="text-lg font-bold">EqualPass</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -379,14 +361,14 @@ export default function LandingPage(): JSX.Element {
               <h3 className="font-semibold">Producto</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="/demo" className="hover:text-foreground transition-colors">
+                  <Link href="/demo" className="hover:text-foreground transition-colors">
                     Demo
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/verifier" className="hover:text-foreground transition-colors">
+                  <Link href="/verifier" className="hover:text-foreground transition-colors">
                     Verificador
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -415,5 +397,5 @@ export default function LandingPage(): JSX.Element {
         </div>
       </footer>
     </div>
-  );
+  )
 }

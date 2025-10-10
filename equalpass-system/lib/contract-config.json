@@ -1,0 +1,81 @@
+{
+  "address": "{{CONTRACT_ADDRESS_PLACEHOLDER}}",
+  "abi": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "to", "type": "address" },
+        { "internalType": "uint8", "name": "badgeType", "type": "uint8" },
+        { "internalType": "bytes32", "name": "claimId", "type": "bytes32" }
+      ],
+      "name": "mintBadge",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
+      "name": "ownerOf",
+      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
+      "name": "badgeInfo",
+      "outputs": [
+        { "internalType": "uint8", "name": "badgeType", "type": "uint8" },
+        { "internalType": "uint256", "name": "issuedAt", "type": "uint256" },
+        { "internalType": "address", "name": "issuer", "type": "address" }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }],
+      "name": "balanceOf",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+        { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
+        { "indexed": false, "internalType": "uint8", "name": "badgeType", "type": "uint8" },
+        { "indexed": false, "internalType": "bytes32", "name": "claimId", "type": "bytes32" }
+      ],
+      "name": "BadgeMinted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+        { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }
+      ],
+      "name": "BadgeRevoked",
+      "type": "event"
+    }
+  ],
+  "chain": {
+    "id": 420420422,
+    "name": "Paseo (Polkadot EVM Testnet)",
+    "rpcUrls": {
+      "default": {
+        "http": ["{{RPC_URL_PASEO_PLACEHOLDER}}"]
+      }
+    },
+    "blockExplorers": {
+      "default": {
+        "name": "Explorer",
+        "url": "{{EXPLORER_URL_PLACEHOLDER}}"
+      }
+    },
+    "nativeCurrency": {
+      "name": "PAS",
+      "symbol": "PAS",
+      "decimals": 18
+    }
+  }
+}

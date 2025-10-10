@@ -29,8 +29,8 @@ export default function VerifierPage() {
         <VerifierForm />
 
         <div className="mt-8 p-4 bg-slate-50 rounded-lg text-sm text-slate-700">
-          <strong>Nota de privacidad:</strong> Este sistema no revela información personal identificable (PII). Solo
-          confirma el estado de validez del badge y su tipo.
+          <strong>Nota de privacidad:</strong> Este sistema no revela información personal identificable
+          (PII). Solo confirma el estado de validez del badge y su tipo.
         </div>
       </div>
     </div>

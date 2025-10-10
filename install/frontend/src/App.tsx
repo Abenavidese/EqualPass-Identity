@@ -11,7 +11,13 @@ export default function App() {
   return (
     <div className="container p-8">
       <h2 className="text-xl font-semibold">EqualPass</h2>
-      <p className="text-sm text-slate-600">Open <a className="underline" href="/test">/test</a> to see the demo or visit the root / to see the landing page.</p>
+      <p className="text-sm text-slate-600">
+        Open{" "}
+        <a className="underline" href="/test">
+          /test
+        </a>{" "}
+        to see the demo or visit the root / to see the landing page.
+      </p>
     </div>
   );
 }
