@@ -16,9 +16,9 @@ export default function LandingPage() {
               <span className="text-xl font-bold">ZK-Scholar</span>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/demo">
+              {/* <Link href="/demo">
                 <Button variant="ghost">Demo</Button>
-              </Link>
+              </Link> */}
               <Link href="/verifier">
                 <Button variant="ghost">Verificador</Button>
               </Link>
@@ -46,7 +46,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Link href="/demo">
               <Button size="lg" className="bg-[#0ea5e9] hover:bg-[#0ea5e9]/90 text-lg px-8">
-                Probar Demo
+                Genera tu Prueba Ahora
               </Button>
             </Link>
             <Link href="/verifier">
@@ -124,7 +124,7 @@ export default function LandingPage() {
                 </div>
                 <CardTitle>Autenticación WebAuthn</CardTitle>
                 <CardDescription>
-                  Verifica tu identidad con tu huella digital o reconocimiento facial
+                  Genera tus claves privadas en tu dispositivo
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -379,7 +379,7 @@ export default function LandingPage() {
                 </li>
                 <li>
                   <Link href="/verifier" className="hover:text-foreground transition-colors">
-                    Verificador
+                    Verificadorff
                   </Link>
                 </li>
               </ul>

@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Shield, User, CheckCircle2, AlertTriangle, Lock, Award, ArrowLeft, Zap, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { equalPassApi, metaMaskHelpers } from "@/lib/equal-pass-api";
+import BackButton from "@/components/ui/BackButton";
 
 export default function DemoPage() {
   // Form state
@@ -197,9 +198,7 @@ export default function DemoPage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center gap-3">
             <Link href="/">
-              <Button variant="ghost" size="icon">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
+              <BackButton /> 
             </Link>
             <Shield className="h-8 w-8 text-blue-600" />
             <h1 className="text-2xl font-bold">EqualPass - Demo Seguridad WebAuthn + ZK</h1>
@@ -229,22 +228,22 @@ export default function DemoPage() {
                 />
               </div>
               <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  className="flex-1" 
+                <Button
+                  variant="outline"
+                  className="flex-1"
                   onClick={checkWebAuthnStatus}
                   disabled={loading.status}
                 >
                   {loading.status ? "Verificando..." : "Verificar Estado WebAuthn"}
                 </Button>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="sm"
                   onClick={() => {
                     localStorage.removeItem(`webauthn_registered_${userAddress}`);
                     setWebauthnRegistered(false);
-                    setResults(prev => ({ ...prev, status: null }));
-                    alert('Estado local limpiado. Verifica el estado nuevamente.');
+                    setResults((prev) => ({ ...prev, status: null }));
+                    alert("Estado local limpiado. Verifica el estado nuevamente.");
                   }}
                   title="Limpiar estado local en caso de desincronización"
                 >
@@ -273,9 +272,7 @@ export default function DemoPage() {
                       </div>
                     )}
                     {results.status.error && !results.status.fallback && (
-                      <div className="text-xs text-red-600">
-                        Error: {results.status.error}
-                      </div>
+                      <div className="text-xs text-red-600">Error: {results.status.error}</div>
                     )}
                   </AlertDescription>
                 </Alert>
@@ -347,9 +344,9 @@ export default function DemoPage() {
               <Zap className="h-4 w-4 mr-2" />
               {loading.zkProof ? "Generando Prueba ZK..." : "Generar Prueba ZK"}
             </Button>
-            
+
             {results.zkProof && (
-              <Alert className={`mt-4 ${results.zkProof.success ? 'border-green-500' : 'border-red-500'}`}>
+              <Alert className={`mt-4 ${results.zkProof.success ? "border-green-500" : "border-red-500"}`}>
                 <AlertDescription>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
@@ -358,30 +355,36 @@ export default function DemoPage() {
                       ) : (
                         <AlertTriangle className="h-4 w-4 text-red-600" />
                       )}
-                      <strong>Resultado:</strong> {results.zkProof.success ? '✅ Badge minteado' : '❌ Error'}
+                      <strong>Resultado:</strong> {results.zkProof.success ? "✅ Badge minteado" : "❌ Error"}
                     </div>
                     {results.zkProof.securityLevel && (
-                      <div><strong>Seguridad:</strong> {results.zkProof.securityLevel}</div>
+                      <div>
+                        <strong>Seguridad:</strong> {results.zkProof.securityLevel}
+                      </div>
                     )}
                     {results.zkProof.txHash && (
                       <div className="flex items-center gap-2">
-                        <strong>TX:</strong> 
-                        <a 
-                          href={results.zkProof.blockscoutUrl} 
-                          target="_blank" 
+                        <strong>TX:</strong>
+                        <a
+                          href={results.zkProof.blockscoutUrl}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:underline flex items-center gap-1"
                         >
-                          {results.zkProof.txHash.slice(0,10)}...
+                          {results.zkProof.txHash.slice(0, 10)}...
                           <ExternalLink className="h-3 w-3" />
                         </a>
                       </div>
                     )}
                     {results.zkProof.tokenId && (
-                      <div><strong>Token ID:</strong> {results.zkProof.tokenId}</div>
+                      <div>
+                        <strong>Token ID:</strong> {results.zkProof.tokenId}
+                      </div>
                     )}
                     {results.zkProof.error && (
-                      <div className="text-red-600"><strong>Error:</strong> {results.zkProof.error}</div>
+                      <div className="text-red-600">
+                        <strong>Error:</strong> {results.zkProof.error}
+                      </div>
                     )}
                   </div>
                 </AlertDescription>
@@ -404,20 +407,24 @@ export default function DemoPage() {
               disabled={loading.webauthn || webauthnRegistered}
             >
               <Lock className="h-4 w-4 mr-2" />
-              {loading.webauthn ? "Registrando..." : webauthnRegistered ? "Dispositivo Registrado" : "Registrar Dispositivo"}
+              {loading.webauthn
+                ? "Registrando..."
+                : webauthnRegistered
+                ? "Dispositivo Registrado"
+                : "Registrar Dispositivo"}
             </Button>
-            
+
             {results.webauthn && (
-              <Alert className={`mt-4 ${results.webauthn.verified ? 'border-green-500' : 'border-red-500'}`}>
+              <Alert className={`mt-4 ${results.webauthn.verified ? "border-green-500" : "border-red-500"}`}>
                 <AlertDescription>
                   {results.webauthn.verified ? (
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      ✅ Dispositivo registrado exitosamente
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />✅ Dispositivo registrado
+                      exitosamente
                     </div>
                   ) : (
                     <div className="text-red-600">
-                      ❌ Error: {results.webauthn.error || 'No se pudo registrar el dispositivo'}
+                      ❌ Error: {results.webauthn.error || "No se pudo registrar el dispositivo"}
                     </div>
                   )}
                 </AlertDescription>
@@ -441,17 +448,15 @@ export default function DemoPage() {
               <Shield className="h-4 w-4 mr-2" />
               {loading.mintSecure ? "Generando Prueba..." : "Generar Prueba ZK + WebAuthn"}
             </Button>
-            
+
             {!webauthnRegistered && (
               <Alert className="mt-4">
-                <AlertDescription>
-                  ⚠️ Primero necesitas registrar tu dispositivo WebAuthn
-                </AlertDescription>
+                <AlertDescription>⚠️ Primero necesitas registrar tu dispositivo WebAuthn</AlertDescription>
               </Alert>
             )}
 
             {results.mintSecure && (
-              <Alert className={`mt-4 ${results.mintSecure.success ? 'border-green-500' : 'border-red-500'}`}>
+              <Alert className={`mt-4 ${results.mintSecure.success ? "border-green-500" : "border-red-500"}`}>
                 <AlertDescription>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
@@ -460,27 +465,32 @@ export default function DemoPage() {
                       ) : (
                         <AlertTriangle className="h-4 w-4 text-red-600" />
                       )}
-                      <strong>Resultado:</strong> {results.mintSecure.success ? '✅ Badge con ALTA SEGURIDAD' : '❌ Error WebAuthn'}
+                      <strong>Resultado:</strong>{" "}
+                      {results.mintSecure.success ? "✅ Badge con ALTA SEGURIDAD" : "❌ Error WebAuthn"}
                     </div>
                     {results.mintSecure.txHash && (
                       <div className="flex items-center gap-2">
-                        <strong>TX:</strong> 
-                        <a 
-                          href={results.mintSecure.blockscoutUrl} 
-                          target="_blank" 
+                        <strong>TX:</strong>
+                        <a
+                          href={results.mintSecure.blockscoutUrl}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:underline flex items-center gap-1"
                         >
-                          {results.mintSecure.txHash.slice(0,10)}...
+                          {results.mintSecure.txHash.slice(0, 10)}...
                           <ExternalLink className="h-3 w-3" />
                         </a>
                       </div>
                     )}
                     {results.mintSecure.tokenId && (
-                      <div><strong>Token ID:</strong> {results.mintSecure.tokenId}</div>
+                      <div>
+                        <strong>Token ID:</strong> {results.mintSecure.tokenId}
+                      </div>
                     )}
                     {results.mintSecure.error && (
-                      <div className="text-red-600"><strong>Error:</strong> {results.mintSecure.error}</div>
+                      <div className="text-red-600">
+                        <strong>Error:</strong> {results.mintSecure.error}
+                      </div>
                     )}
                   </div>
                 </AlertDescription>
@@ -494,7 +504,8 @@ export default function DemoPage() {
           <CardHeader>
             <CardTitle className="text-red-700">🚨 Demo Anti-Fraude para Jueces</CardTitle>
             <CardDescription>
-              <strong>Escenario:</strong> Un atacante robó los datos ZK pero NO tiene tu dispositivo biométrico.
+              <strong>Escenario:</strong> Un atacante robó los datos ZK pero NO tiene tu dispositivo
+              biométrico.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -507,12 +518,13 @@ export default function DemoPage() {
               <AlertTriangle className="h-4 w-4 mr-2" />
               {loading.fraud ? "Simulando..." : "Simular Intento de Fraude"}
             </Button>
-            
+
             {results.fraud && (
               <Alert className="mt-4 border-red-500">
                 <AlertDescription>
                   <div className="text-red-700">
-                    🚨 <strong>Fraude detectado:</strong> {results.fraud.message || 'Datos ZK válidos pero falta WebAuthn'}
+                    🚨 <strong>Fraude detectado:</strong>{" "}
+                    {results.fraud.message || "Datos ZK válidos pero falta WebAuthn"}
                   </div>
                 </AlertDescription>
               </Alert>
@@ -526,7 +538,8 @@ export default function DemoPage() {
             <CardHeader>
               <CardTitle>🎫 Paso 5: Obtener NFT de Estudiante</CardTitle>
               <CardDescription>
-                <strong>¡Solo disponible después de mint exitoso!</strong> Obtén tu NFT que prueba tu estatus de estudiante verificado.
+                <strong>¡Solo disponible después de mint exitoso!</strong> Obtén tu NFT que prueba tu estatus
+                de estudiante verificado.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -539,16 +552,18 @@ export default function DemoPage() {
                   <Award className="h-4 w-4 mr-2" />
                   {loading.nft ? "Agregando a MetaMask..." : "🎫 Obtener Mi NFT"}
                 </Button>
-                
+
                 {lastTokenId && (
                   <Alert className="border-green-500">
                     <AlertDescription>
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <CheckCircle2 className="h-4 w-4 text-green-600" />
-                          🎉 ¡Badge minteado exitosamente! 
+                          🎉 ¡Badge minteado exitosamente!
                         </div>
-                        <div><strong>Token ID:</strong> {lastTokenId}</div>
+                        <div>
+                          <strong>Token ID:</strong> {lastTokenId}
+                        </div>
                         <div className="text-sm text-gray-600">
                           Ahora puedes obtener tu NFT de estudiante y agregarlo automáticamente a MetaMask.
                         </div>
@@ -575,15 +590,18 @@ export default function DemoPage() {
                 <Badge variant={results.mintSecure?.success ? "default" : "secondary"}>
                   {results.mintSecure?.success ? "✅" : "3"} Alta Seguridad
                 </Badge>
-                <Badge variant={lastTokenId ? "default" : "secondary"}>
-                  {lastTokenId ? "✅" : "4"} NFT
-                </Badge>
+                <Badge variant={lastTokenId ? "default" : "secondary"}>{lastTokenId ? "✅" : "4"} NFT</Badge>
               </div>
               <div className="text-muted-foreground">
-                {lastTokenId ? "Completado" : 
-                 results.mintSecure?.success ? "Obtén tu NFT" :
-                 webauthnRegistered ? "Genera prueba de alta seguridad" :
-                 zkProofGenerated ? "Registra WebAuthn" : "Comienza con ZK Proof"}
+                {lastTokenId
+                  ? "Completado"
+                  : results.mintSecure?.success
+                  ? "Obtén tu NFT"
+                  : webauthnRegistered
+                  ? "Genera prueba de alta seguridad"
+                  : zkProofGenerated
+                  ? "Registra WebAuthn"
+                  : "Comienza con ZK Proof"}
               </div>
             </div>
           </CardContent>
