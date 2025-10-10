@@ -193,313 +193,623 @@ export default function DemoPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      {/* Header */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <Link href="/">
-              <BackButton /> 
+      <header className="sticky top-0 z-40 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="mx-auto w-full max-w-4xl px-4 py-5">
+          <div className="flex items-center justify-between gap-3">
+            <Link href="/" aria-label="Volver">
+              <BackButton />
             </Link>
-            <Shield className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl font-bold">EqualPass - Demo Seguridad WebAuthn + ZK</h1>
+            <div className="flex items-center gap-3">
+              <Shield className="h-8 w-8 text-blue-500" />
+              <h1 className="text-2xl font-semibold">Generación de Pruebas ZK</h1>
+            </div>
           </div>
         </div>
+        {/* Barra de acento */}
+        <div className="h-[3px] w-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400" />
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-4xl space-y-6">
+        {/* Intro como Card (mismo tamaño) */}
+        <div className="relative overflow-hidden rounded-2xl">
+          {/* Glows más marcados */}
+          <div className="pointer-events-none absolute -top-28 -right-28 h-64 w-64 rounded-full bg-gradient-to-tr from-blue-500/60 via-cyan-400/50 to-emerald-400/40 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-32 -left-32 h-72 w-72 rounded-full bg-gradient-to-tr from-amber-400/60 via-pink-500/50 to-violet-500/40 blur-[90px]" />
+          <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/15" />
+
+          <Card className="relative border bg-background/70 backdrop-blur-md">
+            <CardHeader className="pb-3">
+              <div className="flex items-start gap-3">
+                <div className="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-xl border bg-background/80 shadow-sm">
+                  <span aria-hidden>🛡️</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <CardTitle className="text-base md:text-lg">¿Cómo funciona?</CardTitle>
+                    <span className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
+                      Zero-Knowledge • WebAuthn • NFT
+                    </span>
+                  </div>
+                  <CardDescription className="mt-2">
+                    Ingresa tu <span className="font-medium">wallet</span>, verifica/registrar tu{" "}
+                    <span className="font-medium">WebAuthn</span> y luego{" "}
+                    <span className="font-medium">mintea</span> tu credencial. Demuestras que eres estudiante{" "}
+                    <span className="font-medium">sin exponer datos personales</span>.
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="pt-0">
+              <ol className="grid gap-3 sm:grid-cols-2">
+                {[
+                  { t: "Verifica o registra WebAuthn", d: "Liga tu dispositivo de forma segura." },
+                  { t: "Mintea tu ZK-Badge", d: "Con o sin WebAuthn requerido." },
+                  { t: "Agrega el NFT a MetaMask", d: "Visualiza tu credencial en tu wallet." },
+                ].map((s, i) => (
+                  <li
+                    key={i}
+                    className="group relative flex gap-3 rounded-xl border bg-card/50 p-3 transition hover:bg-card/70"
+                  >
+                    <div className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs">
+                      {i + 1}
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium">{s.t}</div>
+                      <div className="text-xs text-muted-foreground">{s.d}</div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <div className="mt-3 text-xs text-muted-foreground">
+                Tip: si cambiaste de dispositivo, vuelve a registrar WebAuthn para sincronizar tus
+                credenciales.
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* User Info */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              Información del Usuario
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="userAddress">Dirección de Wallet</Label>
-                <Input
-                  id="userAddress"
-                  value={userAddress}
-                  onChange={(e) => setUserAddress(e.target.value)}
-                  placeholder="0x..."
-                  className="font-mono text-sm"
-                />
+        {/* User Info (matching header/intro) */}
+        <div className="relative overflow-hidden rounded-2xl">
+          {/* Glows (ligeramente más suaves que el Intro) */}
+          <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-gradient-to-tr from-blue-500/40 via-cyan-400/30 to-emerald-400/25 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-60 w-60 rounded-full bg-gradient-to-tr from-amber-400/35 via-pink-500/25 to-violet-500/25 blur-[80px]" />
+          {/* Anillo sutil */}
+          <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/12" />
+
+          <Card className="relative border bg-background/70 backdrop-blur-md shadow-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-2">
+                  <User className="h-5 w-5" />
+                  Información del Usuario
+                </span>
+                {/* Chip opcional
+                <span className="hidden sm:inline-flex items-center rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
+                  Wallet & WebAuthn
+                </span> */}
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="userAddress">Dirección de Wallet</Label>
+                  <Input
+                    id="userAddress"
+                    value={userAddress}
+                    onChange={(e) => setUserAddress(e.target.value)}
+                    placeholder="0x..."
+                    className="font-mono text-sm"
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={checkWebAuthnStatus}
+                    disabled={loading.status}
+                  >
+                    {loading.status ? "Verificando..." : "Verificar Estado WebAuthn"}
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      localStorage.removeItem(`webauthn_registered_${userAddress}`);
+                      setWebauthnRegistered(false);
+                      setResults((prev) => ({ ...prev, status: null }));
+                      alert("Estado local limpiado. Verifica el estado nuevamente.");
+                    }}
+                    title="Limpiar estado local en caso de desincronización"
+                  >
+                    🔄
+                  </Button>
+                </div>
+
+                {results.status && (
+                  <Alert variant={webauthnStatus?.hasCredential ? "default" : "destructive"}>
+                    <AlertDescription className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        {webauthnStatus?.hasCredential ? (
+                          <>
+                            <CheckCircle2 className="h-4 w-4 text-green-600" />
+                            <span>Estado: ✅ Dispositivo registrado</span>
+                          </>
+                        ) : (
+                          <>
+                            <AlertTriangle className="h-4 w-4" />
+                            <span>Estado: ⚠️ Dispositivo no registrado</span>
+                          </>
+                        )}
+                      </div>
+                      {results.status.fallback && (
+                        <div className="text-xs text-orange-600">
+                          ⚠️ Backend no disponible — usando esta do local
+                        </div>
+                      )}
+                      {results.status.error && !results.status.fallback && (
+                        <div className="text-xs text-red-600">Error: {results.status.error}</div>
+                      )}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Acento inferior para cohesión con el header */}
+                <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400/90" />
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={checkWebAuthnStatus}
-                  disabled={loading.status}
-                >
-                  {loading.status ? "Verificando..." : "Verificar Estado WebAuthn"}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    localStorage.removeItem(`webauthn_registered_${userAddress}`);
-                    setWebauthnRegistered(false);
-                    setResults((prev) => ({ ...prev, status: null }));
-                    alert("Estado local limpiado. Verifica el estado nuevamente.");
-                  }}
-                  title="Limpiar estado local en caso de desincronización"
-                >
-                  🔄
-                </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Paso 1: Datos de Estudiante (matching header/intro) */}
+        <div className="relative overflow-hidden rounded-2xl">
+          {/* Glows suaves para no competir con el Intro */}
+          <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-gradient-to-tr from-blue-500/40 via-cyan-400/30 to-emerald-400/25 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-60 w-60 rounded-full bg-gradient-to-tr from-amber-400/40 via-pink-500/30 to-violet-500/25 blur-[80px]" />
+          {/* Anillo sutil tipo vidrio */}
+          <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/12" />
+
+          <Card className="relative border bg-background/70 backdrop-blur-md shadow-sm">
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <CardTitle>Paso 1: Datos de Estudiante</CardTitle>
+                  <CardDescription>Ingresa tus datos académicos para generar la prueba</CardDescription>
+                </div>
+                {/* Chip/acento que hereda la paleta del header */}
+                <span className="mt-1 inline-flex items-center rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
+                  ZK • WebAuthn
+                </span>
               </div>
-              {results.status && (
-                <Alert variant={webauthnStatus?.hasCredential ? "default" : "destructive"}>
-                  <AlertDescription className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      {webauthnStatus?.hasCredential ? (
-                        <>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="studentStatus">Estado Estudiante</Label>
+                  <Input
+                    id="studentStatus"
+                    value={studentStatus}
+                    onChange={(e) => setStudentStatus(e.target.value)}
+                    placeholder="1 = activo"
+                    className="font-sans"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="enrollmentYear">Año Matrícula</Label>
+                  <Input
+                    id="enrollmentYear"
+                    value={enrollmentYear}
+                    onChange={(e) => setEnrollmentYear(e.target.value)}
+                    placeholder="2025"
+                    inputMode="numeric"
+                    className="font-sans"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="universityHash">Hash Universidad</Label>
+                  <Input
+                    id="universityHash"
+                    value={universityHash}
+                    onChange={(e) => setUniversityHash(e.target.value)}
+                    placeholder="ej. 0xabc123… o hash numérico"
+                    className="font-mono text-sm"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="userSecret">Secreto Usuario</Label>
+                  <Input
+                    id="userSecret"
+                    value={userSecret}
+                    onChange={(e) => setUserSecret(e.target.value)}
+                    placeholder="clave privada local (no se envía en claro)"
+                    className="font-mono text-sm"
+                    type="password"
+                  />
+                </div>
+              </div>
+
+              {/* Línea de acento inferior (coincide con el header degradé) */}
+              <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400/90" />
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Step 2: Generate ZK Proof */}
+        <div className="relative overflow-hidden rounded-2xl">
+          {/* Glows (un poco más fríos por ser acción técnica) */}
+          <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-gradient-to-tr from-blue-500/45 via-cyan-400/35 to-emerald-400/25 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-60 w-60 rounded-full bg-gradient-to-tr from-amber-400/35 via-pink-500/25 to-violet-500/25 blur-[80px]" />
+          {/* Anillo sutil */}
+          <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/12" />
+
+          <Card className="relative border bg-background/70 backdrop-blur-md shadow-sm">
+            <CardHeader>
+              <CardTitle>Paso 2: Generar Prueba ZK</CardTitle>
+              <CardDescription>Solo prueba ZK (verificación básica)</CardDescription>
+            </CardHeader>
+
+            <CardContent>
+              {/* Botón ancho con foco estilizado */}
+              {/* Botón ancho, muy “botón” */}
+              <Button
+                onClick={handleGenerateZkProof}
+                disabled={loading.zkProof}
+                className={[
+                  // base shadcn
+                  "group w-full",
+                  // look de botón sólido y notorio
+                  "relative overflow-hidden rounded-xl border border-white/10",
+                  "bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500",
+                  "text-white shadow-lg transition-all",
+                  // interacción
+                  "hover:shadow-xl hover:brightness-110 active:scale-[0.99]",
+                  // accesibilidad
+                  "focus-visible:outline-none focus-visible:ring-2",
+                  "focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                ].join(" ")}
+                aria-label="Generar Prueba ZK"
+              >
+                {/* brillo sutil al pasar el mouse */}
+                <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-15 group-active:opacity-20 bg-white" />
+
+                {loading.zkProof ? (
+                  <span className="flex items-center justify-center gap-2">
+                    {/* spinner */}
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-90"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"
+                      />
+                    </svg>
+                    Generando Prueba ZK…
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <Zap className="h-4 w-4" />
+                    Generar Prueba ZK
+                  </span>
+                )}
+              </Button>
+
+              {results.zkProof && (
+                <Alert
+                  className={`mt-4 ${
+                    results.zkProof.success ? "border-green-500/70" : "border-red-500/70"
+                  } bg-card/60 backdrop-blur-sm`}
+                >
+                  <AlertDescription>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        {results.zkProof.success ? (
                           <CheckCircle2 className="h-4 w-4 text-green-600" />
-                          <span>Estado: ✅ Dispositivo registrado</span>
-                        </>
-                      ) : (
-                        <>
-                          <AlertTriangle className="h-4 w-4" />
-                          <span>Estado: ⚠️ Dispositivo no registrado</span>
-                        </>
+                        ) : (
+                          <AlertTriangle className="h-4 w-4 text-red-600" />
+                        )}
+                        <strong>Resultado:</strong>{" "}
+                        {results.zkProof.success ? "✅ Badge minteado" : "❌ Error"}
+                      </div>
+
+                      {results.zkProof.securityLevel && (
+                        <div className="text-sm">
+                          <strong>Seguridad:</strong> {results.zkProof.securityLevel}
+                        </div>
+                      )}
+
+                      {results.zkProof.txHash && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <strong>TX:</strong>
+                          <a
+                            href={results.zkProof.blockscoutUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                          >
+                            {results.zkProof.txHash.slice(0, 10)}…
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </div>
+                      )}
+
+                      {results.zkProof.tokenId && (
+                        <div className="text-sm">
+                          <strong>Token ID:</strong> {results.zkProof.tokenId}
+                        </div>
+                      )}
+
+                      {results.zkProof.error && (
+                        <div className="text-sm text-red-600">
+                          <strong>Error:</strong> {results.zkProof.error}
+                        </div>
                       )}
                     </div>
-                    {results.status.fallback && (
-                      <div className="text-xs text-orange-600">
-                        ⚠️ Backend no disponible - usando estado local
+                  </AlertDescription>
+                </Alert>
+              )}
+            </CardContent>
+
+            {/* Acento inferior para cohesión */}
+            <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400/90" />
+          </Card>
+        </div>
+
+        {/* Step 3: WebAuthn Registration */}
+        <div className="relative overflow-hidden rounded-2xl">
+          {/* Glows suaves */}
+          <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-gradient-to-tr from-blue-500/40 via-cyan-400/30 to-emerald-400/25 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-60 w-60 rounded-full bg-gradient-to-tr from-amber-400/35 via-pink-500/25 to-violet-500/25 blur-[80px]" />
+          {/* Anillo sutil */}
+          <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/12" />
+
+          <Card className="relative border bg-background/70 backdrop-blur-md shadow-sm">
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <CardTitle>Paso 3: Registro WebAuthn (Solo una vez)</CardTitle>
+                  <CardDescription>
+                    Registra tu dispositivo biométrico para verificación segura
+                  </CardDescription>
+                </div>
+                <span className="hidden sm:inline-flex items-center rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
+                  Seguridad 🔐
+                </span>
+              </div>
+            </CardHeader>
+
+            <CardContent>
+              {/* Botón sólido y notorio; cambia si ya está registrado */}
+              <Button
+                onClick={handleRegisterWebAuthn}
+                disabled={loading.webauthn || webauthnRegistered}
+                className={[
+                  "group w-full relative overflow-hidden rounded-xl border",
+                  webauthnRegistered
+                    ? "border-emerald-500/20 bg-emerald-600 text-white shadow-lg"
+                    : "border-white/10 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500 text-white shadow-lg hover:shadow-xl hover:brightness-110 active:scale-[0.99]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                ].join(" ")}
+                aria-label="Registrar Dispositivo WebAuthn"
+              >
+                <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-15 group-active:opacity-20 bg-white" />
+                <span className="flex items-center justify-center gap-2">
+                  {loading.webauthn ? (
+                    <>
+                      {/* spinner */}
+                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="none"
+                        />
+                        <path
+                          className="opacity-90"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"
+                        />
+                      </svg>
+                      Registrando...
+                    </>
+                  ) : webauthnRegistered ? (
+                    <>
+                      <CheckCircle2 className="h-4 w-4" />
+                      Dispositivo Registrado
+                    </>
+                  ) : (
+                    <>
+                      <Lock className="h-4 w-4" />
+                      Registrar Dispositivo
+                    </>
+                  )}
+                </span>
+              </Button>
+
+              {/* Resultado */}
+              {results.webauthn && (
+                <Alert
+                  className={`mt-4 ${
+                    results.webauthn.verified ? "border-green-500/70" : "border-red-500/70"
+                  } bg-card/60 backdrop-blur-sm`}
+                >
+                  <AlertDescription>
+                    {results.webauthn.verified ? (
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />✅ Dispositivo registrado
+                        exitosamente
                       </div>
-                    )}
-                    {results.status.error && !results.status.fallback && (
-                      <div className="text-xs text-red-600">Error: {results.status.error}</div>
+                    ) : (
+                      <div className="text-red-600">
+                        ❌ Error: {results.webauthn.error || "No se pudo registrar el dispositivo"}
+                      </div>
                     )}
                   </AlertDescription>
                 </Alert>
               )}
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Step 1: Student Data */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Paso 1: Datos de Estudiante</CardTitle>
-            <CardDescription>Ingresa tus datos académicos para generar la prueba</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="studentStatus">Estado Estudiante</Label>
-                <Input
-                  id="studentStatus"
-                  value={studentStatus}
-                  onChange={(e) => setStudentStatus(e.target.value)}
-                  placeholder="1=activo"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="enrollmentYear">Año Matrícula</Label>
-                <Input
-                  id="enrollmentYear"
-                  value={enrollmentYear}
-                  onChange={(e) => setEnrollmentYear(e.target.value)}
-                  placeholder="2025"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="universityHash">Hash Universidad</Label>
-                <Input
-                  id="universityHash"
-                  value={universityHash}
-                  onChange={(e) => setUniversityHash(e.target.value)}
-                  placeholder="12345"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="userSecret">Secreto Usuario</Label>
-                <Input
-                  id="userSecret"
-                  value={userSecret}
-                  onChange={(e) => setUserSecret(e.target.value)}
-                  placeholder="67890"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              {/* Tip de compatibilidad */}
+              <p className="mt-3 text-xs text-muted-foreground">
+                Tip: para usar biometría integrada, habilita “Usar llaves de acceso/Passkeys” en tu
+                navegador/sistema.
+              </p>
+            </CardContent>
 
-        {/* Step 2: Generate ZK Proof */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Paso 2: Generar Prueba ZK</CardTitle>
-            <CardDescription>Solo prueba ZK (verificación básica)</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button
-              onClick={handleGenerateZkProof}
-              className="w-full bg-blue-600 hover:bg-blue-700"
-              disabled={loading.zkProof}
-            >
-              <Zap className="h-4 w-4 mr-2" />
-              {loading.zkProof ? "Generando Prueba ZK..." : "Generar Prueba ZK"}
-            </Button>
+            {/* Acento inferior */}
+            <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400/90" />
+          </Card>
+        </div>
 
-            {results.zkProof && (
-              <Alert className={`mt-4 ${results.zkProof.success ? "border-green-500" : "border-red-500"}`}>
-                <AlertDescription>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      {results.zkProof.success ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      ) : (
-                        <AlertTriangle className="h-4 w-4 text-red-600" />
-                      )}
-                      <strong>Resultado:</strong> {results.zkProof.success ? "✅ Badge minteado" : "❌ Error"}
-                    </div>
-                    {results.zkProof.securityLevel && (
-                      <div>
-                        <strong>Seguridad:</strong> {results.zkProof.securityLevel}
-                      </div>
-                    )}
-                    {results.zkProof.txHash && (
-                      <div className="flex items-center gap-2">
-                        <strong>TX:</strong>
-                        <a
-                          href={results.zkProof.blockscoutUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline flex items-center gap-1"
-                        >
-                          {results.zkProof.txHash.slice(0, 10)}...
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
-                      </div>
-                    )}
-                    {results.zkProof.tokenId && (
-                      <div>
-                        <strong>Token ID:</strong> {results.zkProof.tokenId}
-                      </div>
-                    )}
-                    {results.zkProof.error && (
-                      <div className="text-red-600">
-                        <strong>Error:</strong> {results.zkProof.error}
-                      </div>
-                    )}
-                  </div>
-                </AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
+        {/* Step 4: High Security Mint (matching header/intro) */}
+        <div className="relative overflow-hidden rounded-2xl">
+          {/* Glows (un poco más intensos por “Alta Seguridad”) */}
+          <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-gradient-to-tr from-blue-500/55 via-indigo-500/40 to-purple-500/35 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-60 w-60 rounded-full bg-gradient-to-tr from-emerald-400/35 via-cyan-400/30 to-blue-400/25 blur-[80px]" />
+          {/* Anillo sutil */}
+          <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/12" />
 
-        {/* Step 3: WebAuthn Registration */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Paso 3: Registro WebAuthn (Solo una vez)</CardTitle>
-            <CardDescription>Registra tu dispositivo biométrico para verificación segura</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button
-              onClick={handleRegisterWebAuthn}
-              variant="outline"
-              className="w-full"
-              disabled={loading.webauthn || webauthnRegistered}
-            >
-              <Lock className="h-4 w-4 mr-2" />
-              {loading.webauthn
-                ? "Registrando..."
-                : webauthnRegistered
-                ? "Dispositivo Registrado"
-                : "Registrar Dispositivo"}
-            </Button>
+          <Card className="relative border bg-background/70 backdrop-blur-md shadow-sm">
+            <CardHeader>
+              <CardTitle>Paso 4: Prueba ZK + WebAuthn (Alta Seguridad)</CardTitle>
+              <CardDescription>Prueba ZK + Verificación WebAuthn</CardDescription>
+            </CardHeader>
 
-            {results.webauthn && (
-              <Alert className={`mt-4 ${results.webauthn.verified ? "border-green-500" : "border-red-500"}`}>
-                <AlertDescription>
-                  {results.webauthn.verified ? (
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />✅ Dispositivo registrado
-                      exitosamente
-                    </div>
+            <CardContent>
+              {/* Botón sólido, notorio y coherente con la paleta */}
+              <Button
+                onClick={handleMintWithWebAuthn}
+                disabled={loading.mintSecure || !webauthnRegistered}
+                className={[
+                  "group w-full relative overflow-hidden rounded-xl border text-white shadow-lg transition-all",
+                  loading.mintSecure || !webauthnRegistered
+                    ? "border-white/10 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 opacity-80"
+                    : "border-white/10 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:shadow-xl hover:brightness-110 active:scale-[0.99]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                ].join(" ")}
+                aria-label="Generar Prueba ZK + WebAuthn"
+              >
+                <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-15 group-active:opacity-20 bg-white" />
+                <span className="flex items-center justify-center gap-2">
+                  {loading.mintSecure ? (
+                    <>
+                      {/* spinner */}
+                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="none"
+                        />
+                        <path
+                          className="opacity-90"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"
+                        />
+                      </svg>
+                      Generando Prueba…
+                    </>
                   ) : (
-                    <div className="text-red-600">
-                      ❌ Error: {results.webauthn.error || "No se pudo registrar el dispositivo"}
-                    </div>
+                    <>
+                      <Shield className="h-4 w-4" />
+                      Generar Prueba ZK + WebAuthn
+                      <svg
+                        className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path d="M13 5l7 7-7 7M5 12h14" />
+                      </svg>
+                    </>
                   )}
-                </AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
+                </span>
+              </Button>
 
-        {/* Step 4: High Security Mint */}
-        <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-          <CardHeader>
-            <CardTitle>Paso 4: Prueba ZK + WebAuthn (Alta Seguridad)</CardTitle>
-            <CardDescription>Prueba ZK + Verificación WebAuthn</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button
-              onClick={handleMintWithWebAuthn}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-              disabled={loading.mintSecure || !webauthnRegistered}
-            >
-              <Shield className="h-4 w-4 mr-2" />
-              {loading.mintSecure ? "Generando Prueba..." : "Generar Prueba ZK + WebAuthn"}
-            </Button>
+              {/* Aviso si falta registro WebAuthn */}
+              {!webauthnRegistered && (
+                <Alert className="mt-4 bg-card/60 backdrop-blur-sm border-yellow-500/60">
+                  <AlertDescription>⚠️ Primero necesitas registrar tu dispositivo WebAuthn.</AlertDescription>
+                </Alert>
+              )}
 
-            {!webauthnRegistered && (
-              <Alert className="mt-4">
-                <AlertDescription>⚠️ Primero necesitas registrar tu dispositivo WebAuthn</AlertDescription>
-              </Alert>
-            )}
-
-            {results.mintSecure && (
-              <Alert className={`mt-4 ${results.mintSecure.success ? "border-green-500" : "border-red-500"}`}>
-                <AlertDescription>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      {results.mintSecure.success ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      ) : (
-                        <AlertTriangle className="h-4 w-4 text-red-600" />
-                      )}
-                      <strong>Resultado:</strong>{" "}
-                      {results.mintSecure.success ? "✅ Badge con ALTA SEGURIDAD" : "❌ Error WebAuthn"}
-                    </div>
-                    {results.mintSecure.txHash && (
+              {/* Resultado */}
+              {results.mintSecure && (
+                <Alert
+                  className={`mt-4 ${
+                    results.mintSecure.success ? "border-green-500/70" : "border-red-500/70"
+                  } bg-card/60 backdrop-blur-sm`}
+                >
+                  <AlertDescription>
+                    <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <strong>TX:</strong>
-                        <a
-                          href={results.mintSecure.blockscoutUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline flex items-center gap-1"
-                        >
-                          {results.mintSecure.txHash.slice(0, 10)}...
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
+                        {results.mintSecure.success ? (
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                        ) : (
+                          <AlertTriangle className="h-4 w-4 text-red-600" />
+                        )}
+                        <strong>Resultado:</strong>{" "}
+                        {results.mintSecure.success ? "✅ Badge con ALTA SEGURIDAD" : "❌ Error WebAuthn"}
                       </div>
-                    )}
-                    {results.mintSecure.tokenId && (
-                      <div>
-                        <strong>Token ID:</strong> {results.mintSecure.tokenId}
-                      </div>
-                    )}
-                    {results.mintSecure.error && (
-                      <div className="text-red-600">
-                        <strong>Error:</strong> {results.mintSecure.error}
-                      </div>
-                    )}
-                  </div>
-                </AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
 
-        {/* Anti-Fraud Demo */}
+                      {results.mintSecure.txHash && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <strong>TX:</strong>
+                          <a
+                            href={results.mintSecure.blockscoutUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                          >
+                            {results.mintSecure.txHash.slice(0, 10)}…
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </div>
+                      )}
+
+                      {results.mintSecure.tokenId && (
+                        <div className="text-sm">
+                          <strong>Token ID:</strong> {results.mintSecure.tokenId}
+                        </div>
+                      )}
+
+                      {results.mintSecure.error && (
+                        <div className="text-sm text-red-600">
+                          <strong>Error:</strong> {results.mintSecure.error}
+                        </div>
+                      )}
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
+            </CardContent>
+
+            {/* Acento inferior para cohesión */}
+            <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400/90" />
+          </Card>
+        </div>
+
+        {/* Anti-Fraud Demo
         <Card className="border-red-200 bg-red-50">
           <CardHeader>
             <CardTitle className="text-red-700">🚨 Demo Anti-Fraude para Jueces</CardTitle>
@@ -530,82 +840,217 @@ export default function DemoPage() {
               </Alert>
             )}
           </CardContent>
-        </Card>
+        </Card> */}
 
-        {/* NFT Claim */}
+        {/* NFT Claim (matching header/intro, celebratorio) */}
         {(nftMinted || lastTokenId) && (
-          <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
-            <CardHeader>
-              <CardTitle>🎫 Paso 5: Obtener NFT de Estudiante</CardTitle>
-              <CardDescription>
-                <strong>¡Solo disponible después de mint exitoso!</strong> Obtén tu NFT que prueba tu estatus
-                de estudiante verificado.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <Button
-                  onClick={handleClaimNft}
-                  className="w-full bg-green-600 hover:bg-green-700"
-                  disabled={loading.nft || !lastTokenId}
-                >
-                  <Award className="h-4 w-4 mr-2" />
-                  {loading.nft ? "Agregando a MetaMask..." : "🎫 Obtener Mi NFT"}
-                </Button>
+          <div className="relative overflow-hidden rounded-2xl">
+            {/* Glows celebratorios (verdes/azules) */}
+            <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-gradient-to-tr from-emerald-500/55 via-teal-400/40 to-blue-400/35 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 -left-24 h-60 w-60 rounded-full bg-gradient-to-tr from-lime-400/40 via-emerald-400/35 to-cyan-400/30 blur-[80px]" />
+            {/* Anillo sutil */}
+            <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/12" />
 
-                {lastTokenId && (
-                  <Alert className="border-green-500">
-                    <AlertDescription>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-green-600" />
-                          🎉 ¡Badge minteado exitosamente!
+            <Card className="relative border bg-background/70 backdrop-blur-md shadow-sm">
+              <CardHeader>
+                <CardTitle>🎫 Paso 5: Obtener NFT de Estudiante</CardTitle>
+                <CardDescription>
+                  <strong>¡Disponible después de un mint exitoso!</strong> Reclama y añade tu NFT verificado.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Botón sólido y distintivo */}
+                  <Button
+                    onClick={handleClaimNft}
+                    disabled={loading.nft || !lastTokenId}
+                    className={[
+                      "group w-full relative overflow-hidden rounded-xl border text-white shadow-lg transition-all",
+                      loading.nft || !lastTokenId
+                        ? "border-white/10 bg-gradient-to-r from-emerald-700 via-teal-700 to-blue-700 opacity-85"
+                        : "border-white/10 bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:shadow-xl hover:brightness-110 active:scale-[0.99]",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    ].join(" ")}
+                    aria-label="Obtener Mi NFT"
+                  >
+                    <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-15 group-active:opacity-20 bg-white" />
+                    <span className="flex items-center justify-center gap-2">
+                      {loading.nft ? (
+                        <>
+                          {/* spinner */}
+                          <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                              fill="none"
+                            />
+                            <path
+                              className="opacity-90"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"
+                            />
+                          </svg>
+                          Agregando a MetaMask…
+                        </>
+                      ) : (
+                        <>
+                          <Award className="h-4 w-4" />
+                          🎫 Obtener Mi NFT
+                        </>
+                      )}
+                    </span>
+                  </Button>
+
+                  {/* Resultado / detalle del mint */}
+                  {lastTokenId && (
+                    <Alert className="bg-card/60 backdrop-blur-sm border-green-500/70">
+                      <AlertDescription>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-green-600" />
+                            🎉 ¡Badge minteado exitosamente!
+                          </div>
+
+                          <div className="flex items-center justify-between gap-3 text-sm">
+                            <div>
+                              <strong>Token ID:</strong> {lastTokenId}
+                            </div>
+
+                            {/* Acciones rápidas */}
+                            <div className="flex items-center gap-2">
+                              {/* Copiar Token ID */}
+                              <button
+                                type="button"
+                                onClick={() => navigator.clipboard?.writeText(String(lastTokenId))}
+                                className="inline-flex items-center rounded-md border px-2 py-1 text-xs hover:bg-muted"
+                                title="Copiar Token ID"
+                              >
+                                Copiar
+                              </button>
+
+                              {/* Ver en Blockscout (si tienes URL en results) */}
+                              {results?.mintSecure?.blockscoutUrl && results?.mintSecure?.txHash && (
+                                <a
+                                  href={results.mintSecure.blockscoutUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs hover:bg-muted"
+                                  title="Ver transacción"
+                                >
+                                  Ver TX <ExternalLink className="h-3 w-3" />
+                                </a>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="text-xs text-muted-foreground">
+                            Añadiremos el NFT a tu cartera para que puedas visualizarlo en MetaMask.
+                          </div>
                         </div>
-                        <div>
-                          <strong>Token ID:</strong> {lastTokenId}
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          Ahora puedes obtener tu NFT de estudiante y agregarlo automáticamente a MetaMask.
-                        </div>
-                      </div>
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                </div>
+              </CardContent>
+
+              {/* Acento inferior para cohesión */}
+              <div className="h-[2px] w-full rounded-full bg-gradient-to-r from-emerald-500 via-teal-400 to-blue-500/90" />
+            </Card>
+          </div>
         )}
 
-        {/* Progress Indicator */}
-        <Card className="sticky bottom-6 bg-white/90 backdrop-blur border-2">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center space-x-4">
-                <Badge variant={zkProofGenerated ? "default" : "secondary"}>
-                  {zkProofGenerated ? "✅" : "1"} ZK Proof
-                </Badge>
-                <Badge variant={webauthnRegistered ? "default" : "secondary"}>
-                  {webauthnRegistered ? "✅" : "2"} WebAuthn
-                </Badge>
-                <Badge variant={results.mintSecure?.success ? "default" : "secondary"}>
-                  {results.mintSecure?.success ? "✅" : "3"} Alta Seguridad
-                </Badge>
-                <Badge variant={lastTokenId ? "default" : "secondary"}>{lastTokenId ? "✅" : "4"} NFT</Badge>
-              </div>
-              <div className="text-muted-foreground">
-                {lastTokenId
-                  ? "Completado"
-                  : results.mintSecure?.success
-                  ? "Obtén tu NFT"
-                  : webauthnRegistered
-                  ? "Genera prueba de alta seguridad"
-                  : zkProofGenerated
-                  ? "Registra WebAuthn"
-                  : "Comienza con ZK Proof"}
+        {/* Progress Indicator — slim */}
+        <div className="sticky bottom-4 z-30">
+          <div className="mx-auto w-full max-w-4xl">
+            <div className="relative overflow-hidden rounded-full">
+              {/* glows sutiles */}
+              <div className="pointer-events-none absolute -top-6 -right-6 h-16 w-16 rounded-full bg-gradient-to-tr from-blue-500/25 via-cyan-400/20 to-emerald-400/15 blur-xl" />
+              <div className="pointer-events-none absolute -bottom-6 -left-6 h-16 w-16 rounded-full bg-gradient-to-tr from-amber-400/20 via-pink-500/15 to-violet-500/15 blur-xl" />
+              <div className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-inset ring-white/12" />
+
+              <div className="relative border bg-background/70 backdrop-blur-md shadow-md">
+                {/* barra */}
+                {(() => {
+                  const steps = [
+                    Boolean(zkProofGenerated),
+                    Boolean(webauthnRegistered),
+                    Boolean(results?.mintSecure?.success),
+                    Boolean(lastTokenId),
+                  ];
+                  const pct = (steps.filter(Boolean).length / steps.length) * 100;
+                  const nextLabel = lastTokenId
+                    ? "Completado"
+                    : results?.mintSecure?.success
+                    ? "Obtén tu NFT"
+                    : webauthnRegistered
+                    ? "Genera alta seguridad"
+                    : zkProofGenerated
+                    ? "Registra WebAuthn"
+                    : "Comienza con ZK Proof";
+
+                  return (
+                    <div className="px-3 py-2">
+                      <div
+                        role="progressbar"
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-valuenow={Math.round(pct)}
+                        className="relative h-2 w-full overflow-hidden rounded-full border border-white/10 bg-gradient-to-r from-muted/40 to-muted/20"
+                        title={`${Math.round(pct)}%`}
+                      >
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 transition-[width] duration-500 ease-out"
+                          style={{ width: `${pct}%` }}
+                        />
+                        {/* ticks */}
+                        <div className="pointer-events-none absolute inset-0 grid grid-cols-4">
+                          {[0, 1, 2, 3].map((i) => (
+                            <div key={i} className="relative">
+                              <div className="absolute right-0 top-0 h-full w-px bg-white/10" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* fila ultra-compacta */}
+                      <div className="mt-1.5 flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-[11px]">
+                          <Badge
+                            variant={zkProofGenerated ? "default" : "secondary"}
+                            className="px-2 py-0 h-5"
+                          >
+                            {zkProofGenerated ? "✅" : " "} ZK
+                          </Badge>
+                          <Badge
+                            variant={webauthnRegistered ? "default" : "secondary"}
+                            className="px-2 py-0 h-5"
+                          >
+                            {webauthnRegistered ? "✅" : " "} WA
+                          </Badge>
+                          <Badge
+                            variant={results?.mintSecure?.success ? "default" : "secondary"}
+                            className="px-2 py-0 h-5"
+                          >
+                            {results?.mintSecure?.success ? "✅" : " "} HS
+                          </Badge>
+                          <Badge variant={lastTokenId ? "default" : "secondary"} className="px-2 py-0 h-5">
+                            {lastTokenId ? "✅" : " "} NFT
+                          </Badge>
+                        </div>
+                        <div className="text-[11px] text-muted-foreground">{nextLabel}</div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </main>
     </div>
   );
