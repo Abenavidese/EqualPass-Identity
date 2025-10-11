@@ -1,30 +1,23 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import {
-  Shield,
-  User,
-  CheckCircle2,
-  AlertTriangle,
-  Lock,
-  Award,
-  Zap,
-  ExternalLink,
-} from "lucide-react";
+import { User, CheckCircle2, AlertTriangle, Lock, Award, Zap, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { equalPassApi, metaMaskHelpers } from "@/lib/equal-pass-api";
 import BackButton from "@/components/ui/BackButton";
 
 export default function DemoPage() {
   // Form state
-  const [userAddress, setUserAddress] = useState("0x6388681e6A22F8Fc30e3150733795255D4250db1");
-  const [studentStatus, setStudentStatus] = useState("1");
+  const [userAddress, setUserAddress] = useState("");
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [studentStatus] = useState("1");
   const [enrollmentYear, setEnrollmentYear] = useState("2025");
   const [universityHash, setUniversityHash] = useState("12345");
   const [userSecret, setUserSecret] = useState("67890");
@@ -57,8 +50,28 @@ export default function DemoPage() {
 
   // Check WebAuthn status on load
   useEffect(() => {
-    checkWebAuthnStatus();
+    if (userAddress) {
+      checkWebAuthnStatus();
+    }
   }, [userAddress]);
+
+  // Check if wallet is already connected on page load
+  useEffect(() => {
+    const checkWalletConnection = async () => {
+      try {
+        if ((window as any).ethereum) {
+          const accounts = await (window as any).ethereum.request({ method: "eth_accounts" });
+          if (accounts.length > 0) {
+            setUserAddress(accounts[0]);
+            setWalletConnected(true);
+          }
+        }
+      } catch (error) {
+        console.warn("Error checking wallet connection:", error);
+      }
+    };
+    checkWalletConnection();
+  }, []);
 
   const setLoadingState = (key: string, value: boolean) => {
     setLoading((prev) => ({ ...prev, [key]: value }));
@@ -93,6 +106,25 @@ export default function DemoPage() {
       setResult("status", { error: error.message, fallback: true });
     } finally {
       setLoadingState("status", false);
+    }
+  };
+
+  // Función para conectar wallet
+  const connectWallet = async () => {
+    try {
+      if (!(window as any).ethereum) {
+        alert("MetaMask no está instalado. Por favor instala MetaMask para continuar.");
+        return;
+      }
+
+      const accounts = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
+      if (accounts.length > 0) {
+        setUserAddress(accounts[0]);
+        setWalletConnected(true);
+      }
+    } catch (error) {
+      console.error("Error connecting wallet:", error);
+      alert("Error conectando la wallet. Por favor intenta de nuevo.");
     }
   };
 
@@ -168,18 +200,6 @@ export default function DemoPage() {
     }
   };
 
-  // const handleSimulateFraud = async () => {
-  //   setLoadingState("fraud", true);
-  //   try {
-  //     const result = await equalPassApi.simulateFraud(userAddress);
-  //     setResult("fraud", result);
-  //   } catch (error: any) {
-  //     setResult("fraud", { error: error.message });
-  //   } finally {
-  //     setLoadingState("fraud", false);
-  //   }
-  // };
-
   const handleClaimNft = async () => {
     if (!lastTokenId) return;
 
@@ -211,7 +231,7 @@ export default function DemoPage() {
               <BackButton />
             </Link>
             <div className="flex items-center gap-3">
-              <Shield className="h-8 w-8 text-blue-500" />
+              <Image src="/logo_zks.png" alt="EqualPass Logo" width={32} height={32} className="h-8 w-8" />
               <h1 className="text-2xl font-semibold">Generación de Pruebas ZK</h1>
             </div>
           </div>
@@ -305,43 +325,71 @@ export default function DemoPage() {
 
             <CardContent>
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="userAddress">Dirección de Wallet</Label>
-                  <Input
-                    id="userAddress"
-                    value={userAddress}
-                    onChange={(e) => setUserAddress(e.target.value)}
-                    placeholder="0x..."
-                    className="font-mono text-sm"
-                  />
-                </div>
+                {!walletConnected ? (
+                  <div className="text-center p-6 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50/50">
+                    <User className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                    <h3 className="text-sm font-medium text-gray-900 mb-1">Conecta tu Wallet</h3>
+                    <p className="text-xs text-gray-500 mb-4">
+                      Conecta MetaMask para comenzar con la verificación de identidad
+                    </p>
+                    <Button onClick={connectWallet} className="w-full">
+                      <span className="mr-2">🦊</span>
+                      Conectar MetaMask
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label>Wallet Conectada</Label>
+                      <Button
+                        onClick={() => {
+                          setUserAddress("");
+                          setWalletConnected(false);
+                        }}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Desconectar
+                      </Button>
+                    </div>
+                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                        <span className="text-sm font-medium text-green-900">Conectado</span>
+                      </div>
+                      <p className="text-xs font-mono text-green-700 mt-1 break-all">{userAddress}</p>
+                    </div>
+                  </div>
+                )}
 
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={checkWebAuthnStatus}
-                    disabled={loading.status}
-                  >
-                    {loading.status ? "Verificando..." : "Verificar Estado WebAuthn"}
-                  </Button>
+                {walletConnected && (
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={checkWebAuthnStatus}
+                      disabled={loading.status}
+                    >
+                      {loading.status ? "Verificando..." : "Verificar Estado WebAuthn"}
+                    </Button>
 
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      localStorage.removeItem(`webauthn_registered_${userAddress}`);
-                      setWebauthnRegistered(false);
-                      setResults((prev) => ({ ...prev, status: null }));
-                      alert("Estado local limpiado. Verifica el estado nuevamente.");
-                    }}
-                    title="Limpiar estado local en caso de desincronización"
-                  >
-                    🔄
-                  </Button>
-                </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        localStorage.removeItem(`webauthn_registered_${userAddress}`);
+                        setWebauthnRegistered(false);
+                        setResults((prev) => ({ ...prev, status: null }));
+                        alert("Estado local limpiado. Verifica el estado nuevamente.");
+                      }}
+                      title="Limpiar estado local en caso de desincronización"
+                    >
+                      🔄
+                    </Button>
+                  </div>
+                )}
 
-                {results.status && (
+                {walletConnected && results.status && (
                   <Alert variant={webauthnStatus?.hasCredential ? "default" : "destructive"}>
                     <AlertDescription className="space-y-1">
                       <div className="flex items-center gap-2">
@@ -399,16 +447,32 @@ export default function DemoPage() {
             </CardHeader>
 
             <CardContent className="space-y-4">
+              {/* Texto explicativo */}
+              <Alert className="bg-amber-50/80 border-amber-200 text-amber-800 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-300">
+                <div className="flex items-center gap-2">
+                  <div className="text-amber-600 dark:text-amber-400">ℹ️</div>
+                  <div className="text-sm">
+                    <span className="font-medium">Nota:</span> Por el momento se asume que todos los datos
+                    solicitados son números representando IDs.
+                  </div>
+                </div>
+              </Alert>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="studentStatus">Estado Estudiante</Label>
                   <Input
                     id="studentStatus"
                     value={studentStatus}
-                    onChange={(e) => setStudentStatus(e.target.value)}
+                    readOnly
+                    disabled
                     placeholder="1 = activo"
-                    className="font-sans"
+                    className="font-sans bg-muted text-muted-foreground cursor-not-allowed"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    1 significa que el estudiante está activo (Para la prueba se asume que todo estudiante
+                    está activo por lo que no se puede modificar)
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -416,31 +480,51 @@ export default function DemoPage() {
                   <Input
                     id="enrollmentYear"
                     value={enrollmentYear}
-                    onChange={(e) => setEnrollmentYear(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        setEnrollmentYear(value);
+                      }
+                    }}
                     placeholder="2025"
                     inputMode="numeric"
+                    pattern="[0-9]*"
                     className="font-sans"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="universityHash">Hash Universidad</Label>
+                  <Label htmlFor="universityHash">Hash Universidad (ID numérico)</Label>
                   <Input
                     id="universityHash"
                     value={universityHash}
-                    onChange={(e) => setUniversityHash(e.target.value)}
-                    placeholder="ej. 0xabc123… o hash numérico"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        setUniversityHash(value);
+                      }
+                    }}
+                    placeholder="12345"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     className="font-mono text-sm"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="userSecret">Secreto Usuario</Label>
+                  <Label htmlFor="userSecret">Secreto Usuario (ID numérico)</Label>
                   <Input
                     id="userSecret"
                     value={userSecret}
-                    onChange={(e) => setUserSecret(e.target.value)}
-                    placeholder="clave privada local (no se envía en claro)"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        setUserSecret(value);
+                      }
+                    }}
+                    placeholder="67890"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     className="font-mono text-sm"
                     type="password"
                   />
@@ -742,7 +826,7 @@ export default function DemoPage() {
                     </>
                   ) : (
                     <>
-                      <Shield className="h-4 w-4" />
+                      <Lock className="h-4 w-4" />
                       Generar Prueba ZK + WebAuthn
                       <svg
                         className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
@@ -872,6 +956,17 @@ export default function DemoPage() {
 
               <CardContent>
                 <div className="space-y-4">
+                  {/* Tip box sobre wallet desbloqueada */}
+                  <Alert className="bg-blue-50/80 border-blue-200 text-blue-800 dark:bg-blue-950/30 dark:border-blue-800 dark:text-blue-300">
+                    <div className="flex items-center gap-2">
+                      <div className="text-blue-600 dark:text-blue-400">💡</div>
+                      <div className="text-sm">
+                        <span className="font-medium">Tip!</span> Debes tener tu wallet desbloqueada para que
+                        el NFT se agregue automáticamente.
+                      </div>
+                    </div>
+                  </Alert>
+
                   {/* Botón sólido y distintivo */}
                   <Button
                     onClick={handleClaimNft}
