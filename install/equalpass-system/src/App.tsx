@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { Toaster } from "@/components/ui/toaster"
 import LandingPage from "@/pages/landing-page"
-import DemoPage from "@/pages/demo-page"
+import DemoPage from "@/pages/test"
 import VerifierPage from "@/pages/verifier-page"
 
 function App() {
