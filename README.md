@@ -1,4 +1,4 @@
-# EqualPass Identity System - Documentación Completa
+# Zk-Scholar - Documentación Completa
 
 ## 📋 Índice
 
@@ -21,7 +21,7 @@
 
 ## 🎯 Resumen Ejecutivo
 
-**EqualPass Identity System** es una solución completa de identidad digital que combina **Zero-Knowledge Proofs (ZK)**, **WebAuthn**, y **NFTs** para crear un sistema de verificación de credenciales estudiantiles seguro y preservando la privacidad.
+**Zk-Scholar ** es una solución completa de identidad digital que combina **Zero-Knowledge Proofs (ZK)**, **WebAuthn**, y **NFTs** para crear un sistema de verificación de credenciales estudiantiles seguro y preservando la privacidad.
 
 ### Características Principales
 
@@ -31,6 +31,55 @@
 - ✅ **Interfaz Moderna**: Frontend React/Next.js responsivo
 - ✅ **Verificador Independiente**: Sistema para verificar credenciales
 - ✅ **Conectividad Multi-Wallet**: MetaMask y otras wallets compatibles
+
+## 🏆 INFORMACIÓN CRÍTICA PARA LOS JUECES
+
+### 🌐 Despliegues en Producción
+
+*Frontend Desplegado:*
+•⁠  ⁠URL: https://zk-scholar.vercel.app/
+•⁠  ⁠Rutas principales: ⁠ /test ⁠ y ⁠ /test-verifier ⁠
+
+*Backend Desplegado:*
+•⁠  ⁠URL: https://zk-scholar.onrender.com/
+•⁠  ⁠API endpoints activos para metadata de NFTs y verificación ZK
+
+### 📋 Información del Smart Contract
+
+*Dirección del Contrato:*
+
+0x2bB1E8bDd9C9FFe7F115b18a607742ce82A40518
+
+
+*Explorer del Contrato (Paseo TestNet):*
+•⁠  ⁠[Ver Contrato en BlockScout](https://blockscout-passet-hub.parity-testnet.parity.io/address/0x2bB1E8bDd9C9FFe7F115b18a607742ce82A40518)
+
+### 🔗 Transacción de Ejemplo
+
+*Transacción Demo:*
+•⁠  ⁠[Ver Transacción](https://blockscout-passet-hub.parity-testnet.parity.io/tx/0x487712dbcbd0ea52bde7405f617927e4a072d18f45e0301f324ae74aa0c727b6)
+
+### 🛠️ Tecnologías Utilizadas
+
+•⁠  ⁠*Frontend:* Next.js 14 + TypeScript
+•⁠  ⁠*Backend:* Node.js + Express
+•⁠  ⁠*Smart Contract:* Solidity en Polkadot Paseo TestNet
+•⁠  ⁠*Zero Knowledge:* Circom + snarkjs
+•⁠  ⁠*Autenticación:* WebAuthn
+•⁠  ⁠*Base de datos:* Metadata en backend
+
+### 🎯 Funcionalidades Principales
+
+1.⁠ ⁠*Verificación ZK de Elegibilidad Estudiantil*
+2.⁠ ⁠*Minting de NFTs de Identidad*
+3.⁠ ⁠*Autenticación sin contraseñas (WebAuthn)*
+4.⁠ ⁠*Sistema de metadata descentralizado*
+
+---
+
+*Status:* ✅ Completamente funcional y desplegado en producción
+
+---
 
 ### Casos de Uso
 
@@ -46,8 +95,8 @@
 ```mermaid
 graph TB
     subgraph "Frontend Layer"
-        A[Next.js App] --> B[Demo Interface]
-        A --> C[Verifier Interface]
+        A[Next.js App] --> B[Test Interface]
+        A --> C[Test Verifier Interface]
         A --> D[Landing Page]
     end
     
@@ -59,7 +108,7 @@ graph TB
     end
     
     subgraph "Blockchain Layer"
-        J[EqualPass Smart Contract]
+        J[Zk-Scholar Smart Contract]
         K[Polkadot Paseo Testnet]
         J --> K
     end
@@ -123,18 +172,18 @@ graph TB
 
 ## 🧩 Componentes Principales
 
-### 1. Frontend Application (`/equalpass-system`)
+### 1. Frontend Application (`/Zk-Scholar-system`)
 
 #### **Páginas Principales**
 
 - **`app/page.tsx`**: Landing page con navegación principal
-- **`app/demo/page.tsx`**: Interface para estudiantes (generación de credenciales)
-- **`app/verifier/page.tsx`**: Interface para verificadores
+- **`app/test/page.tsx`**: Interface para estudiantes (generación de credenciales)
+- **`app/test-verifier/page.tsx`**: Interface para verificadores
 
 #### **Componentes Clave**
 
 - **`components/mint/mint-card.tsx`**: Card para mintear NFTs
-- **`components/verifier/verifier-form.tsx`**: Formulario de verificación
+- **`components/test-verifier/verifier-form.tsx`**: Formulario de verificación
 - **`components/ui/BackButton.tsx`**: Navegación mejorada
 - **`components/test/test-contract.tsx`**: Herramientas de testing
 
@@ -174,10 +223,10 @@ backend/
 
 ### 3. Smart Contracts (`/contracts`)
 
-#### **Contrato Principal: EqualPassIdentityBadge.sol**
+#### **Contrato Principal: Zk-ScholarIdentityBadge.sol**
 
 ```solidity
-contract EqualPassIdentityBadge is ERC721, AccessControl {
+contract Zk-ScholarIdentityBadge is ERC721, AccessControl {
     // Tipos de badges disponibles
     enum BadgeType { STUDENT, FACULTY, ADMIN }
     
@@ -341,7 +390,7 @@ git --version
 **Backend (`.env`)**:
 ```env
 # Red de desarrollo
-NETWORK=passetHubTestnet
+NETWORK=Paseo PassetHub
 RPC_URL=https://testnet-passet-hub-eth-rpc.polkadot.io
 
 # Clave privada (sin 0x)
@@ -395,7 +444,7 @@ const config: HardhatUserConfig = {
 #### **1. Clonar Repositorio**
 ```bash
 git clone [repository-url]
-cd equalpass-hackathon/install
+cd Zk-Scholar-hackathon/install
 ```
 
 #### **2. Backend Setup**
@@ -424,12 +473,12 @@ npx hardhat vars set PRIVATE_KEY
 npx hardhat compile
 
 # Desplegar en testnet
-npx hardhat ignition deploy ./ignition/modules/DeployEqualPass.ts --network passetHubTestnet
+npx hardhat ignition deploy ./ignition/modules/DeployZk-Scholar.ts --network passetHubTestnet
 ```
 
 #### **4. Frontend Setup**
 ```bash
-cd ../equalpass-system
+cd ../Zk-Scholar-system
 npm install
 
 # Configurar variables de entorno
@@ -542,7 +591,7 @@ cd ..
 npm run test
 
 # Test de frontend
-cd ../equalpass-system
+cd ../Zk-Scholar-system
 npm run test
 ```
 
@@ -689,7 +738,7 @@ Obtiene metadata de un NFT.
 **Response**:
 ```json
 {
-  "name": "EqualPass Student Badge #123",
+  "name": "Zk-Scholar Student Badge #123",
   "description": "Verified student credential",
   "image": "https://api.example.com/nft/123.png",
   "attributes": [
@@ -758,7 +807,7 @@ Obtiene información del contrato desplegado.
 **Response**:
 ```json
 {
-  "address": "0x60E9b9fe1fb298299534a8aBafB628B1279DaaD3",
+  "address": "0x2bB1E8bDd9C9FFe7F115b18a607742ce82A40518",
   "network": "Paseo Asset Hub Testnet",
   "chainId": 420420422,
   "blockExplorer": "https://blockscout-passet-hub.parity-testnet.parity.io"
@@ -769,7 +818,7 @@ Obtiene información del contrato desplegado.
 
 ## 📜 Smart Contracts
 
-### EqualPassIdentityBadge Contract
+### Zk-ScholarIdentityBadge Contract
 
 #### **Funciones Principales**
 
@@ -876,8 +925,8 @@ solidity: {
 
 ### Deployment Information
 
-**Contract Address**: `0x60E9b9fe1fb298299534a8aBafB628B1279DaaD3`  
-**Network**: Polkadot Paseo Asset Hub Testnet  
+**Contract Address**: `0x2bB1E8bDd9C9FFe7F115b18a607742ce82A40518`  
+**Network**: Paseo PassetHub 
 **Chain ID**: 420420422  
 **Explorer**: https://blockscout-passet-hub.parity-testnet.parity.io
 
@@ -892,7 +941,7 @@ solidity: {
 // Características principales:
 - Hero section con gradientes animados
 - Navegación a Demo y Verifier
-- Logo EqualPass integrado
+- Logo Zk-Scholar integrado
 - Responsive design
 - Animaciones con Tailwind CSS
 ```
@@ -1074,7 +1123,7 @@ function validateZKInputs(inputs) {
 #### **Contract Verification**
 ```bash
 # Verificar contrato en explorer
-npx hardhat verify --network passetHubTestnet 0x60E9b9fe1fb298299534a8aBafB628B1279DaaD3
+npx hardhat verify --network passetHubTestnet 0x2bB1E8bDd9C9FFe7F115b18a607742ce82A40518
 
 # Resultado esperado: ✅ Contract verified
 ```
@@ -1142,7 +1191,7 @@ npm run test
 
 #### **Frontend Component Tests**
 ```bash
-cd equalpass-system
+cd Zk-Scholar-system
 npm run test
 
 # Componentes probados:
@@ -1176,10 +1225,10 @@ npm run test
 #### **Hardhat Testing Framework**
 ```javascript
 // Ejemplo de test de contrato
-describe("EqualPassIdentityBadge", function () {
+describe("Zk-ScholarIdentityBadge", function () {
   it("Should mint badge with correct metadata", async function () {
     const [owner, addr1] = await ethers.getSigners();
-    const badge = await EqualPassIdentityBadge.deploy();
+    const badge = await Zk-ScholarIdentityBadge.deploy();
     
     await badge.mintBadge(addr1.address, 0, "HIGH", "0x123...");
     
@@ -1292,7 +1341,7 @@ const tx = await contract.mintBadge(address, type, level, hash, {
 ```bash
 # 1. Verificar token fue minteado
 npx hardhat console --network passetHubTestnet
-> const contract = await ethers.getContractAt("EqualPassIdentityBadge", "0x60E9...");
+> const contract = await ethers.getContractAt("Zk-ScholarIdentityBadge", "0x60E9...");
 > await contract.ownerOf(tokenId);
 
 # 2. Verificar metadata accesible
@@ -1334,7 +1383,7 @@ cd backend
 DEBUG=* npm run dev
 
 # Frontend con información detallada
-cd equalpass-system
+cd Zk-Scholar-system
 npm run dev -- --debug
 ```
 
@@ -1519,7 +1568,7 @@ graph TB
 ## 📞 Soporte y Contacto
 
 ### Documentación Adicional
-- **GitHub Repository**: [Link to repository]
+- **GitHub Repository**: https://github.com/Abenavidese/EqualPass-Identity.git
 - **API Documentation**: `/api/docs` endpoint
 - **Technical Specifications**: `/docs` folder
 
@@ -1529,7 +1578,7 @@ graph TB
 - **GitHub Discussions**: Conversaciones técnicas
 
 ### Reporte de Issues
-- **Security Issues**: security@equalpass.io
+- **Security Issues**: security@Zk-Scholar.io
 - **Bug Reports**: GitHub Issues
 - **Feature Requests**: RFC process
 
@@ -1541,4 +1590,4 @@ graph TB
 
 ---
 
-*Este documento representa el estado actual del proyecto EqualPass Identity System. Para información actualizada, consultar el repositorio oficial y la documentación técnica más reciente.*
+*Este documento representa el estado actual del proyecto Zk-Scholar . Para información actualizada, consultar el repositorio oficial y la documentación técnica más reciente.*
