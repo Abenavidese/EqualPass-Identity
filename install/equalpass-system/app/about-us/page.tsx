@@ -289,10 +289,10 @@ export default function AboutUsPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600">
-              <Link href="/demo">Prueba EqualPass</Link>
+              <Link href="/test">Prueba EqualPass</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/verifier">Ver Verificador</Link>
+              <Link href="/test-verifier">Ver Verificador</Link>
             </Button>
           </div>
         </section>

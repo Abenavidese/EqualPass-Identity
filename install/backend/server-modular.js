@@ -25,6 +25,10 @@ app.use(cors({
   credentials: true
 })); 
 
+// Middleware para parsear JSON
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Servir archivos estáticos del NFT
 app.use("/nft", express.static(path.join(__dirname, "nft_mint")));
 
