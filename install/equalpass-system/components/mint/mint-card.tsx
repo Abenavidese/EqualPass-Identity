@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast"
 export function MintCard() {
   const [badgeType, setBadgeType] = useState<BadgeType>(1)
   const [claimId, setClaimId] = useState<`0x${string}`>(generateClaimId())
-  const [authToken, setAuthToken] = useState<string | null>(null)
+  const [, setAuthToken] = useState<string | null>(null)
   const { address, isConnected } = useAccount()
   const chainId = useChainId()
   const { toast } = useToast()
