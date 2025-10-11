@@ -67,8 +67,6 @@ export default function DemoPage() {
     }
   };
 
-
-
   const handleGenerateZKProof = async () => {
     setLoading(true);
     try {
