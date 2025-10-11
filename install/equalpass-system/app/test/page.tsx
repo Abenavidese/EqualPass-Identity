@@ -14,7 +14,6 @@ import {
   AlertTriangle,
   Lock,
   Award,
-  ArrowLeft,
   Zap,
   ExternalLink,
 } from "lucide-react";
@@ -169,17 +168,17 @@ export default function DemoPage() {
     }
   };
 
-  const handleSimulateFraud = async () => {
-    setLoadingState("fraud", true);
-    try {
-      const result = await equalPassApi.simulateFraud(userAddress);
-      setResult("fraud", result);
-    } catch (error: any) {
-      setResult("fraud", { error: error.message });
-    } finally {
-      setLoadingState("fraud", false);
-    }
-  };
+  // const handleSimulateFraud = async () => {
+  //   setLoadingState("fraud", true);
+  //   try {
+  //     const result = await equalPassApi.simulateFraud(userAddress);
+  //     setResult("fraud", result);
+  //   } catch (error: any) {
+  //     setResult("fraud", { error: error.message });
+  //   } finally {
+  //     setLoadingState("fraud", false);
+  //   }
+  // };
 
   const handleClaimNft = async () => {
     if (!lastTokenId) return;
