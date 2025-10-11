@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Shield, Lock, Zap, CheckCircle2, ArrowRight, Github, Twitter } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function LandingPage() {
   return (
@@ -24,7 +24,7 @@ export default function LandingPage() {
               <a href="#benefits" className="text-sm font-medium hover:text-[#0ea5e9] transition-colors">
                 Beneficios
               </a>
-              <Link to="/demo">
+              <Link href="/demo">
                 <Button className="bg-[#0ea5e9] hover:bg-[#0284c7]">Probar Demo</Button>
               </Link>
             </div>
@@ -47,13 +47,13 @@ export default function LandingPage() {
             manteniendo tu privacidad intacta. Sin compartir información personal.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/demo">
+            <Link href="/demo">
               <Button size="lg" className="bg-[#0ea5e9] hover:bg-[#0284c7] text-lg px-8">
                 Comenzar Demo
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link to="/verifier">
+            <Link href="/verifier">
               <Button size="lg" variant="outline" className="text-lg px-8 bg-transparent">
                 Verificar Credencial
               </Button>
@@ -225,7 +225,7 @@ export default function LandingPage() {
           <p className="text-xl text-sky-100 mb-8 max-w-2xl mx-auto">
             Únete a la revolución de la privacidad digital. Prueba ZK-Scholar ahora.
           </p>
-          <Link to="/demo">
+          <Link href="/demo">
             <Button size="lg" variant="secondary" className="text-lg px-8">
               Probar Demo Gratis
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -259,7 +259,7 @@ export default function LandingPage() {
                   </a>
                 </li>
                 <li>
-                  <Link to="/demo" className="hover:text-[#0ea5e9] transition-colors">
+                  <Link href="/demo" className="hover:text-[#0ea5e9] transition-colors">
                     Demo
                   </Link>
                 </li>
@@ -269,9 +269,9 @@ export default function LandingPage() {
               <h3 className="text-white font-semibold mb-4">Recursos</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a 
-                    href="https://anthony-3.gitbook.io/zk-scholar/" 
-                    target="_blank" 
+                  <a
+                    href="https://anthony-3.gitbook.io/zk-scholar/"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-[#0ea5e9] transition-colors"
                   >

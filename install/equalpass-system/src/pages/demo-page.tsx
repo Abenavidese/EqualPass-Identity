@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Shield, CheckCircle2, AlertCircle, Loader2, ArrowLeft, Copy } from "lucide-react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import Link from "next/link";
+
 import {
   checkWebAuthnStatus,
   beginWebAuthnRegistration,
@@ -22,7 +24,7 @@ import {
 import {
   base64urlToUint8Array,
   uint8ArrayToBase64url,
-  copyToClipboard,
+  // copyToClipboard,
   addNFTToMetaMask,
 } from "@/lib/webauthn-utils";
 
@@ -56,6 +58,16 @@ export default function DemoPage() {
       console.error("Error checking status:", error);
     }
   };
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("📋 Copiado al portapapeles");
+    } catch (error) {
+      console.error("❌ Error al copiar:", error);
+    }
+  };
+
+
 
   const handleGenerateZKProof = async () => {
     setLoading(true);
@@ -184,14 +196,11 @@ export default function DemoPage() {
     if (!nftData) return;
 
     try {
-      const success = await addNFTToMetaMask({
-        address: nftData.contractAddress as `0x${string}`,
-        tokenId: nftData.tokenId.toString(),
-      });
+      const success = await addNFTToMetaMask(nftData.contractAddress as string, Number(nftData.tokenId));
+
       if (success) {
         alert("🎉 ¡NFT agregado a MetaMask exitosamente!");
       } else {
-        // Show manual instructions
         const manual = `📝 Instrucciones manuales:\n1. Abre MetaMask → NFTs → "Importar NFT"\n2. Dirección: ${nftData.contractAddress}\n3. Token ID: ${nftData.tokenId}`;
         alert(manual);
       }
@@ -200,21 +209,12 @@ export default function DemoPage() {
     }
   };
 
-  const handleCopy = async (text: string) => {
-    try {
-      await copyToClipboard(text);
-      alert("✅ Copiado al portapapeles");
-    } catch (error) {
-      alert("❌ Error copiando al portapapeles");
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-sky-50 py-8">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <div className="mb-8">
-          <Link to="/">
+          <Link href="/">
             <Button variant="ghost" className="mb-4">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Volver al Inicio
