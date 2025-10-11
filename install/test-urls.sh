@@ -17,7 +17,6 @@ echo "  ✅ src/lib/webauthn-utils.ts - URLs de NFT"
 echo "  ✅ components/mint/mint-card.tsx - Endpoint claim"
 echo "  ✅ components/zk/webauthn-card.tsx - Endpoint WebAuthn"
 echo "  ✅ components/home/evidence-card.tsx - Endpoint eligibilidad"
-echo "  ✅ vite.config.ts - Puerto de desarrollo"
 echo "  ✅ .env - Variables de entorno del frontend"
 
 echo ""

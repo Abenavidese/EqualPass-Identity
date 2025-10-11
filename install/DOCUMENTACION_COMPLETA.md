@@ -113,7 +113,7 @@ graph TB
 - **Token Standard**: ERC-721 (NFTs)
 
 ### DevOps & Tools
-- **Build Tool**: Vite (para desarrollo rápido)
+- **Build Tool**: Next (para desarrollo rápido)
 - **Package Manager**: npm
 - **Testing**: Hardhat test suite
 - **Code Quality**: ESLint + TypeScript

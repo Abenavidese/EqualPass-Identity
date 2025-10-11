@@ -86,8 +86,7 @@ node validate-config.js
 - ✅ `components/mint/mint-card.tsx` - Endpoint de claim
 - ✅ `components/zk/webauthn-card.tsx` - Endpoint de WebAuthn
 - ✅ `components/home/evidence-card.tsx` - Endpoint de eligibilidad
-- ✅ `vite.config.ts` - Puerto de desarrollo
-
+ 
 ### Backend:
 - ✅ `config/app.js` - Configuración centralizada
 - ✅ `server-modular.js` - Metadatos NFT y logs

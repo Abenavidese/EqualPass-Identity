@@ -8,7 +8,6 @@ This template includes:
 - [hardhat](https://hardhat.org/) smart contract development tooling.
 - [wagmi](https://wagmi.sh/) for smart contract interaction.
 - [Tailwind CSS](https://tailwindcss.com) + [Tailwind UI](https://tailwindui.com/).
-- [Vite](https://vite.dev/) for dev tooling.
 
 The project is configured to deploy on "[Passet Hub](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpasset-hub-paseo.ibp.network#/accounts)" network
 
@@ -57,7 +56,7 @@ In such cases, do `rm -rf ignition/deployments`, deploy the new contract, and co
 ## 2. Interacting with smart contracts from frontend app
 
 1. Generate types from deployed smart contracts by running `npm run generate` in `frontend` directory
-2. Run `npm run dev` to start `vite` environment
+2. Run `npm run dev` to start `next` environment
 3. You can import contract ABI and deployed addresses from `src/generated.ts`:
 
 ```ts
