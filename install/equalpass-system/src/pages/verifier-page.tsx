@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Shield, CheckCircle2, XCircle, Loader2, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import Link from "next/link";
+
 
 export default function VerifierPage() {
   const [tokenId, setTokenId] = useState("");
@@ -64,7 +66,7 @@ export default function VerifierPage() {
       <div className="container mx-auto px-4 max-w-2xl">
         {/* Header */}
         <div className="mb-8">
-          <Link to="/">
+          <Link href="/">
             <Button variant="ghost" className="mb-4">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Volver al Inicio

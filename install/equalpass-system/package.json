@@ -70,6 +70,7 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "terser": "latest",
+    "vaul": "^1.1.2",
     "viem": "latest",
     "wagmi": "latest",
     "yaml": "latest",
