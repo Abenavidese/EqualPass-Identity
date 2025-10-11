@@ -29,10 +29,10 @@ export default function LandingPage() {
               <Link href="https://anthony-3.gitbook.io/zk-scholar/" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost">Documentación</Button>
               </Link>
-              <Link href="/verifier">
+              <Link href="/test-verifier">
                 <Button variant="ghost">Verificador</Button>
               </Link>
-              <Link href="/demo">
+              <Link href="/test">
                 <Button className="bg-[#0ea5e9] hover:bg-[#0ea5e9]/90">Comenzar</Button>
               </Link>
             </div>
@@ -54,12 +54,12 @@ export default function LandingPage() {
             un sistema de verificación estudiantil seguro y privado.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-            <Link href="/demo">
+            <Link href="/test">
               <Button size="lg" className="bg-[#0ea5e9] hover:bg-[#0ea5e9]/90 text-lg px-8">
                 Genera tu Prueba Ahora
               </Button>
             </Link>
-            <Link href="/verifier">
+            <Link href="/test-verifier">
               <Button size="lg" variant="outline" className="text-lg px-8 bg-transparent">
                 Ver Verificador
               </Button>
@@ -349,12 +349,12 @@ export default function LandingPage() {
               Únete a la revolución de la privacidad digital con tecnología blockchain
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-              <Link href="/demo">
+              <Link href="/test">
                 <Button size="lg" className="bg-[#0ea5e9] hover:bg-[#0ea5e9]/90 text-lg px-8">
                   Genera tu Prueba Ahora
                 </Button>
               </Link>
-              <Link href="/verifier">
+              <Link href="/test-verifier">
                 <Button size="lg" variant="outline" className="text-lg px-8 bg-transparent">
                   Ver Verificador
                 </Button>
@@ -381,12 +381,12 @@ export default function LandingPage() {
               <h3 className="font-semibold">Producto</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <Link href="/demo" className="hover:text-foreground transition-colors">
+                  <Link href="/test" className="hover:text-foreground transition-colors">
                     Demo
                   </Link>
                 </li>
                 <li>
-                  <Link href="/verifier" className="hover:text-foreground transition-colors">
+                  <Link href="/test-verifier" className="hover:text-foreground transition-colors">
                     Verificadorff
                   </Link>
                 </li>
