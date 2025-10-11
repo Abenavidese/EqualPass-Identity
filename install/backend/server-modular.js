@@ -74,14 +74,14 @@ app.get("/", (req, res) => {
       webauthn: "/api/webauthn/*",
       verification: "/api/*",
       challenges: "/api/*",
-      demo: "/demo",
+      test: "/test",
       verificador: "/verificador",
     },
   });
 });
 
 // Servir páginas demo
-app.get("/demo", (req, res) => {
+app.get("/test", (req, res) => {
   res.sendFile(path.join(__dirname, "demo-webauthn.html"));
 });
 
@@ -96,7 +96,7 @@ app.get("/test-nft", (req, res) => {
     <p>Ruta de imagen: /nft/nft.png</p>
     <img src="/nft/nft.png" alt="NFT Test" style="max-width: 300px; border: 2px solid #007bff;">
     <br><br>
-    <a href="/demo">← Volver al Demo</a>
+    <a href="/test">← Volver al Demo</a>
   `);
 });
 
@@ -193,7 +193,7 @@ app.use((req, res) => {
     path: req.originalUrl,
     method: req.method,
     availableEndpoints: {
-      demo: "/demo",
+      test: "/test",
       verificador: "/verificador",
       contractInfo: "/api/contract-info",
       webauthn: "/api/webauthn/*",
@@ -211,7 +211,7 @@ app.listen(config.PORT, () => {
 🔗 Contrato: ${config.CONTRACT_ADDRESS}
 🌐 Red: Polkadot Paseo Testnet
 📊 Endpoints disponibles:
-   • Demo: ${config.BACKEND_URL}/demo
+   • Test: ${config.BACKEND_URL}/test
    • Verificador: ${config.BACKEND_URL}/verificador
    • API: ${config.BACKEND_URL}/api/*
    

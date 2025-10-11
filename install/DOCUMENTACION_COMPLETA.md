@@ -897,7 +897,7 @@ solidity: {
 - Animaciones con Tailwind CSS
 ```
 
-#### **Demo Page (`app/demo/page.tsx`)**
+#### **Demo Page (`app/test/page.tsx`)**
 ```tsx
 // Funcionalidades:
 - Conexión dinámica de wallet

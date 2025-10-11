@@ -24,7 +24,7 @@ export default function LandingPage() {
               <a href="#benefits" className="text-sm font-medium hover:text-[#0ea5e9] transition-colors">
                 Beneficios
               </a>
-              <Link href="/demo">
+              <Link href="/test">
                 <Button className="bg-[#0ea5e9] hover:bg-[#0284c7]">Probar Demo</Button>
               </Link>
             </div>
@@ -47,7 +47,7 @@ export default function LandingPage() {
             manteniendo tu privacidad intacta. Sin compartir información personal.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/demo">
+            <Link href="/test">
               <Button size="lg" className="bg-[#0ea5e9] hover:bg-[#0284c7] text-lg px-8">
                 Comenzar Demo
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -225,7 +225,7 @@ export default function LandingPage() {
           <p className="text-xl text-sky-100 mb-8 max-w-2xl mx-auto">
             Únete a la revolución de la privacidad digital. Prueba ZK-Scholar ahora.
           </p>
-          <Link href="/demo">
+          <Link href="/test">
             <Button size="lg" variant="secondary" className="text-lg px-8">
               Probar Demo Gratis
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -259,7 +259,7 @@ export default function LandingPage() {
                   </a>
                 </li>
                 <li>
-                  <Link href="/demo" className="hover:text-[#0ea5e9] transition-colors">
+                  <Link href="/test" className="hover:text-[#0ea5e9] transition-colors">
                     Demo
                   </Link>
                 </li>
